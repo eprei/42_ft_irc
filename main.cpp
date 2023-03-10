@@ -1,11 +1,14 @@
 #include "Includes.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
 int main(int argc, char **argv)
 {
-	Server server;
+	Server servIrc;
 
-	if (server.checkArgs(argc, argv))
+	if (servIrc.checkArgs(argc, argv))
 		return (-1);
-	server.loop();
+	servIrc.launchServ();
 	return 0;
 }

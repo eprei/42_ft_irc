@@ -1,8 +1,6 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include "Includes.hpp"
-
 class Channel
 {
 	public:

@@ -1,10 +1,13 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include "Includes.hpp"
+# include <netinet/in.h>
 # include <iostream>
 # include "Client.hpp"
 # include <vector>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <unistd.h>
 
 class Server
 {
@@ -17,15 +20,19 @@ class Server
 
 		bool checkArgs(int argc, char **argv);
 		bool printCorrectUse() const;
-		void printHelp() const; // TO DO: print all possible commands to be used by the Client in our Server
 
-		void loop();
+		void launchServ();
 
 	private:
 
 		std::string				_password;
 		int						_port;
 		std::vector<Client *>	_clientsList;
+		int						_serverSocket;
+		struct sockaddr_in		_serverAddress;
+		fd_set					_currentSockets;
+		fd_set					_readySockets;
+		int						_nOfClients;
 };
 
 #endif
