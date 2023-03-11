@@ -8,6 +8,8 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <unistd.h>
+# include <map>
+# include "Channel.hpp"
 
 class Server
 {
@@ -25,14 +27,15 @@ class Server
 
 	private:
 
-		std::string				_password;
-		int						_port;
-		std::vector<Client *>	_clientsList;
-		int						_serverSocket;
-		struct sockaddr_in		_serverAddress;
-		fd_set					_currentSockets;
-		fd_set					_readySockets;
-		int						_nOfClients;
+		std::string					_password;
+		int							_port;
+		int							_serverSocket;
+		struct sockaddr_in			_serverAddress;
+		fd_set						_currentSockets;
+		fd_set						_readySockets;
+		int							_nOfClients;
+		std::map<int, Client *>		_clientsList;
+		std::map<int, Channel *>	_channelList;
 };
 
 #endif

@@ -1,5 +1,5 @@
-CXX = c++
-# CXX = g++-12
+# CXX = c++
+CXX = g++-12
 
 NAME = ircserv
 
