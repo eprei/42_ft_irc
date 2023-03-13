@@ -8,6 +8,9 @@
 #include <sys/socket.h>
 #include <iostream>
 #include <arpa/inet.h>
+#include <unistd.h>
+#include "Includes.hpp"
+
 #define PORT 6667    /* Le port où le client se connectera */
 
 #define MAXDATASIZE 100 /* Tampon d'entrée */
@@ -35,6 +38,8 @@ int main(int argc, char *argv[])
 		perror("socket");
 		exit(1);
 	}
+	else
+		std::cout << "Socket created" << std::endl;
 
 	// bzero(&servaddr, sizeof(servaddr));     /* zero struct */
 	servaddr.sin_family = AF_INET;      /* host byte order */
@@ -42,6 +47,7 @@ int main(int argc, char *argv[])
 	// servaddr.sin_addr = *((struct in_addr *)he->h_addr);
 	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	bzero(&(servaddr.sin_zero), 8);     /* zero pour le reste de struct */
+	std::cout << "set up address" << std::endl;
 
 	// convert the text representation of the ip address
 	// into a binary representation of the address
@@ -54,6 +60,8 @@ int main(int argc, char *argv[])
 		perror("connect");
 		exit(1);
 	}
+	else
+		std::cout << "Conection esablished" << std::endl;
 
 	// if ((numbytes=recv(sockfd, buf, MAXDATASIZE, 0)) == -1) {
 	//     perror("recv");
@@ -61,24 +69,23 @@ int main(int argc, char *argv[])
 	// }
 
 	char buff[23] = "this is a test message";
+	buff[23] = '\0';
+	printf("buffsize = %ld\n, buff lengh = %ld\n", sizeof(buff), strlen(buff));
+	while (1)
+	{
+		std::cout << "start loop" << std::endl;
+		if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
+			perror("send");
+			exit(1);
+		}
+		if (numbytes != (int)sizeof(buff))
+			std::cout << "the message has been partially sent" << std::endl;
+		else
+			std::cout << "the message has been completely sent" << std::endl;
 
-	if ((numbytes=send(sockfd, buff, MAXDATASIZE, 0)) < 0) {
-		perror("send");
-		exit(1);
+	sleep(2);
 	}
-	if (numbytes != strlen(buff))
-		std::cout << "the message has been partially sent" << std::endl;
-	else
-		std::cout << "the message has been completely sent" << std::endl;
 
-	if ((numbytes=send(sockfd, buff, MAXDATASIZE, 0)) < 0) {
-		perror("send");
-		exit(1);
-	}
-	if (numbytes != strlen(buff))
-		std::cout << "the message has been partially sent" << std::endl;
-	else
-		std::cout << "the message has been completely sent" << std::endl;
 	// buf[numbytes] = '\0';
 
 	// printf("Reçu: %s",buf);
