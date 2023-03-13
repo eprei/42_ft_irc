@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <ctime>
+# include <netinet/in.h>
 
 class Client
 {
@@ -15,13 +16,14 @@ class Client
 
 	private:
 
-		int			_id;
-		std::string _nickname;
-		std::string _realname;
-		std::string _username;
-		std::string _hostname;
-		bool		_operator;
-		std::time_t _lastCommunication;
-};
+		int					_id;
+		std::string 		_nickname;
+		std::string 		_username;
+		std::string 		_hostname;
+		bool				_operator;
+		std::time_t			_lastCommunication;
+		int 				_socket;
+		struct sockaddr_in	_address;
+	};
 
 #endif

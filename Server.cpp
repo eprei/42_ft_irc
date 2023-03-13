@@ -3,7 +3,7 @@
 
 // TO DO: write copilen's functions
 
-Server::Server(): _nOfClients(0){
+Server::Server(): _name("42_IRC"), _nOfClients(0){
 }
 
 Server::Server(Server &other){ *this = other;}
@@ -31,7 +31,7 @@ bool Server::printCorrectUse() const
 {
 	std::cout << "Correct use of ircserv: ./ircserv <port> <password>" << std::endl;
 	std::cout << "<port> must be a number between 6665-6669" << std::endl; // Choix des ports en fonction de l'article https://fr.wikipedia.org/wiki/Internet_Relay_Chat
-	return 1;
+	return EXIT_FAILURE;
 }
 
 void Server::launchServ(){
