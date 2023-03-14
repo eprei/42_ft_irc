@@ -11,6 +11,11 @@
 # define DEFAULT_MIN_PORT 6665
 # define DEFAULT_MAX_PORT 6669
 # define DEFAULT_PASSWORD "0000"
+# define IS_OFF "off"
+# define IS_ON "on"
+# define CLIENT_NICKNAME_NOT_SET "CLIENT_NICKNAME_NOT_SET"
+# define CLIENT_USERNAME_NOT_SET "CLIENT_USERNAME_NOT_SET"
+# define CLIENT_HOSTNAME_NOT_SET "CLIENT_HOSTNAME_NOT_SET"
 
 # include <stdlib.h>
 # include <iostream>

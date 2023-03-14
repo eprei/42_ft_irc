@@ -14,6 +14,24 @@ class Client
 		Client &operator=(Client &other);
 		~Client();
 
+		void				setId(int id);
+		void				setNickname(std::string nickname);
+		void				setUsername(std::string username);
+		void				setHostname(std::string hostname);
+		void				setOperator(bool isOperator);
+		void				setLastCommunication(std::time_t lastCommunication);
+		void				setSocket(int socket);
+		void				setAddress(struct sockaddr_in address);
+
+		int					getId( void ) const;
+		std::string			getNickname( void ) const;
+		std::string			getUsername( void ) const;
+		std::string			getHostname( void ) const;
+		bool				getOperator( void ) const;
+		std::time_t			getlastCommunication( void ) const;
+		int					getSocket( void ) const;
+		struct sockaddr_in	getAddress( void ) const;
+
 	private:
 
 		int					_id;
@@ -24,6 +42,11 @@ class Client
 		std::time_t			_lastCommunication;
 		int 				_socket;
 		struct sockaddr_in	_address;
-	};
+
+		static int			_maxId;
+
+};
+
+std::ostream	&operator<<( std::ostream & o, Client const & rhs );
 
 #endif

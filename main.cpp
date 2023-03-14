@@ -9,6 +9,7 @@ int main(int argc, char **argv)
 
 	if (servIrc.checkArgs(argc, argv))
 		return (EXIT_FAILURE);
-	servIrc.launchServ();
+	if (servIrc.launchServ())
+		return (EXIT_FAILURE);
 	return EXIT_SUCCESS;
 }

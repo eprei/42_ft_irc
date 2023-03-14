@@ -53,18 +53,30 @@ int main(int argc, char *argv[])
 	//     exit(1);
 	// }
 
+	std::string text;
 	while (1)
 	{
-		if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
+		std::cin >> text;
+		// if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
+		// 	perror("send");
+		// 	exit(1);
+		// }
+		// if (numbytes != (int)sizeof(buff))
+		// 	std::cout << "the test message has been partially sent" << std::endl;
+		// else
+		// 	std::cout << "the message has been completely sent" << std::endl;
+
+		// TO SOLVE INPUT !!!
+
+		if ((numbytes=send(sockfd, text.c_str(), sizeof(buff), 0)) < 0) {
 			perror("send");
 			exit(1);
 		}
-		if (numbytes != (int)sizeof(buff))
+		if (numbytes != (int)text.size())
 			std::cout << "the test message has been partially sent" << std::endl;
 		else
 			std::cout << "the message has been completely sent" << std::endl;
-
-	sleep(2);
+		text.clear();
 	}
 
 	// buf[numbytes] = '\0';

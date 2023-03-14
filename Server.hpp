@@ -20,10 +20,21 @@ class Server
 		Server &operator=(Server &other);
 		~Server();
 
-		bool checkArgs(int argc, char **argv);
-		bool printCorrectUse() const;
+		bool	checkArgs(int argc, char **argv);
+		bool	printCorrectUse() const;
 
-		void launchServ();
+		bool	launchServ();
+		bool	serverSocketConfig();
+		bool	serverLoop();
+		void	addNewClient();
+
+		std::string		getName( void ) const;
+		std::string		getPassword( void ) const;
+		int				getPort( void ) const;
+		int				getServerSocket( void ) const;
+		// struct sockaddr_in	getServerAddress( void ) const; // TO CONSIDER if it's useful
+		int				getNOfClients( void ) const;
+		std::string		getServerState( void ) const;
 
 	private:
 
@@ -34,9 +45,12 @@ class Server
 		struct sockaddr_in					_serverAddress;
 		fd_set								_currentSockets;
 		fd_set								_readySockets;
-		int									_nOfClients;
+		int									_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
 		std::map<std::string , Client *>	_clientsList;
-		std::map<int, Channel *>			_channelList;
+		std::vector<Channel *>				_channelList;
+		std::string							_serverState;
 };
+
+std::ostream	&operator<<( std::ostream & o, Server const & rhs );
 
 #endif
