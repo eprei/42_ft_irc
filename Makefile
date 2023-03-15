@@ -9,25 +9,29 @@ CFLAGS = -Werror -Wextra -Wall -std=c++98  #-g #-pedantic
 
 OBJ = $(SRCS:.cpp=.o)
 
-TEST_CLIENT = test
+TEST_CLIENT_1 = test1
+
+TEST_CLIENT_2 = test2
 
 .cpp.o:
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
-all: $(NAME)
+all: $(NAME) test
 
 $(NAME): $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
 
 test:
-	$(CXX) $(CFLAGS) clientTest.cpp -o $(TEST_CLIENT)
+	$(CXX) $(CFLAGS) clientTest1.cpp -o $(TEST_CLIENT_1)
+	$(CXX) $(CFLAGS) clientTest2.cpp -o $(TEST_CLIENT_2)
 
 clean:
 	/bin/rm -f $(OBJ)
 
 fclean: clean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(TEST_CLIENT)
+	/bin/rm -f $(TEST_CLIENT_1)
+	/bin/rm -f $(TEST_CLIENT_2)
 
 re: fclean all
 

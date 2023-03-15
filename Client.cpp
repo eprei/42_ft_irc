@@ -53,7 +53,7 @@ struct sockaddr_in	Client::getAddress( void ) const{return _address;}
 
 std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 {
-	o << "******\tClient info\t******" << std::endl;
+	o << YELLOW << "******\tClient info\t******" << RESET << std::endl;
 	o << "ID: " << rhs.getId() << std::endl;
 	o << "Nickname: " << rhs.getNickname() << std::endl;
 	o << "Username: " << rhs.getUsername() << std::endl;

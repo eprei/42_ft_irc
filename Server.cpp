@@ -71,6 +71,8 @@ bool Server::serverSocketConfig(){
 	FD_ZERO(&_currentSockets);
 	FD_SET(this->_serverSocket, &_currentSockets);
 
+	std::cout << *this << std::endl;
+
 	return (EXIT_SUCCESS);
 }
 
@@ -90,7 +92,7 @@ void Server::addNewClient(){
 	neo->setAddress(clientAddr);
 	_clientsList.insert(std::pair<std::string , Client *>(neo->getNickname(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << "Client added\n" << *neo << std::endl;
+	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo << std::endl;
 	// FD_CLEAR(i, &_currentSockets); TO USE IN THE FUTURE: when we delete a user
 	// if (FD_ISSET(i, &_readySockets)){
 }
@@ -125,9 +127,8 @@ bool Server::serverLoop(){
 						return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 					}
 					// TO DEVELOP: Parsing&Excecute();
-					std::cout << "New message received: " << buff << std::endl;
+					std::cout << GREEN << "New message received: " << RESET << buff << std::endl;
 					// FD_CLR(i, &_currentSockets);
-					std::cout << *this << std::endl;
 				}
 			}
 		}
@@ -151,12 +152,12 @@ std::string		Server::getServerState( void ) const{return _serverState;}
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {
-	o << std::endl << "******\tServer info\t******" << std::endl;
+	o << std::endl << YELLOW << "******\tServer info\t******" << RESET << std::endl;
 	o << "Name: " << rhs.getName() << std::endl;
 	o << "Password: " << rhs.getPassword() << std::endl;
 	o << "Port: " << rhs.getPort() << std::endl;
 	o << "Server Socket: " << rhs.getServerSocket() << std::endl;
 	o << "Number of clients: " << rhs.getNOfClients() << std::endl;
-	o << "State: " << rhs.getServerState() << std::endl << std::endl;
+	o << "State: " << rhs.getServerState() << std::endl;
 	return o;
 }

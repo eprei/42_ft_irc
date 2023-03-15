@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include "Includes.hpp"
 
-#define TEST_MESSAGE "this is a test message"
+#define TEST_MESSAGE "Hello, i'm client 1"
 #define TEST_MESSAGE_LENGTH 23
 #define PORT 6667
 
@@ -22,8 +22,6 @@ int main(int argc, char *argv[])
 	int sockfd, numbytes;
 	struct sockaddr_in servaddr;
 	char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
-
-	buff[TEST_MESSAGE_LENGTH] = '\0';
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("socket");
@@ -53,32 +51,18 @@ int main(int argc, char *argv[])
 	//     exit(1);
 	// }
 
-	std::string text;
 	while (1)
 	{
-		std::cin >> text;
-		// if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
-		// 	perror("send");
-		// 	exit(1);
-		// }
-		// if (numbytes != (int)sizeof(buff))
-		// 	std::cout << "the test message has been partially sent" << std::endl;
-		// else
-		// 	std::cout << "the message has been completely sent" << std::endl;
-
-		// TO SOLVE INPUT !!!
-
-		if ((numbytes=send(sockfd, text.c_str(), sizeof(buff), 0)) < 0) {
+		if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
 			perror("send");
 			exit(1);
 		}
-		if (numbytes != (int)text.size())
+		if (numbytes != (int)sizeof(buff))
 			std::cout << "the test message has been partially sent" << std::endl;
 		else
 			std::cout << "the message has been completely sent" << std::endl;
-		text.clear();
+		sleep (4);
 	}
-
 	// buf[numbytes] = '\0';
 
 	// printf("Reçu: %s",buf);
