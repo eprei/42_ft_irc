@@ -64,7 +64,7 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 	o << "Hostname: " << rhs.getHostname() << std::endl;
 	o << std::boolalpha << "Is Operator: " << rhs.getOperator() << std::endl;
 	o << "Last communication: " << rhs.getlastCommunication() << std::endl;
-	o << "Socket: " << rhs.getSocket() << std::endl;
+	o << "Client Socket: " << rhs.getSocket() << std::endl;
 	// o << "Address: " << rhs.getAddress() << std::endl; TO CONSIDER: if it's usefull to print this infos to debug
 	return o;
 }

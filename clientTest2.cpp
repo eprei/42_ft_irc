@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include "Includes.hpp"
 
-#define TEST_MESSAGE  "I want an icecream"
+#define TEST_MESSAGE  "This is client 2"
 #define TEST_MESSAGE_LENGTH 23
 #define PORT 6667
 

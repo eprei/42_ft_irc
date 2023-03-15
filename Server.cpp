@@ -4,6 +4,7 @@
 // TO DO: write copilen's functions
 
 Server::Server(): _name("42_IRC"), _nOfClients(0), _serverState(IS_ON){
+	// TO DO: print a welcome message
 }
 
 Server::Server(Server &other){ *this = other;}
@@ -16,7 +17,9 @@ Server &Server::operator=(Server &other) // TO DO: Add to this function all the 
 	return (*this);
 }
 
-Server::~Server(){}
+Server::~Server(){
+	// TO DO: delete all mallocs like _clientList.seconds and _channelList objects
+}
 
 bool Server::checkArgs(int argc, char **argv){
 	if (argc != 3 || !(DEFAULT_MIN_PORT <= atoi(argv[1]) && atoi(argv[1]) <= DEFAULT_MAX_PORT))
@@ -76,11 +79,10 @@ bool Server::serverSocketConfig(){
 	return (EXIT_SUCCESS);
 }
 
-
 void Server::addNewClient(){
 	int addrSize = sizeof(struct sockaddr_in);
 	int clientSocketLocal;
-	struct sockaddr_in clientAddr; 	// TO CONSIDER: at this point we could copy the clientAddr information into the corresponding client structure
+	struct sockaddr_in clientAddr;
 	Client *neo = new Client;
 
 	if ((clientSocketLocal = accept(this->_serverSocket, (struct sockaddr*)&clientAddr, (socklen_t*)&addrSize)) < 0){
@@ -115,7 +117,7 @@ bool Server::serverLoop(){
 		{
 			if (FD_ISSET(i, &_readySockets)){
 				// i it's a fd with data that we can read right now. Two cases are possibles
-				if (i == this->_serverSocket){
+				if (i == _serverSocket){
 					// this is a new connection that we can accept
 					addNewClient();
 				}
@@ -138,8 +140,9 @@ void			Server::messageHandling(int fd){
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
 	_clientsList.at(fd)->setBuf(buff);
-	std::cout << GREEN << "message handled: " << RESET << _clientsList.at(fd)->getBuf() << std::endl;
+	std::cout << GREEN << ">> message handled: " << RESET << _clientsList.at(fd)->getBuf() << std::endl;
 	// TO DEVELOP: Parsing&Excecute();
+	_clientsList.at(fd)->setBuf("");
 }
 
 std::string		Server::getName( void ) const{return _name;}
@@ -153,7 +156,6 @@ int				Server::getServerSocket( void ) const{return _serverSocket;}
 int				Server::getNOfClients( void ) const{return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
-
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {
