@@ -90,7 +90,7 @@ void Server::addNewClient(){
 	}
 	neo->setSocket(clientSocketLocal);
 	neo->setAddress(clientAddr);
-	_clientsList.insert(std::pair<std::string , Client *>(neo->getNickname(), neo));
+	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
 	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo << std::endl;
 	// FD_CLEAR(i, &_currentSockets); TO USE IN THE FUTURE: when we delete a user
@@ -121,20 +121,25 @@ bool Server::serverLoop(){
 				}
 				else {
 					// this is an already connected client sending us a message, so we can handle the message
-					char buff[MAX_BUFF];
-					if (recv( i, buff, MAX_BUFF, 0) < 0){
-						std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-						return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
-					}
-					// TO DEVELOP: Parsing&Excecute();
-					std::cout << GREEN << "New message received: " << RESET << buff << std::endl;
-					// FD_CLR(i, &_currentSockets);
+					messageHandling(i);
 				}
 			}
 		}
 		usleep(600);
 	}
 	return (EXIT_SUCCESS);
+}
+
+void			Server::messageHandling(int fd){
+	// TO DO:
+	char buff[MAX_BUFF];
+	if (recv( fd, buff, MAX_BUFF, 0) < 0){
+		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
+		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
+	}
+	_clientsList.at(fd)->setBuf(buff);
+	std::cout << GREEN << "message handled: " << RESET << _clientsList.at(fd)->getBuf() << std::endl;
+	// TO DEVELOP: Parsing&Excecute();
 }
 
 std::string		Server::getName( void ) const{return _name;}

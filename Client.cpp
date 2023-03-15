@@ -35,6 +35,8 @@ void 				Client::setSocket(int socket){_socket = socket;}
 
 void 				Client::setAddress(struct sockaddr_in address){_address = address;}
 
+void 				Client::setBuf(std::string buf){_buf = buf;}
+
 int					Client::getId( void ) const {return _id;}
 
 std::string			Client::getNickname( void ) const {return _nickname;}
@@ -50,6 +52,8 @@ std::time_t			Client::getlastCommunication( void ) const{return _lastCommunicati
 int					Client::getSocket( void ) const{return _socket;}
 
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}
+
+std::string			Client::getBuf( void ) const{return _buf;}
 
 std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 {

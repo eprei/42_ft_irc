@@ -22,6 +22,7 @@ class Client
 		void				setLastCommunication(std::time_t lastCommunication);
 		void				setSocket(int socket);
 		void				setAddress(struct sockaddr_in address);
+		void				setBuf(std::string buf);
 
 		int					getId( void ) const;
 		std::string			getNickname( void ) const;
@@ -31,6 +32,7 @@ class Client
 		std::time_t			getlastCommunication( void ) const;
 		int					getSocket( void ) const;
 		struct sockaddr_in	getAddress( void ) const;
+		std::string			getBuf( void ) const;
 
 	private:
 
@@ -42,6 +44,7 @@ class Client
 		std::time_t			_lastCommunication;
 		int 				_socket;
 		struct sockaddr_in	_address;
+		std::string			_buf;
 
 		static int			_maxId;
 
