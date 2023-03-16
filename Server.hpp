@@ -10,6 +10,7 @@
 # include <unistd.h>
 # include <map>
 # include "Channel.hpp"
+# include "Includes.hpp"
 
 class Server
 {
@@ -35,7 +36,21 @@ class Server
 		// struct sockaddr_in	getServerAddress( void ) const; // TO CONSIDER if it's useful
 		int				getNOfClients( void ) const;
 		std::string		getServerState( void ) const;
-		void			messageHandling(int fd);
+		void			messageHandling(int userSocketNumber);
+		void			parsing(int numOfBytesReceived);
+		void			execCmd( void );
+		void			nick();
+		void			user();
+		void			pass();
+		void			join();
+		void			quit();
+		void			list();
+		void			part();
+		void			privmsg();
+		void			ping();
+		void			kick();
+		void			cap();
+		void			notice();
 
 	private:
 
@@ -50,6 +65,7 @@ class Server
 		std::map<int , Client *>	_clientsList;
 		std::vector<Channel *>		_channelList;
 		std::string					_serverState;
+		char						_buf[MAX_BUFF];
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );

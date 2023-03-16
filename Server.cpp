@@ -113,17 +113,17 @@ bool Server::serverLoop(){
 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 		}
-		for (int i = 0; i < FD_SETSIZE; i++) // TO OPTIMIZE: change FD_SETSIZE by the number or users to reduce the amount of iterations
+		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++) // TO OPTIMIZE: change FD_SETSIZE by the number or users to reduce the amount of iterations
 		{
-			if (FD_ISSET(i, &_readySockets)){
+			if (FD_ISSET(SocketNumber, &_readySockets)){
 				// i it's a fd with data that we can read right now. Two cases are possibles
-				if (i == _serverSocket){
+				if (SocketNumber == _serverSocket){
 					// this is a new connection that we can accept
 					addNewClient();
 				}
 				else {
 					// this is an already connected client sending us a message, so we can handle the message
-					messageHandling(i);
+					messageHandling(SocketNumber);
 				}
 			}
 		}
@@ -132,17 +132,87 @@ bool Server::serverLoop(){
 	return (EXIT_SUCCESS);
 }
 
-void			Server::messageHandling(int fd){
-	// TO DO:
-	char buff[MAX_BUFF];
-	if (recv( fd, buff, MAX_BUFF, 0) < 0){
+void			Server::messageHandling(int userSocketNumber){
+	ssize_t  numOfBytesReceived;
+
+	bzero(_buf, MAX_BUFF);
+	numOfBytesReceived = recv( userSocketNumber, _buf, MAX_BUFF, 0);
+	if (numOfBytesReceived < 0){
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
-	_clientsList.at(fd)->setBuf(buff);
-	std::cout << GREEN << ">> message handled: " << RESET << _clientsList.at(fd)->getBuf() << std::endl;
-	// TO DEVELOP: Parsing&Excecute();
-	_clientsList.at(fd)->setBuf("");
+	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << YELLOW << "\t\t<" << RESET << std::endl; // TO DELETE: just to debug
+	parsing(numOfBytesReceived);
+	execCmd();
+}
+
+void			Server::parsing(int numOfBytesReceived){
+	(void) numOfBytesReceived;
+	std::cout << BLUE << ">\tparsing function called\t\t<" << RESET << std::endl;
+}
+
+void			Server::execCmd(){
+	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = { "nick" , "user" , "pass" , \
+	 "join" , "quit" , "list" , "part" , "privmsg" , "ping" , "kick" , "cap" , "notice"}; // MODE & ISON ?
+	void	(Server::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(void) = { &Server::nick , &Server::user , &Server::pass , &Server::join, \
+	&Server::quit , &Server::list , &Server::part , &Server::privmsg , &Server::ping , &Server::kick , &Server::cap , &Server::notice };
+
+	std::cout << BLUE << ">\texeccmd function called\t\t<" << RESET << std::endl;
+
+	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
+	{
+		if (acceptableCommands[i].compare(_buf) == 0)
+			(this->*p[i])();
+	}
+}
+
+
+void			Server::nick(){
+	std::cout << GREEN << ">\tnick " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::user(){
+	std::cout << GREEN << ">\tuser " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::pass(){
+	std::cout << GREEN << ">\tpass " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::join(){
+	std::cout << GREEN << ">\tjoin " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::quit(){
+	std::cout << GREEN << ">\tquit " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::list(){
+	std::cout << GREEN << ">\tlist " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::part(){
+	std::cout << GREEN << ">\tpart " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::privmsg(){
+	std::cout << GREEN << ">\tprivmsg " << RESET << "function executed\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::ping(){
+	std::cout << GREEN << ">\tping " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::kick(){
+	std::cout << GREEN << ">\tkick " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::cap(){
+	std::cout << GREEN << ">\tcap " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
+}
+
+void			Server::notice(){
+	std::cout << GREEN << ">\tnotice " << RESET << "function executed\t" << GREEN << "<" << RESET << std::endl;
 }
 
 std::string		Server::getName( void ) const{return _name;}
