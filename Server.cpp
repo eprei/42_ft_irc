@@ -94,7 +94,7 @@ void Server::addNewClient(){
 	neo->setAddress(clientAddr);
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo << std::endl;
+	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo;
 	// FD_CLEAR(i, &_currentSockets); TO USE IN THE FUTURE: when we delete a user
 	// if (FD_ISSET(i, &_readySockets)){
 }
@@ -119,6 +119,7 @@ bool Server::serverLoop(){
 				// i it's a fd with data that we can read right now. Two cases are possibles
 				if (SocketNumber == _serverSocket){
 					// this is a new connection that we can accept
+					std::cout << YELLOW << "\n_\tnew conection detected\t_" << RESET << std::endl;
 					addNewClient();
 				}
 				else {
@@ -162,8 +163,13 @@ void			Server::execCmd(){
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
 	{
 		if (acceptableCommands[i].compare(_buf) == 0)
+		{
 			(this->*p[i])();
+			return ;
+		}
 	}
+	std::cout << RED << ">\tunknow command\t\t\t<" << RESET << std::endl;
+
 }
 
 
