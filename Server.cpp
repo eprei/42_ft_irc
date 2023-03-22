@@ -128,6 +128,7 @@ bool Server::serverLoop(){
 				}
 			}
 		}
+		// TO DO: function to deconect all clients with timeout expired
 		usleep(600);
 	}
 	return (EXIT_SUCCESS);

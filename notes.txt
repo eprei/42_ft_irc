@@ -1,0 +1,153 @@
+======================================================================================
+
+EVALUATION REQUIREMENT:
+	Join a channel thanks to the appropriate command. Ensure that all
+	messages from one client on that channel are sent to all other clients
+	that joined the channel.
+
+INFORMATION SOURCE:
+	4.2 Channel operations ..........................................   19
+			4.2.1 Join message ......................................   19
+
+======================================================================================
+
+SUBJECT:
+	Vous devez pouvoir vous authentifier, définir un nickname, un username, re-
+	joindre un channel, envoyer et recevoir des messages privés, avec votre
+	client de référence.
+
+EVALUATION REQUIREMENT:
+	With both nc and a regular IRC client, check that you can authenticate,
+	set a nickname, a username, join a channel. This should be ok (you
+	should have already done this previously).
+
+INFORMATION SOURCE:
+	4.1 Connection Registration ......................................   13
+			4.1.1 Password message ...................................   14
+			4.1.2 Nickname message ...................................   14
+			4.1.3 User message .......................................   15
+			4.1.4 Server message .....................................   16
+			4.1.5 Operator message ...................................   17
+			4.1.6 Quit message .......................................   17
+			4.1.7 Server Quit message ................................   18
+	4.2 Channel operations ...........................................   19
+			4.2.1 Join message .......................................   19
+
+======================================================================================
+
+SUBJECT:
+	Tous les messages envoyés par un client dans un channel doivent être transmis
+	à tous les clients ayant rejoint ce channel.
+
+INFORMATION SOURCE:
+	IRC Concepts ......................................................   10
+		3.2 One-to-many ...............................................   11
+			3.2.1 To a list ...........................................   11 // to discuss whether to implement it or not
+			3.2.2 To a group (channel) ................................   11
+		3.3 One to all ................................................   12
+			3.3.1 Client to Client ....................................   12
+			3.3.2 Clients to Server ...................................   12
+
+======================================================================================
+
+SUBJECT:
+	Vous devez pouvoir vous authentifier, définir un nickname, un username,
+	rejoindre un channel, envoyer et recevoir des messages privés, avec votre
+	client de référence.
+
+EVALUATION REQUIREMENT:
+	Verify that private messages (PRIVMSG) and notices (NOTICE) are
+	fully functional with different parameters.
+
+INFORMATION SOURCE:
+	3. IRC Concepts ................................................   10
+		3.1 One-to-one communication ...............................   10
+		3.3.2 Clients to Server ....................................   12
+	4.4 Sending messages ...........................................   32
+		4.4.1 Private messages .....................................   32
+		4.4.2 Notice messages ......................................   33
+
+======================================================================================
+
+EVALUATION REQUIREMENT:
+	Then test with an operator. All the channel operation
+	commands should be tested (remove one point for each feature that is not working).
+
+INFORMATION SOURCE:
+	4.2 Channel operations ...........................................   19
+			4.2.1 Join message .......................................   19
+			4.2.2 Part message .......................................   20
+			4.2.3 Mode message .......................................   21
+			4.2.3.1 Channel modes ....................................   21
+			4.2.3.2 User modes .......................................   22
+			4.2.4 Topic message ......................................   23
+			4.2.5 Names message ......................................   24
+			4.2.6 List message .......................................   24
+			4.2.7 Invite message .....................................   25
+			4.2.8 Kick message .......................................   25
+
+======================================================================================
+
+TOPIC: REPLIES
+
+INFORMATION SOURCE:
+	6. REPLIES ......................................................   43
+		6.1 Error Replies ...........................................   43
+		6.2 Command responses .......................................   48
+		6.3 Reserved numerics .......................................   56
+
+======================================================================================
+
+SUBJECT: Vous devez donc implémenter les commandes spécifiques aux operators
+
+TOPIC: OPERATOR COMMANDS
+
+INFORMATION SOURCE:
+	1.  INTRODUCTION ................................................    4
+		1.2  Clients ................................................    5
+			1.2.1 Operators .........................................    5
+
+KILL COMMAND
+
+	4.6 Miscellaneous messages ......................................   35
+		4.6.1 Kill message ..........................................   36
+	8. Current Implementations Details ..............................   56
+		8.7 Terminating server-client connections ...................   59
+
+
+						... there could be more commands ...
+
+======================================================================================
+
+TOPIC: REPLIES
+
+INFORMATION SOURCE:
+	2. THE IRC SPECIFICATION .........................................    7
+		2.3 Messages .................................................    7
+			2.3.1  Message format in 'pseudo' BNF ....................    8
+		2.4 Numeric replies ..........................................   10
+	6. REPLIES .......................................................   43
+		6.1 Error Replies ............................................   43
+		6.2 Command responses ........................................   48
+		6.3 Reserved numerics ........................................   56
+
+
+======================================================================================
+
+TOPIC: COMMANDS
+
+PING COMMAND
+
+	4.6 Miscellaneous messages ......................................   35
+		4.6.2 Ping message ..........................................   37
+		4.6.3 Pong message ..........................................   37
+	8. Current Implementations Details ..............................   56
+		8.4 Connection 'Liveness' ...................................   58
+
+======================================================================================
+
+TOPIC: PARSING
+
+	8. Current Implementations Details ..............................   56
+		8.2 Command Parsing .........................................   57
+
