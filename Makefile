@@ -1,11 +1,16 @@
 # CXX = c++
-CXX = g++-12
+CXX = clang++
+# CXX = g++-12
 
 NAME = ircserv
 
-SRCS = main.cpp Server.cpp Channel.cpp Client.cpp
+SRCS =	main.cpp\
+		Server.cpp\
+		Channel.cpp\
+		Client.cpp\
 
-CFLAGS = -Werror -Wextra -Wall -std=c++98  #-g #-pedantic
+CFLAGS = -Werror -Wextra -Wall -std=c++98
+CFLAGS += -Wfatal-errors #-g #-pedantic
 
 OBJ = $(SRCS:.cpp=.o)
 
@@ -24,6 +29,9 @@ $(NAME): $(OBJ)
 test:
 	$(CXX) $(CFLAGS) clientTest1.cpp -o $(TEST_CLIENT_1)
 	$(CXX) $(CFLAGS) clientTest2.cpp -o $(TEST_CLIENT_2)
+
+run: all
+	./ircserv 6667 asd
 
 clean:
 	/bin/rm -f $(OBJ)

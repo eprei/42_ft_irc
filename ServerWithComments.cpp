@@ -1,12 +1,15 @@
 # include "Server.hpp"
 # include "Includes.hpp"
 
+// TO DO: write copilen's functions
+
 Server::Server(): _name("42_IRC"), _nOfClients(0), _serverState(IS_ON){
+	// TO DO: print a welcome message
 }
 
 Server::Server(Server &other){ *this = other;}
 
-Server &Server::operator=(Server &other)
+Server &Server::operator=(Server &other) // TO DO: Add to this function all the new parameters that are added to the Server class
 {
 	this->_password = other._password;
 	this->_port = other._port;
@@ -23,15 +26,14 @@ bool Server::checkArgs(int argc, char **argv){
 		return printCorrectUse();
 	_port = atoi(argv[1]);
 	_password = argv[2];
-	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
+	// std::cout << "port = " << _port << "\tpass = " << _password << std::endl; // TO DELETE:
 	return EXIT_SUCCESS;
 }
 
 bool Server::printCorrectUse() const
 {
 	std::cout << "Correct use of ircserv: ./ircserv <port> <password>" << std::endl;
-	std::cout << "<port> must be a number between 6665-6669" << std::endl;
-	// Choix des ports en fonction de l'article https://fr.wikipedia.org/wiki/Internet_Relay_Chat
+	std::cout << "<port> must be a number between 6665-6669" << std::endl; // Choix des ports en fonction de l'article https://fr.wikipedia.org/wiki/Internet_Relay_Chat
 	return EXIT_FAILURE;
 }
 
@@ -46,8 +48,8 @@ bool Server::launchServ(){
 bool Server::serverSocketConfig(){
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-		std::cout << "ERROR: socket function error" << std::endl; 
-		return (EXIT_FAILURE); 
+		std::cout << "ERROR: socket function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
+		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
 
 //	INITIALIZE THE SERVER'S ADDRESS STRUCTURE
@@ -59,13 +61,13 @@ bool Server::serverSocketConfig(){
 
 //	BIND SOCKET WITH A PORT
 	if ((bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress))) < 0){
-		perror("\nerror found at bind");
-		return (EXIT_FAILURE);
+		perror("\nerror found at bind"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
+		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
 // LISTEN
 	if ((listen(_serverSocket, MAX_CONNECTIONS_ON_STANDBY)) < 0){
-		perror("\nerror found at listen"); 
-		return (EXIT_FAILURE);
+		perror("\nerror found at listen"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
+		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
 
 // SET THE GROUPS OF FD THAT WILL BE CHECKED BY SELECT
@@ -245,7 +247,7 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 
 
 
-// :servername 001 yournick :Welcome to the Internet Relay Network yournick!user@host
+:servername 001 yournick :Welcome to the Internet Relay Network yournick!user@host
 
 
 // class Server {
@@ -267,3 +269,25 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 //   void remove_client_from_channel(Client* client, std::string channel_name);
 //   bool channel_exists(std::string channel_name);
 // };
+
+inline void Server::numeric_reply(Client *c, std::string code, std::string arg1, std::string arg2, std::string arg3) 
+{
+	std::string txt;
+	char *ptr;
+	txt.append(":");
+	txt.append(hostname);
+	txt.append(" ");
+	txt.append(code);
+	txt.append(" ");
+	txt.append(u->getNickName()); 
+	txt.append(" ");
+	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg1, arg2, arg3));
+	txt.append("\r\n");
+
+	out(FG2("Server Reply to be sent:") << code);
+	out(txt.c_str());
+	if (send(u->socket_descriptor, txt.c_str(), txt.length(), 0) < 0)
+	{
+		perror("SEND FAILED");
+	}
+}

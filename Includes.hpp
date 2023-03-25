@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <errno.h>
+# include <stdio.h>
 
 #define RESET		"\033[0m"
 #define BLACK		"\033[30m"
@@ -43,4 +44,5 @@
 #define BOLDCYAN	"\033[1m\033[36m"
 #define BOLDWHITE	"\033[1m\033[37m"
 
+#define FC(color, string_a_colorear) color string_a_colorear RESET
 #endif
