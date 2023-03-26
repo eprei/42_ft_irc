@@ -37,20 +37,36 @@ class Server
 		int				getNOfClients( void ) const;
 		std::string		getServerState( void ) const;
 		void			messageHandling(int userSocketNumber);
-		void			parsing(int numOfBytesReceived);
-		void			execCmd( void );
-		void			nick();
-		void			user();
-		void			pass();
-		void			join();
-		void			quit();
-		void			list();
-		void			part();
-		void			privmsg();
-		void			ping();
-		void			kick();
-		void			cap();
-		void			notice();
+		
+
+		void			numeric_reply(Client *c, std::string code);
+		// void	handle_new_connection();
+		// void	handle_client_request(Client* client);
+		// IDEAS a implementar
+		void	remove_client(Client* client);
+		void	send_message_to_client(Client* client, std::string message);
+		
+		void	create_channel(std::string channel_name);
+		void	add_client_to_channel(Client* client, std::string channel_name);
+		void	remove_client_from_channel(Client* client, std::string channel_name);
+		bool	channel_exists(std::string channel_name);
+		
+
+		// CMDS
+		void	parsing(int numOfBytesReceived);
+		void	execCmd( void );
+		void	nick();
+		void	user();
+		void	pass();
+		void	join();
+		void	quit();
+		void	list();
+		void	part();
+		void	privmsg();
+		void	ping();
+		void	kick();
+		void	cap();
+		void	notice();
 
 	private:
 
@@ -71,3 +87,5 @@ class Server
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );
 
 #endif
+
+// };

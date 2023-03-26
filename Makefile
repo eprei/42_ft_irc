@@ -8,6 +8,7 @@ SRCS =	main.cpp\
 		Server.cpp\
 		Channel.cpp\
 		Client.cpp\
+		numeric_reply.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors #-g #-pedantic

@@ -23,7 +23,6 @@ Client::~Client(){
 void				Client::setNickname(std::string nickname){_nickname = nickname;}
 void				Client::setUsername(std::string username){_username = username;}
 void				Client::setHostname(std::string hostname){_hostname = hostname;}
-void				Client::setOperator(bool isOperator){_operator = isOperator;}
 void				Client::setLastCommunication(std::time_t lastCommunication){_lastCommunication = lastCommunication;}
 void 				Client::setSocket(int socket){_socket = socket;}
 void 				Client::setAddress(struct sockaddr_in address){_address = address;}

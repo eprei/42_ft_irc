@@ -244,26 +244,3 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 }
 
 
-
-// :servername 001 yournick :Welcome to the Internet Relay Network yournick!user@host
-
-
-// class Server {
-// private:
-//   int port;
-//   int server_fd;
-//   std::vector<Client*> clients;
-//   std::vector<std::string> channels;
-// public:
-//   Server(int port);
-//   void start();
-//   void handle_new_connection();
-//   void handle_client_request(Client* client);
-//   void remove_client(Client* client);
-//   void broadcast_message(std::string message);
-//   void send_message_to_client(Client* client, std::string message);
-//   void create_channel(std::string channel_name);
-//   void add_client_to_channel(Client* client, std::string channel_name);
-//   void remove_client_from_channel(Client* client, std::string channel_name);
-//   bool channel_exists(std::string channel_name);
-// };

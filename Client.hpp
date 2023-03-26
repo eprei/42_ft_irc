@@ -18,7 +18,6 @@ class Client
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
 		void				setHostname(std::string hostname);
-		void				setOperator(bool isOperator);
 		void				setLastCommunication(std::time_t lastCommunication);
 		void				setSocket(int socket);
 		void				setAddress(struct sockaddr_in address);
