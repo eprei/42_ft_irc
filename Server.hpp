@@ -40,16 +40,18 @@ class Server
 		int				getNOfClients( void ) const;
 		std::string		getServerState( void ) const;
 		void			messageHandling(int userSocketNumber);
-		
+
 		void			numeric_reply(Client *c, std::string code);
 		// void	handle_new_connection();
 		// void	handle_client_request(Client* client);
 		// IDEAS a implementar
-		
+
 		void	create_channel(std::string channel_name);
 		void	add_client_to_channel(Client* client, std::string channel_name);
 		void	remove_client_from_channel(Client* client, std::string channel_name);
 		bool	channel_exists(std::string channel_name);
+		void	signalHandling( void );
+
 	private:
 
 		std::string					_name;
