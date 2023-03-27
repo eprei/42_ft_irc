@@ -37,20 +37,6 @@ class Server
 		int				getNOfClients( void ) const;
 		std::string		getServerState( void ) const;
 		void			messageHandling(int userSocketNumber);
-		void			parsing(int numOfBytesReceived);
-		void			execCmd( void );
-		void			nick();
-		void			user();
-		void			pass();
-		void			join();
-		void			quit();
-		void			list();
-		void			part();
-		void			privmsg();
-		void			ping();
-		void			kick();
-		void			cap();
-		void			notice();
 
 	private:
 
@@ -65,7 +51,7 @@ class Server
 		std::map<int , Client *>	_clientsList;
 		std::vector<Channel *>		_channelList;
 		std::string					_serverState;
-		char						_buf[MAX_BUFF];
+		std::string					_buf;
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );

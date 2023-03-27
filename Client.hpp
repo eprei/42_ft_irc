@@ -34,6 +34,22 @@ class Client
 		struct sockaddr_in	getAddress( void ) const;
 		std::string			getBuf( void ) const;
 
+		void				parsing( void );
+		void				execCmd( void );
+		void				nick( void );
+		void				user( void );
+		void				pass( void );
+		void				join( void );
+		void				quit( void );
+		void				list( void );
+		void				part( void );
+		void				privmsg( void );
+		void				ping( void );
+		void				kick( void );
+		void				cap( void );
+		void				notice( void );
+		void				mode( void );
+
 	private:
 
 		int					_id;

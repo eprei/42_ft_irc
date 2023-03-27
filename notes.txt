@@ -1,3 +1,12 @@
+TO DO:
+
+manage the case when:
+	nc 127.0.0.1 6667
+	ctrl+d (without previous characteres writed)
+
+	nc 127.0.0.1 6667
+	ctrl+d
+
 ======================================================================================
 
 EVALUATION REQUIREMENT:

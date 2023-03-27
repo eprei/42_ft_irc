@@ -135,91 +135,26 @@ bool Server::serverLoop(){
 }
 
 void			Server::messageHandling(int userSocketNumber){
+
+	char bufferLocal[MAX_BUFF + 1];
 	ssize_t  numOfBytesReceived;
 
-	bzero(_buf, MAX_BUFF);
-	numOfBytesReceived = recv( userSocketNumber, _buf, MAX_BUFF, 0);
+	bzero(bufferLocal, MAX_BUFF + 1);
+	while ((numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0)) == MAX_BUFF) // to delete may be.
+	{
+		_buf[numOfBytesReceived] = 0;
+		_buf.append(bufferLocal);
+
+	}
 	if (numOfBytesReceived < 0){
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
-	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << YELLOW << "\t\t<" << RESET << std::endl; // TO DELETE: just to debug
-	parsing(numOfBytesReceived);
-	execCmd();
-}
-
-void			Server::parsing(int numOfBytesReceived){
-	(void) numOfBytesReceived;
-	std::cout << BLUE << ">\tparsing function called\t\t<" << RESET << std::endl;
-}
-
-void			Server::execCmd(){
-	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = { "nick" , "user" , "pass" , \
-	 "join" , "quit" , "list" , "part" , "privmsg" , "ping" , "kick" , "cap" , "notice"}; // MODE & ISON ?
-	void	(Server::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(void) = { &Server::nick , &Server::user , &Server::pass , &Server::join, \
-	&Server::quit , &Server::list , &Server::part , &Server::privmsg , &Server::ping , &Server::kick , &Server::cap , &Server::notice };
-
-	std::cout << BLUE << ">\texeccmd function called\t\t<" << RESET << std::endl;
-
-	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
-	{
-		if (acceptableCommands[i].compare(_buf) == 0)
-		{
-			(this->*p[i])();
-			return ;
-		}
-	}
-	std::cout << RED << ">\tunknow command\t\t\t<" << RESET << std::endl;
-
-}
-
-
-void			Server::nick(){
-	std::cout << GREEN << ">\tnick " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::user(){
-	std::cout << GREEN << ">\tuser " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::pass(){
-	std::cout << GREEN << ">\tpass " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::join(){
-	std::cout << GREEN << ">\tjoin " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::quit(){
-	std::cout << GREEN << ">\tquit " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::list(){
-	std::cout << GREEN << ">\tlist " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::part(){
-	std::cout << GREEN << ">\tpart " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::privmsg(){
-	std::cout << GREEN << ">\tprivmsg " << RESET << "function executed\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::ping(){
-	std::cout << GREEN << ">\tping " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::kick(){
-	std::cout << GREEN << ">\tkick " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::cap(){
-	std::cout << GREEN << ">\tcap " << RESET << "function executed\t\t" << GREEN << "<" << RESET << std::endl;
-}
-
-void			Server::notice(){
-	std::cout << GREEN << ">\tnotice " << RESET << "function executed\t" << GREEN << "<" << RESET << std::endl;
+	bufferLocal[numOfBytesReceived] = 0;
+	_buf.append(bufferLocal);
+	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << RESET << std::endl; // TO DELETE: just to debug
+	_clientsList[userSocketNumber]->setBuf(_buf);
+	_buf.erase();
 }
 
 std::string		Server::getName( void ) const{return _name;}
