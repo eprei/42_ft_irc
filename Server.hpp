@@ -50,7 +50,6 @@ class Server
 		void	add_client_to_channel(Client* client, std::string channel_name);
 		void	remove_client_from_channel(Client* client, std::string channel_name);
 		bool	channel_exists(std::string channel_name);
-		void	signalHandling( void );
 
 	private:
 

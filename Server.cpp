@@ -97,32 +97,10 @@ void Server::addNewClient(){
 	// if (FD_ISSET(i, &_readySockets)){
 }
 
-int g_server_is_on = TRUE;
-
-void	signal_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_server_is_on = FALSE;
-		std::cout << "You have decided to terminate the server with " << FC(RED, "SIGINT") << std::endl;
-	}
-	if (sig == SIGKILL)
-	{
-		g_server_is_on = FALSE;
-		std::cout << "You have decided to terminate the server with " << FC(RED, "SIGKILL") << std::endl;
-	}
-}
-
-void	Server::signalHandling( void ){
-	signal(SIGINT, signal_handler);
-	signal(SIGKILL, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 bool Server::serverLoop(){
 	// TO DO: Handle the signals and set _serverState to IS_OFF when a unix signal is reciveded
-	signalHandling();
-	while (_serverState == IS_ON)
+	// signalHandling();
+	while (1)
 	{
 		// this is to keep safe the information of this->_currentSocket
 		// we have to work in a copy (_readySocket) because select is destructive,

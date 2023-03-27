@@ -12,6 +12,5 @@ int main(int argc, char **argv)
 	if (servIrc.launchServ())
 		return (EXIT_FAILURE);
 	// TO DO: free all mallocs Clients, may be we can do at Server::~Server()
-	std::cout << "main END" << std::endl;
 	return EXIT_SUCCESS;
 }
