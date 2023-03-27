@@ -9,7 +9,7 @@ void	process_buffer(const std::string& buf)
 {
     // Separar la cadena en tokens utilizando el delimitador "\r\n"
 	Message	m;
-    char	*token = strtok(const_cast<char*>(buf.c_str()), "\r\n");
+    char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
     while (token != NULL) {
         // Convertir el token en una cadena de C++
         std::string command(token);
@@ -22,7 +22,7 @@ void	process_buffer(const std::string& buf)
 		print_message(m);
 		// execCmd(m);
         // Obtener el siguiente token
-        token = strtok(NULL, "\r\n");
+        token = strtok(NULL, END_CHARACTERS);
     }
 }
 
