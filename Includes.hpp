@@ -22,9 +22,11 @@
 # include <stdlib.h>
 # include <iostream>
 # include <string.h>
+# include <vector>
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <errno.h>
+# include <stdio.h>
 # include <signal.h>
 
 #define RESET		"\033[0m"
@@ -44,6 +46,18 @@
 #define BOLDMAGENTA	"\033[1m\033[35m"
 #define BOLDCYAN	"\033[1m\033[36m"
 #define BOLDWHITE	"\033[1m\033[37m"
+
+#define FC(color, string_a_colorear) color string_a_colorear RESET
+
+struct Message {
+    std::string prefix;
+    std::string command;
+    std::vector<std::string> params;
+};
+
+Message parseMessage(std::string input);
+void	print_message(const Message& msg);
+void	printAscii(const std::string& str);
 
 //  int g_server_is_on = TRUE;
 

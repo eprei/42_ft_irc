@@ -1,15 +1,12 @@
 # include "Server.hpp"
 # include "Includes.hpp"
 
-// TO DO: write copilen's functions
-
 Server::Server(): _name("42_IRC"), _nOfClients(0), _serverState(IS_ON){
-	// TO DO: print a welcome message
 }
 
 Server::Server(Server &other){ *this = other;}
 
-Server &Server::operator=(Server &other) // TO DO: Add to this function all the new parameters that are added to the Server class
+Server &Server::operator=(Server &other)
 {
 	this->_password = other._password;
 	this->_port = other._port;
@@ -26,14 +23,15 @@ bool Server::checkArgs(int argc, char **argv){
 		return printCorrectUse();
 	_port = atoi(argv[1]);
 	_password = argv[2];
-	// std::cout << "port = " << _port << "\tpass = " << _password << std::endl; // TO DELETE:
+	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
 	return EXIT_SUCCESS;
 }
 
 bool Server::printCorrectUse() const
 {
 	std::cout << "Correct use of ircserv: ./ircserv <port> <password>" << std::endl;
-	std::cout << "<port> must be a number between 6665-6669" << std::endl; // Choix des ports en fonction de l'article https://fr.wikipedia.org/wiki/Internet_Relay_Chat
+	std::cout << "<port> must be a number between 6665-6669" << std::endl;
+	// Choix des ports en fonction de l'article https://fr.wikipedia.org/wiki/Internet_Relay_Chat
 	return EXIT_FAILURE;
 }
 
@@ -48,8 +46,8 @@ bool Server::launchServ(){
 bool Server::serverSocketConfig(){
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-		std::cout << "ERROR: socket function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
+		std::cout << "ERROR: socket function error" << std::endl; 
+		return (EXIT_FAILURE); 
 	}
 
 //	INITIALIZE THE SERVER'S ADDRESS STRUCTURE
@@ -61,13 +59,13 @@ bool Server::serverSocketConfig(){
 
 //	BIND SOCKET WITH A PORT
 	if ((bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress))) < 0){
-		perror("\nerror found at bind"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
+		perror("\nerror found at bind");
+		return (EXIT_FAILURE);
 	}
 // LISTEN
 	if ((listen(_serverSocket, MAX_CONNECTIONS_ON_STANDBY)) < 0){
-		perror("\nerror found at listen"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-		return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
+		perror("\nerror found at listen"); 
+		return (EXIT_FAILURE);
 	}
 
 // SET THE GROUPS OF FD THAT WILL BE CHECKED BY SELECT
@@ -138,6 +136,7 @@ void			Server::messageHandling(int userSocketNumber){
 
 	char bufferLocal[MAX_BUFF + 1];
 	ssize_t  numOfBytesReceived;
+	Message m;
 
 	bzero(bufferLocal, MAX_BUFF + 1);
 	while ((numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0)) == MAX_BUFF) // to delete may be.
@@ -180,3 +179,5 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 	o << "State: " << rhs.getServerState() << std::endl;
 	return o;
 }
+
+

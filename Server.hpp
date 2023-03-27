@@ -11,6 +11,7 @@
 # include <map>
 # include "Channel.hpp"
 # include "Includes.hpp"
+# include "Message.hpp"
 
 class Server
 {
@@ -28,6 +29,8 @@ class Server
 		bool	serverSocketConfig();
 		bool	serverLoop();
 		void	addNewClient();
+		void	remove_client(Client* client);//hacer
+		void	send_message_to_client(Client* client, std::string message);
 
 		std::string		getName( void ) const;
 		std::string		getPassword( void ) const;
@@ -37,7 +40,16 @@ class Server
 		int				getNOfClients( void ) const;
 		std::string		getServerState( void ) const;
 		void			messageHandling(int userSocketNumber);
-
+		
+		void			numeric_reply(Client *c, std::string code);
+		// void	handle_new_connection();
+		// void	handle_client_request(Client* client);
+		// IDEAS a implementar
+		
+		void	create_channel(std::string channel_name);
+		void	add_client_to_channel(Client* client, std::string channel_name);
+		void	remove_client_from_channel(Client* client, std::string channel_name);
+		bool	channel_exists(std::string channel_name);
 	private:
 
 		std::string					_name;
@@ -57,3 +69,5 @@ class Server
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );
 
 #endif
+
+// };
