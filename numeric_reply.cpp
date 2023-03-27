@@ -1,10 +1,11 @@
-# include "Server.hpp"
-
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Includes.hpp"
 // map (string, string)
 // #define MSG_001 ":Welcome to the Internet Relay Network" + client->getNickname() + "!" + client->getUsername() + "@" + _name
 
 // RPL 001
-# define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network " \
+# define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network PAPA!" \
                + nick + "!" + user + "@" + host + "\r\n")
 
 // RPL 002
@@ -16,6 +17,9 @@
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
                     " " + version + " " + userModes + " " + channelModes + "\r\n")
+#define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
+
+
 
 std::string	ft_to_string(int value)
 {
@@ -65,6 +69,12 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 			return (reply + RPL_CREATED());
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
+		case 461:
+			return reply + ERR_NEEDMOREPARAMS(arg1);
+		case 462:
+			return reply + ERR_ALREADYREGISTERED;
+		case 464:
+			return reply + ERR_PASSWDMISMATCH;
 	}
 	return (reply);
 }
