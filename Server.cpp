@@ -133,6 +133,7 @@ bool Server::serverLoop(){
 
 void	Server::messageHandling(int userSocketNumber){
 	ssize_t  numOfBytesReceived;
+	Message m;
 
 	bzero(_buf, MAX_BUFF);
 	numOfBytesReceived = recv( userSocketNumber, _buf, MAX_BUFF, 0);
@@ -142,12 +143,19 @@ void	Server::messageHandling(int userSocketNumber){
 	}
 	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << YELLOW << "\t\t<" << RESET << std::endl; // TO DELETE: just to debug
 	parsing(numOfBytesReceived);
+	m = parseMessage(_buf);
+	std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
+	printAscii(_buf);
+	std::cout << FC(GREEN, "Message parsed =") << std::endl;
+	print_message(m);
 	execCmd();
 }
 
 void			Server::parsing(int numOfBytesReceived){
 	(void) numOfBytesReceived;
+
 	std::cout << BLUE << ">\tparsing function called\t\t<" << RESET << std::endl;
+
 }
 
 void			Server::execCmd(){

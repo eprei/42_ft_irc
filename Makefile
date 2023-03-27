@@ -9,6 +9,7 @@ SRCS =	main.cpp\
 		Channel.cpp\
 		Client.cpp\
 		numeric_reply.cpp\
+		parsing.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors #-g #-pedantic

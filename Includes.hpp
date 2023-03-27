@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <iostream>
 # include <string.h>
+# include <vector>
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <errno.h>
@@ -45,4 +46,18 @@
 #define BOLDWHITE	"\033[1m\033[37m"
 
 #define FC(color, string_a_colorear) color string_a_colorear RESET
+
+struct Message {
+    std::string prefix;
+    std::string command;
+    std::vector<std::string> params;
+};
+
+Message parseMessage(std::string input);
+void	print_message(const Message& msg);
+void	printAscii(const std::string& str);
+
+
+
+
 #endif

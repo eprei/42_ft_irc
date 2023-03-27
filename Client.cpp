@@ -31,7 +31,6 @@ int					Client::getId( void ) const {return _id;}
 std::string			Client::getNickname( void ) const {return _nickname;}
 std::string			Client::getUsername( void ) const{return _username;}
 std::string			Client::getHostname( void ) const{return _hostname;}
-bool				Client::getOperator( void ) const{return _operator;}
 std::time_t			Client::getlastCommunication( void ) const{return _lastCommunication;}
 int					Client::getSocket( void ) const{return _socket;}
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}
@@ -44,7 +43,6 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 	o << "Nickname: " << rhs.getNickname() << std::endl;
 	o << "Username: " << rhs.getUsername() << std::endl;
 	o << "Hostname: " << rhs.getHostname() << std::endl;
-	o << std::boolalpha << "Is Operator: " << rhs.getOperator() << std::endl;
 	o << "Last communication: " << rhs.getlastCommunication() << std::endl;
 	o << "Client Socket: " << rhs.getSocket() << std::endl;
 	// o << "Address: " << rhs.getAddress() << std::endl; TO CONSIDER: if it's usefull to print this infos to debug
