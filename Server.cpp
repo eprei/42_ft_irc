@@ -136,14 +136,12 @@ void			Server::messageHandling(int userSocketNumber){
 
 	char bufferLocal[MAX_BUFF + 1];
 	ssize_t  numOfBytesReceived;
-	Message m;
 
 	bzero(bufferLocal, MAX_BUFF + 1);
 	while ((numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0)) == MAX_BUFF) // to delete may be.
 	{
 		_buf[numOfBytesReceived] = 0;
 		_buf.append(bufferLocal);
-
 	}
 	if (numOfBytesReceived < 0){
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???

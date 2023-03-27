@@ -56,6 +56,7 @@ struct Message {
 };
 
 Message parseMessage(std::string input);
+void	process_buffer(const std::string& message);
 void	print_message(const Message& msg);
 void	printAscii(const std::string& str);
 
