@@ -50,6 +50,26 @@ class Server
 		void	add_client_to_channel(Client* client, std::string channel_name);
 		void	remove_client_from_channel(Client* client, std::string channel_name);
 		bool	channel_exists(std::string channel_name);
+		
+		//MSG
+
+
+		// CMDS
+		void	parsing(int numOfBytesReceived);
+		void	execCmd( void );
+		void	nick();
+		void	user();
+		void	pass();
+		void	join();
+		void	quit();
+		void	list();
+		void	part();
+		void	privmsg();
+		void	ping();
+		void	kick();
+		void	cap();
+		void	notice();
+
 	private:
 
 		std::string					_name;
@@ -63,7 +83,7 @@ class Server
 		std::map<int , Client *>	_clientsList;
 		std::vector<Channel *>		_channelList;
 		std::string					_serverState;
-		std::string					_buf;
+		char						_buf[MAX_BUFF];
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );

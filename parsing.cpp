@@ -5,6 +5,28 @@
 
 using namespace std;
 
+void	process_buffer(const std::string& buf)
+{
+    // Separar la cadena en tokens utilizando el delimitador "\r\n"
+	Message	m;
+    char	*token = strtok(const_cast<char*>(buf.c_str()), "\r\n");
+    while (token != NULL) {
+        // Convertir el token en una cadena de C++
+        std::string command(token);
+        std::cout << "Comando recibido: " << command << std::endl;
+        // Procesar el comando aquí...
+		m = parseMessage(token);
+		// std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
+		// printAscii(_buf);
+		std::cout << FC(GREEN, "Message parsed =") << std::endl;
+		print_message(m);
+		// execCmd(m);
+        // Obtener el siguiente token
+        token = strtok(NULL, "\r\n");
+    }
+}
+
+//el comando llega sin \r\n
 Message parseMessage(string input) {
     Message msg;
 
@@ -52,6 +74,8 @@ Message parseMessage(string input) {
     return msg;
 }
 
+
+//PRINT
 void	print_message(const Message& msg)
 {
     if (!msg.prefix.empty()) {
@@ -61,12 +85,12 @@ void	print_message(const Message& msg)
     std::cout << msg.command;
     std::cout << std::endl;
 
-    std::cout << "msg.params =" << std::endl;
+    std::cout << "msg.params =";
 	for (std::vector<std::string>::const_iterator it = msg.params.begin(); it != msg.params.end(); ++it)
 	{
         std::cout << " " << *it;
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 }
 
 void printAscii(const std::string& str)

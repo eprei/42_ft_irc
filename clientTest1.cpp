@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 	int sockfd, numbytes;
 	struct sockaddr_in servaddr;
 	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
-	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = { "NICK\n" , "USER\n" , "PASS\n" , \
-	 "JOIN\n" , "QUIT\n" , "LIST\n" , "PART\n" , "PRIVMSG\n" , "PING\n" , "KICK\n" , "CAP\n" , "NOTICE\n" , "MODE\n" };
+	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = { "nick" , "user" , "pass" , \
+	 "join" , "quit" , "list" , "part" , "privmsg" , "ping" , "kick" , "cap" , "notice"};
 	int i = 0;
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {

@@ -16,8 +16,7 @@
 # define CLIENT_NICKNAME_NOT_SET "CLIENT_NICKNAME_NOT_SET"
 # define CLIENT_USERNAME_NOT_SET "CLIENT_USERNAME_NOT_SET"
 # define CLIENT_HOSTNAME_NOT_SET "CLIENT_HOSTNAME_NOT_SET"
-# define NUMBER_OF_ACCEPTABLE_COMMANDS 13
-# define END_CHARACTERS "\n"
+# define NUMBER_OF_ACCEPTABLE_COMMANDS 12
 
 # include <stdlib.h>
 # include <iostream>
@@ -27,7 +26,6 @@
 # include <sys/socket.h>
 # include <errno.h>
 # include <stdio.h>
-# include <signal.h>
 
 #define RESET		"\033[0m"
 #define BLACK		"\033[30m"
@@ -56,9 +54,11 @@ struct Message {
 };
 
 Message parseMessage(std::string input);
+void	process_buffer(const std::string& message);
 void	print_message(const Message& msg);
 void	printAscii(const std::string& str);
 
-//  int g_server_is_on = TRUE;
+
+
 
 #endif
