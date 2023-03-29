@@ -98,12 +98,13 @@ void Server::addNewClient(){
 }
 
 void	Server::removeClient(Client* client){
-	close(client->getSocket());
-	_clientsList.erase(client->getSocket());
-	delete _clientsList[client->getSocket()];
-	FD_CLR(client->getSocket(), &_currentSockets);
+	int sock = client->getSocket();
+
+	close(sock);
+	delete _clientsList[sock];
+	FD_CLR(sock, &_currentSockets);
+	_clientsList.erase(sock);
 	_nOfClients -= 1;
-	// std::cout << *this << std::endl;
 }
 
 bool isSocketClosed(int socket_fd)
@@ -128,6 +129,7 @@ bool isSocketClosed(int socket_fd)
 bool Server::serverLoop(){
 	while (1)
 	{
+		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
 		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0)
 		{
@@ -171,7 +173,6 @@ void			Server::messageHandling(int userSocketNumber){
 	}
 	// bufferLocal[numOfBytesReceived] = 0;
 	_buf.append(bufferLocal);
-	std::cout << YELLOW << "\n>\tmessage recived at messageHandling function: " << RESET << _buf << RESET << std::endl; // TO DELETE: just to debug
 	_clientsList[userSocketNumber]->setBuf(_buf);
 	_buf.erase();
 	// std::cout << *this << std::endl;
