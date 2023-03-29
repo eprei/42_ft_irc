@@ -2,29 +2,30 @@
 #include <string>
 #include <vector>
 #include "Includes.hpp"
+#include "Client.hpp"
 
 using namespace std;
 
-void	process_buffer(const std::string& buf)
-{
-    // Separar la cadena en tokens utilizando el delimitador "\r\n"
-	Message	m;
-    char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
-    while (token != NULL) {
-        // Convertir el token en una cadena de C++
-        std::string command(token);
-        std::cout << "Comando recibido: " << command << std::endl;
-        // Procesar el comando aquí...
-		m = parseMessage(token);
-		// std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
-		// printAscii(_buf);
-		std::cout << FC(GREEN, "Message parsed =") << std::endl;
-		print_message(m);
-		// execCmd(m);
-        // Obtener el siguiente token
-        token = strtok(NULL, END_CHARACTERS);
-    }
-}
+// void	process_buffer(const std::string& buf)
+// {
+//     // Separar la cadena en tokens utilizando el delimitador "\r\n"
+// 	Message	m;
+//     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
+//     while (token != NULL) {
+//         // Convertir el token en una cadena de C++
+//         std::string command(token);
+//         std::cout << "Comando recibido: " << command << std::endl;
+//         // Procesar el comando aquí...
+// 		m = parseMessage(token);
+// 		// std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
+// 		// printAscii(_buf);
+// 		std::cout << FC(GREEN, "Message parsed =") << std::endl;
+// 		print_message(m);
+// 		Client::execCmd(&m);
+//         // Obtener el siguiente token
+//         token = strtok(NULL, END_CHARACTERS);
+//     }
+// }
 
 //el comando llega sin \r\n
 Message parseMessage(string input) {

@@ -17,7 +17,7 @@
 # define CLIENT_USERNAME_NOT_SET "CLIENT_USERNAME_NOT_SET"
 # define CLIENT_HOSTNAME_NOT_SET "CLIENT_HOSTNAME_NOT_SET"
 # define NUMBER_OF_ACCEPTABLE_COMMANDS 13
-# define END_CHARACTERS "\n"
+# define END_CHARACTERS "\r\n"
 
 # include <stdlib.h>
 # include <iostream>
@@ -28,6 +28,9 @@
 # include <errno.h>
 # include <stdio.h>
 # include <signal.h>
+
+class Client;
+class Server;
 
 #define RESET		"\033[0m"
 #define BLACK		"\033[30m"
@@ -47,7 +50,12 @@
 #define BOLDCYAN	"\033[1m\033[36m"
 #define BOLDWHITE	"\033[1m\033[37m"
 
-#define FC(color, string_a_colorear) color string_a_colorear RESET
+
+#define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+#define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
+ 
+# define FC(color, string_a_colorear) color string_a_colorear RESET
+
 
 struct Message {
     std::string prefix;
@@ -56,9 +64,11 @@ struct Message {
 };
 
 Message parseMessage(std::string input);
-void	process_buffer(const std::string& message);
+// void	process_buffer(const std::string& message);
 void	print_message(const Message& msg);
 void	printAscii(const std::string& str);
+std::string	numeric_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+void		send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 
 //  int g_server_is_on = TRUE;
 

@@ -13,6 +13,8 @@
 # include "Includes.hpp"
 # include "Message.hpp"
 
+class Channel;
+
 class Server
 {
 	public:

@@ -4,12 +4,18 @@
 # include <iostream>
 # include <ctime>
 # include <netinet/in.h>
+# include "Message.hpp"
+# include "Includes.hpp"
+// # include "Server.hpp"
+
+class Server;
 
 class Client
 {
 	public:
-
-		Client();
+		
+		// Client();
+		Client(Server *server);
 		Client(Client &other);
 		Client &operator=(Client &other);
 		~Client();
@@ -27,27 +33,30 @@ class Client
 		std::string			getNickname( void ) const;
 		std::string			getUsername( void ) const;
 		std::string			getHostname( void ) const;
-		// bool				getOperator( void ) const;
 		std::time_t			getlastCommunication( void ) const;
 		int					getSocket( void ) const;
 		struct sockaddr_in	getAddress( void ) const;
-		std::string			getBuf( void ) const;
 
+		//Parsing
+		std::string			getBuf( void ) const;
 		void				parsing( void );
-		void				execCmd( void );
-		void				nick( void );
-		void				user( void );
-		void				pass( void );
-		void				join( void );
-		void				quit( void );
-		void				list( void );
-		void				part( void );
-		void				privmsg( void );
-		void				ping( void );
-		void				kick( void );
-		void				cap( void );
-		void				notice( void );
-		void				mode( void );
+		void				execCmd(Message *m);
+		void				process_buffer(const std::string& message);
+
+		// CMDS
+		void				nick(Message *m);
+		void				user(Message *m);
+		void				pass(Message *m);
+		void				join(Message *m);
+		void				quit(Message *m);
+		void				list(Message *m);
+		void				part(Message *m);
+		void				privmsg(Message *m);
+		void				ping(Message *m);
+		void				kick(Message *m);
+		void				cap(Message *m);
+		void				notice(Message *m);
+		void				mode(Message *m);
 
 	private:
 
@@ -55,13 +64,14 @@ class Client
 		std::string 		_nickname;
 		std::string 		_username;
 		std::string 		_hostname;
-		bool				_operator;
+		bool				_isRegistered;
 		std::time_t			_lastCommunication;
 		int 				_socket;
 		struct sockaddr_in	_address;
 		std::string			_buf;
-
 		static int			_maxId;
+		Server				*_server;
+
 
 };
 

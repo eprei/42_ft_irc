@@ -81,7 +81,7 @@ void Server::addNewClient(){
 	int addrSize = sizeof(struct sockaddr_in);
 	int clientSocketLocal;
 	struct sockaddr_in clientAddr;
-	Client *neo = new Client;
+	Client *neo = new Client(this);
 
 	if ((clientSocketLocal = accept(this->_serverSocket, (struct sockaddr*)&clientAddr, (socklen_t*)&addrSize)) < 0){
 		perror("\nerror found at accept"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???

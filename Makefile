@@ -8,11 +8,13 @@ SRCS =	main.cpp\
 		Server.cpp\
 		Channel.cpp\
 		Client.cpp\
-		numeric_reply.cpp\
 		parsing.cpp\
+		numeric_reply.cpp\
+		pass.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
-CFLAGS += -Wfatal-errors #-g #-pedantic
+CFLAGS += -Wfatal-errors  #-pedantic
+CFLAGS += -fsanitize=address -g3
 
 OBJ = $(SRCS:.cpp=.o)
 
@@ -37,7 +39,7 @@ run: all
 
 run2: all
 	./ircserv 6668 asd
-
+  
 clean:
 	/bin/rm -f $(OBJ)
 
