@@ -6,11 +6,14 @@
 # include <string>
 # include "Client.hpp"
 
-//   Channel: Esta clase representaría a un canal de chat en el servidor. 
+//   Channel: Esta clase representaría a un canal de chat en el servidor.
 //   Sería responsable de mantener una lista de clientes que se han unido al canal,
 //   enviar mensajes a todos los clientes en el canal,
 //   y gestionar las restricciones de acceso al canal.
 //   atributo _private: es privado o no el canal??
+
+class Client;
+
 class Channel
 {
 	private:
@@ -20,7 +23,7 @@ class Channel
 		std::string _topic;
 	    std::vector<Client*> members;
 	    // std::vector<Client*> oper;
-	
+
 	public:
 
 		Channel(Client &owner, std::string name);
@@ -30,15 +33,15 @@ class Channel
 
   		std::string				getName() const;
 		std::vector<Client*>	getClients() const;
-		void	addClient(Client *client); 
-		void	removeClient(Client *client); 
+		void	addClient(Client *client);
+		void	removeClient(Client *client);
 		bool	hasClient(Client *client) const;
 
 		bool	isOperator(Client *client) const;
 		// void	addOperator(Client *to_add);
 		// void	removeOperator(Client *to_del);
 
-		void		setTopic(std::string topic); 
+		void		setTopic(std::string topic);
 		std::string	getTopic() const;
 
 };

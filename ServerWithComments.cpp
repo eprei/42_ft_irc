@@ -261,16 +261,16 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 //   void start();
 //   void handle_new_connection();
 //   void handle_client_request(Client* client);
-//   void remove_client(Client* client);
+//   void removeClient(Client* client);
 //   void broadcast_message(std::string message);
 //   void send_message_to_client(Client* client, std::string message);
 //   void create_channel(std::string channel_name);
 //   void add_client_to_channel(Client* client, std::string channel_name);
-//   void remove_client_from_channel(Client* client, std::string channel_name);
+//   void removeClient_from_channel(Client* client, std::string channel_name);
 //   bool channel_exists(std::string channel_name);
 // };
 
-inline void Server::numeric_reply(Client *c, std::string code, std::string arg1, std::string arg2, std::string arg3) 
+inline void Server::numeric_reply(Client *c, std::string code, std::string arg1, std::string arg2, std::string arg3)
 {
 	std::string txt;
 	char *ptr;
@@ -279,7 +279,7 @@ inline void Server::numeric_reply(Client *c, std::string code, std::string arg1,
 	txt.append(" ");
 	txt.append(code);
 	txt.append(" ");
-	txt.append(u->getNickName()); 
+	txt.append(u->getNickName());
 	txt.append(" ");
 	txt.append(choose_msg(std::strtol(code.c_str(), &ptr, 10), u, arg1, arg2, arg3));
 	txt.append("\r\n");
