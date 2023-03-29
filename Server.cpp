@@ -46,8 +46,8 @@ bool Server::launchServ(){
 bool Server::serverSocketConfig(){
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-		std::cout << "ERROR: socket function error" << std::endl; 
-		return (EXIT_FAILURE); 
+		std::cout << "ERROR: socket function error" << std::endl;
+		return (EXIT_FAILURE);
 	}
 
 //	INITIALIZE THE SERVER'S ADDRESS STRUCTURE
@@ -64,7 +64,7 @@ bool Server::serverSocketConfig(){
 	}
 // LISTEN
 	if ((listen(_serverSocket, MAX_CONNECTIONS_ON_STANDBY)) < 0){
-		perror("\nerror found at listen"); 
+		perror("\nerror found at listen");
 		return (EXIT_FAILURE);
 	}
 
@@ -99,7 +99,8 @@ void Server::addNewClient(){
 
 bool Server::serverLoop(){
 	// TO DO: Handle the signals and set _serverState to IS_OFF when a unix signal is reciveded
-	while (_serverState == IS_ON)
+	// signalHandling();
+	while (1)
 	{
 		// this is to keep safe the information of this->_currentSocket
 		// we have to work in a copy (_readySocket) because select is destructive,
@@ -147,7 +148,7 @@ void			Server::messageHandling(int userSocketNumber){
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
-	bufferLocal[numOfBytesReceived] = 0;
+	// bufferLocal[numOfBytesReceived] = 0;
 	_buf.append(bufferLocal);
 	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << RESET << std::endl; // TO DELETE: just to debug
 	_clientsList[userSocketNumber]->setBuf(_buf);

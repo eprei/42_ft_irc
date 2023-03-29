@@ -38,13 +38,14 @@ void 				Client::setAddress(struct sockaddr_in address){_address = address;}
 void 				Client::setBuf(std::string buf){
 	_buf += buf;
 	// std::cout << YELLOW << "The client " << this->_id << " has recived a new bufferline: " << RESET << _buf << std::endl;
-	// if (_buf.find(END_CHARACTERS) != std::string::npos )
-	// {
+	if (_buf.find(END_CHARACTERS) != std::string::npos )
+	{
 		// _buf = _buf.substr(0, _buf.find(END_CHARACTERS));
 		// std::cout << GREEN << "The client " << RESET << this->_id << " has detected an endline" << std::endl;
 		process_buffer(_buf);
 		_buf.clear();
 	}
+}
 
 void				Client::parsing( void ){
 	std::cout << BLUE << ">\tparsing function executed " << RESET <<"by client id: " << _id << "\t<" << RESET << std::endl;
