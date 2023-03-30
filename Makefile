@@ -11,6 +11,8 @@ SRCS =	main.cpp\
 		parsing.cpp\
 		numeric_reply.cpp\
 		pass.cpp\
+		nick.cpp\
+		user.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors  #-pedantic
@@ -19,7 +21,6 @@ CFLAGS += -fsanitize=address -g3
 OBJ = $(SRCS:.cpp=.o)
 
 TEST_CLIENT_1 = test1
-
 TEST_CLIENT_2 = test2
 
 .cpp.o:
@@ -30,7 +31,7 @@ all: $(NAME) test
 $(NAME): $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
 
-test:
+test: 
 	$(CXX) $(CFLAGS) clientTest1.cpp -o $(TEST_CLIENT_1)
 	$(CXX) $(CFLAGS) clientTest2.cpp -o $(TEST_CLIENT_2)
 
