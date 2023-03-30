@@ -39,7 +39,7 @@ run: all
 
 run2: all
 	./ircserv 6668 asd
-  
+
 clean:
 	/bin/rm -f $(OBJ)
 

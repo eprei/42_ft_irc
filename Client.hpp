@@ -4,16 +4,16 @@
 # include <iostream>
 # include <ctime>
 # include <netinet/in.h>
-# include "Message.hpp"
+# include "Server.hpp"
 # include "Includes.hpp"
-// # include "Server.hpp"
+# include "Message.hpp"
 
 class Server;
 
 class Client
 {
 	public:
-		
+
 		// Client();
 		Client(Server *server);
 		Client(Client &other);
@@ -28,6 +28,7 @@ class Client
 		void				setSocket(int socket);
 		void				setAddress(struct sockaddr_in address);
 		void				setBuf(std::string buf);
+		int					getMaxId( void ) const ;
 
 		int					getId( void ) const;
 		std::string			getNickname( void ) const;
@@ -39,7 +40,6 @@ class Client
 
 		//Parsing
 		std::string			getBuf( void ) const;
-		void				parsing( void );
 		void				execCmd(Message *m);
 		void				process_buffer(const std::string& message);
 
@@ -57,6 +57,7 @@ class Client
 		void				cap(Message *m);
 		void				notice(Message *m);
 		void				mode(Message *m);
+		void				pong(Message *m);
 
 	private:
 

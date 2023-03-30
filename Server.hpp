@@ -13,6 +13,8 @@
 # include "Includes.hpp"
 # include "Message.hpp"
 
+class Client;
+
 class Channel;
 
 class Server
@@ -31,7 +33,7 @@ class Server
 		bool	serverSocketConfig();
 		bool	serverLoop();
 		void	addNewClient();
-		void	remove_client(Client* client);//hacer
+		void	removeClient(Client* client);
 		void	send_message_to_client(Client* client, std::string message);
 
 		std::string		getName( void ) const;
@@ -50,8 +52,9 @@ class Server
 
 		void	create_channel(std::string channel_name);
 		void	add_client_to_channel(Client* client, std::string channel_name);
-		void	remove_client_from_channel(Client* client, std::string channel_name);
+		void	removeClient_from_channel(Client* client, std::string channel_name);
 		bool	channel_exists(std::string channel_name);
+		bool	isNickUsed(std::string nickname);
 
 	private:
 
@@ -64,7 +67,7 @@ class Server
 		fd_set						_readySockets;
 		int							_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
 		std::map<int , Client *>	_clientsList;
-		std::vector<Channel *>		_channelList;
+		// std::vector<Channel *>		_channelList;
 		std::string					_serverState;
 		std::string					_buf;
 };

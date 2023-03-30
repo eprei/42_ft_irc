@@ -93,37 +93,63 @@ void Server::addNewClient(){
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
 	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo;
-	// FD_CLEAR(i, &_currentSockets); TO USE IN THE FUTURE: when we delete a user
-	// if (FD_ISSET(i, &_readySockets)){
+	_nOfClients += 1;
+	// std::cout << *this << std::endl;
+}
+
+void	Server::removeClient(Client* client){
+	int sock = client->getSocket();
+
+	close(sock);
+	delete _clientsList[sock];
+	FD_CLR(sock, &_currentSockets);
+	_clientsList.erase(sock);
+	_nOfClients -= 1;
+}
+
+bool isSocketClosed(int socket_fd)
+{
+	char buffer[1];
+	int result = recv(socket_fd, buffer, 1, MSG_PEEK);
+
+	if (result == 0) {
+		// std::cout << "the socket is closed" << std::endl;
+		return true;
+	}
+	else if (result < 0) {
+		// std::cout << "error found at isSocketClosed function" << std::endl;
+		return false;
+	}
+	else {
+		// std::cout << "the socket is open" << std::endl;
+		return false;
+	}
 }
 
 bool Server::serverLoop(){
-	// TO DO: Handle the signals and set _serverState to IS_OFF when a unix signal is reciveded
-	// signalHandling();
 	while (1)
 	{
-		// this is to keep safe the information of this->_currentSocket
-		// we have to work in a copy (_readySocket) because select is destructive,
-		// it overwrites the structure and we lose the previous information
+		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
-		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0){
+		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0)
+		{
 			// (errno == EINTR) To verify if we control errno or not because if we do we could go against what is requested in the evaluation
 			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred
 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 		}
-		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++) // TO OPTIMIZE: change FD_SETSIZE by the number or users to reduce the amount of iterations
+		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
 		{
-			if (FD_ISSET(SocketNumber, &_readySockets)){
-				// i it's a fd with data that we can read right now. Two cases are possibles
-				if (SocketNumber == _serverSocket){
-					// this is a new connection that we can accept
-					std::cout << YELLOW << "\n_\tnew conection detected\t_" << RESET << std::endl;
+			if (FD_ISSET(SocketNumber, &_readySockets))
+			{
+				if (SocketNumber == _serverSocket)
 					addNewClient();
-				}
-				else {
-					// this is an already connected client sending us a message, so we can handle the message
-					messageHandling(SocketNumber);
+				else
+				{
+					if (isSocketClosed(SocketNumber) == true)
+						removeClient(_clientsList[SocketNumber]);
+					else
+						messageHandling(SocketNumber);
 				}
 			}
 		}
@@ -139,21 +165,33 @@ void			Server::messageHandling(int userSocketNumber){
 	ssize_t  numOfBytesReceived;
 
 	bzero(bufferLocal, MAX_BUFF + 1);
-	while ((numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0)) == MAX_BUFF) // to delete may be.
-	{
-		_buf[numOfBytesReceived] = 0;
-		_buf.append(bufferLocal);
-	}
+	numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0);
+	// _buf[numOfBytesReceived] = 0;
 	if (numOfBytesReceived < 0){
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
 	// bufferLocal[numOfBytesReceived] = 0;
 	_buf.append(bufferLocal);
-	std::cout << YELLOW << "\n>\tmessage recived: " << RESET << _buf << RESET << std::endl; // TO DELETE: just to debug
 	_clientsList[userSocketNumber]->setBuf(_buf);
 	_buf.erase();
+	// std::cout << *this << std::endl;
+
 }
+
+bool	Server::isNickUsed(std::string nickname)
+{
+	std::map<int , Client *>::iterator itBegin = _clientsList.begin();
+
+	while (itBegin != _clientsList.end())
+	{
+		if (itBegin->second->getNickname() == nickname)
+			return true;
+		itBegin++;
+	}
+	return false;
+}
+
 
 std::string		Server::getName( void ) const{return _name;}
 
@@ -163,7 +201,7 @@ int				Server::getPort( void ) const{return _port;}
 
 int				Server::getServerSocket( void ) const{return _serverSocket;}
 
-int				Server::getNOfClients( void ) const{return _nOfClients;}
+int				Server::getNOfClients( void ) const {return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
 

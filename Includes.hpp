@@ -16,7 +16,7 @@
 # define CLIENT_NICKNAME_NOT_SET "CLIENT_NICKNAME_NOT_SET"
 # define CLIENT_USERNAME_NOT_SET "CLIENT_USERNAME_NOT_SET"
 # define CLIENT_HOSTNAME_NOT_SET "CLIENT_HOSTNAME_NOT_SET"
-# define NUMBER_OF_ACCEPTABLE_COMMANDS 13
+# define NUMBER_OF_ACCEPTABLE_COMMANDS 14
 # define END_CHARACTERS "\r\n"
 
 # include <stdlib.h>
@@ -53,15 +53,15 @@ class Server;
 
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
 #define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
- 
+
 # define FC(color, string_a_colorear) color string_a_colorear RESET
 
 
-struct Message {
+typedef struct Message {
     std::string prefix;
     std::string command;
     std::vector<std::string> params;
-};
+} TMesage;
 
 Message parseMessage(std::string input);
 // void	process_buffer(const std::string& message);

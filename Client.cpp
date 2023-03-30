@@ -4,13 +4,6 @@
 // TO DO: write copilen's functions
 int Client::_maxId = 0;
 
-// Client::Client(): _nickname(CLIENT_NICKNAME_NOT_SET), _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET){
-// 	_maxId += 1;
-// 	_id = Client::_maxId;
-// 	_isRegistered = false;
-// 	_server = NULL;
-// }
-
 Client::Client(Server *s): _nickname(CLIENT_NICKNAME_NOT_SET),
  _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET), _server(s) {
 	_maxId += 1;
@@ -35,25 +28,16 @@ void				Client::setHostname(std::string hostname){_hostname = hostname;}
 void				Client::setLastCommunication(std::time_t lastCommunication){_lastCommunication = lastCommunication;}
 void 				Client::setSocket(int socket){_socket = socket;}
 void 				Client::setAddress(struct sockaddr_in address){_address = address;}
+
 void 				Client::setBuf(std::string buf){
 	_buf += buf;
-	// std::cout << YELLOW << "The client " << this->_id << " has recived a new bufferline: " << RESET << _buf << std::endl;
 	if (_buf.find(END_CHARACTERS) != std::string::npos )
 	{
-		// _buf = _buf.substr(0, _buf.find(END_CHARACTERS));
-		// std::cout << GREEN << "The client " << RESET << this->_id << " has detected an endline" << std::endl;
 		process_buffer(_buf);
 		_buf.clear();
 	}
 }
 
-void				Client::parsing( void ){
-	std::cout << BLUE << ">\tparsing function executed " << RESET <<"by client id: " << _id << "\t<" << RESET << std::endl;
-}
-
-
-		// std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
-		// printAscii(_buf);
 void	Client::process_buffer(const std::string& buf)
 {
 	Message	m;
@@ -74,11 +58,11 @@ void	Client::process_buffer(const std::string& buf)
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] =\
 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
-	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE"}; // ISON ?
+	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG"}; // ISON ?
 	void	(Client::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
 	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
-	&Client::ping , &Client::kick , &Client::cap , &Client::notice , &Client::mode};
+	&Client::ping , &Client::kick , &Client::cap , &Client::notice , &Client::mode, &Client::pong };
 
 	std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
@@ -92,9 +76,17 @@ void			Client::execCmd(Message *m){
 	std::cout << RED << ">\t\tunknow command\t\t\t<" << RESET << std::endl;
 }
 
-void			Client::nick(Message *m){
+void	Client::nick(Message *m){
 	(void)m;
+
 	std::cout << GREEN << ">\tnick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	if (_server->isNickUsed(m->params[0]))
+	{
+		std::cout << "the nick is already used" << std::endl;
+		return;
+	}
+	std::cout << "the nick is available" << std::endl;
+	this->setNickname(m->params[0]);
 }
 
 void			Client::user(Message *m){
@@ -154,6 +146,11 @@ void			Client::mode(Message *m){
 	std::cout << GREEN << ">\tmode function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 }
 
+void			Client::pong(Message *m){
+	(void)m;
+	std::cout << GREEN << ">\tpong function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+}
+
 int					Client::getId( void ) const {return _id;}
 std::string			Client::getNickname( void ) const {return _nickname;}
 std::string			Client::getUsername( void ) const{return _username;}
@@ -162,6 +159,7 @@ std::time_t			Client::getlastCommunication( void ) const{return _lastCommunicati
 int					Client::getSocket( void ) const{return _socket;}
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}
 std::string			Client::getBuf( void ) const{return _buf;}
+int					Client::getMaxId( void ) const {return _maxId;}
 
 std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 {
