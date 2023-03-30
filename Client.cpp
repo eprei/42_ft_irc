@@ -76,24 +76,9 @@ void			Client::execCmd(Message *m){
 	std::cout << RED << ">\t\tunknow command\t\t\t<" << RESET << std::endl;
 }
 
-void	Client::nick(Message *m){
-	(void)m;
 
-	std::cout << GREEN << ">\tnick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-	if (_server->isNickUsed(m->params[0]))
-	{
-		std::cout << "the nick is already used" << std::endl;
-		return;
-	}
-	std::cout << "the nick is available" << std::endl;
-	this->setNickname(m->params[0]);
-}
 
-void			Client::user(Message *m){
-	(void)m;
 
-	std::cout << GREEN << ">\tuser function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
 
 
 void			Client::join(Message *m){
