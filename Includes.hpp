@@ -13,9 +13,9 @@
 # define DEFAULT_PASSWORD "0000"
 # define IS_OFF "off"
 # define IS_ON "on"
-# define CLIENT_NICKNAME_NOT_SET "CLIENT_NICKNAME_NOT_SET"
-# define CLIENT_USERNAME_NOT_SET "CLIENT_USERNAME_NOT_SET"
-# define CLIENT_HOSTNAME_NOT_SET "CLIENT_HOSTNAME_NOT_SET"
+# define CLIENT_NICKNAME_NOT_SET "NickNotSet"
+# define CLIENT_USERNAME_NOT_SET "UserNotSet"
+# define CLIENT_HOSTNAME_NOT_SET "HostMotSet"
 # define NUMBER_OF_ACCEPTABLE_COMMANDS 14
 # define END_CHARACTERS "\r\n"
 
@@ -69,6 +69,7 @@ void	print_message(const Message& msg);
 void	printAscii(const std::string& str);
 std::string	numeric_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 void		send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+std::string	formatMsgsUsers(const std::string & nickname, const std::string & username, const std::string & hostname);
 
 //  int g_server_is_on = TRUE;
 

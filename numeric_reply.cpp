@@ -19,7 +19,19 @@
                     " " + version + " " + userModes + " " + channelModes + "\r\n")
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
 
+#define ERR_NONICKNAMEGIVEN ":No nickname given" //431
+// - Returned when a nickname parameter expected for a command and isn't found.
 
+// #define ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname" //432
+#define ERR_ERRONEUSNICKNAME(nick) nick + " :Erroneous nickname" //432
+//          - Returned after receiving a NICK message which contains
+//            characters which do not fall in the defined set.  See
+//            section 2.3.1 for details on valid nicknames.
+
+# define ERR_NICKNAMEINUSE(nick) nick + " :Nickname is already in use" //433
+//          - Returned when a NICK message is processed that results
+//            in an attempt to change to a currently existing
+//            nickname..
 
 std::string	ft_to_string(int value)
 {
@@ -69,6 +81,14 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 			return (reply + RPL_CREATED());
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
+		// nick
+		case 431:
+			return (reply + ERR_NONICKNAMEGIVEN);
+		case 432:
+			return (reply + ERR_ERRONEUSNICKNAME(arg1));
+		case 433:
+			return (reply + ERR_NICKNAMEINUSE(arg1));
+
 		case 461:
 			return reply + ERR_NEEDMOREPARAMS(arg1);
 		case 462:
@@ -89,5 +109,17 @@ void	send_reply(const int code, Client *client, Server *serv, std::string arg1, 
 		perror("SEND FAILED");
 }
 
+std::string	formatMsgsUsers(const std::string & nickname, const std::string & username, const std::string & hostname)
+{
+	std::string		msg;
 
+	msg.append(":");
+	msg.append(nickname);
+	msg.append("!");
+	msg.append(username);
+	msg.append("@");
+	msg.append(hostname);
+	msg.append(" ");
+	return (msg);
+}
 
