@@ -13,6 +13,7 @@ SRCS =	main.cpp\
 		pass.cpp\
 		nick.cpp\
 		user.cpp\
+		whois.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors  #-pedantic
@@ -31,7 +32,7 @@ all: $(NAME) test
 $(NAME): $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
 
-test: 
+test:
 	$(CXX) $(CFLAGS) clientTest1.cpp -o $(TEST_CLIENT_1)
 	$(CXX) $(CFLAGS) clientTest2.cpp -o $(TEST_CLIENT_2)
 

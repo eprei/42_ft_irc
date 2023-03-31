@@ -105,6 +105,7 @@ void	Server::removeClient(Client* client){
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
 	_nOfClients -= 1;
+	// TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
 }
 
 bool isSocketClosed(int socket_fd)

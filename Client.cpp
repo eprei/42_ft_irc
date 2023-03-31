@@ -59,11 +59,11 @@ void	Client::process_buffer(const std::string& buf)
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] =\
 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
-	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG"}; // ISON ?
+	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG" , "WHOIS" }; // ISON ?
 	void	(Client::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
 	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
-	&Client::ping , &Client::kick , &Client::cap , &Client::notice , &Client::mode, &Client::pong };
+	&Client::ping , &Client::kick , &Client::cap , &Client::notice , &Client::mode, &Client::pong , &Client::whois };
 
 	std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
@@ -76,11 +76,6 @@ void			Client::execCmd(Message *m){
 	}
 	std::cout << RED << ">\t\tunknow command\t\t\t<" << RESET << std::endl;
 }
-
-
-
-
-
 
 void			Client::join(Message *m){
 	(void)m;

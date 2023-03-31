@@ -58,6 +58,7 @@ class Client
 		void				notice(Message *m);
 		void				mode(Message *m);
 		void				pong(Message *m);
+		void				whois(Message *m);
 
 	private:
 
