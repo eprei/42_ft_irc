@@ -5,7 +5,8 @@
 int Client::_maxId = 0;
 
 Client::Client(Server *s): _nickname(CLIENT_NICKNAME_NOT_SET),
- _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET), _server(s) {
+ _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET),
+ _realname(CLIENT_REALNAME_NOT_SET), _server(s){
 	_maxId += 1;
 	_id = Client::_maxId;
 	_isRegistered = false;
