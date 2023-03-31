@@ -1,12 +1,12 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-# include <iostream>
-# include <ctime>
-# include <netinet/in.h>
-# include "Server.hpp"
+// # include <iostream>
+// # include <ctime>
+// # include <netinet/in.h>
 # include "Includes.hpp"
-# include "Message.hpp"
+// # include "Server.hpp"
+// # include "Message.hpp"
 
 class Server;
 

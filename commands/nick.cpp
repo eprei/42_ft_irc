@@ -1,6 +1,6 @@
-#include "Client.hpp"
-#include "Server.hpp"
+#include "../srcs/Includes.hpp"
 #include <cstring>
+
 // 3.1.2 Nick message
 //       Command: NICK  Parameters: <nickname>
 

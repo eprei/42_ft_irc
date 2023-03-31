@@ -1,5 +1,5 @@
-#include "Client.hpp"
-#include "Server.hpp"
+#include "../srcs/Includes.hpp"
+
 
 void			Client::user(Message *m){
 	(void)m;

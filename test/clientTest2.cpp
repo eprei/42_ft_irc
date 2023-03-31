@@ -9,9 +9,9 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "Includes.hpp"
+#include "../srcs/Includes.hpp"
 
-#define TEST_MESSAGE "Hello, i'm client 1"
+#define TEST_MESSAGE  "burgers!"
 #define TEST_MESSAGE_LENGTH 23
 #define PORT 6667
 
@@ -21,10 +21,7 @@ int main(int argc, char *argv[])
 	(void)argc;
 	int sockfd, numbytes;
 	struct sockaddr_in servaddr;
-	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
-	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = { "NICK\n" , "USER\n" , "PASS\n" , \
-	 "JOIN\n" , "QUIT\n" , "LIST\n" , "PART\n" , "PRIVMSG\n" , "PING\n" , "KICK\n" , "CAP\n" , "NOTICE\n" , "MODE\n" };
-	int i = 0;
+	char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("socket");
@@ -36,6 +33,13 @@ int main(int argc, char *argv[])
 	// servaddr.sin_addr = *((struct in_addr *)he->h_addr);
 	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	bzero(&(servaddr.sin_zero), 8);     /* zero pour le reste de struct */
+
+	// convert the text representation of the ip address
+	// into a binary representation of the address
+	// if (inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr) <= 0){
+		// perror("inet_pton");
+		// exit(1);
+	// }
 
 	if (connect(sockfd, (struct sockaddr *)&servaddr,sizeof(servaddr)) < 0) {
 		perror("connect");
@@ -49,18 +53,15 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		if ((numbytes=send(sockfd, acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].c_str(), acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length(), 0)) < 0) {
+		if ((numbytes=send(sockfd, buff, sizeof(buff), 0)) < 0) {
 			perror("send");
 			exit(1);
 		}
-		// if (numbytes != (int)sizeof(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()))
-		std::cout << "string length = " << (int)(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()) << std::endl;
-		if (numbytes != (int)(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()))
-			std::cout << "numbytes sended = " << numbytes << "the test message has been partially sent" << std::endl;
+		if (numbytes != (int)sizeof(buff))
+			std::cout << "the test message has been partially sent" << std::endl;
 		else
 			std::cout << "the message has been completely sent" << std::endl;
 		sleep (4);
-		i++;
 	}
 	// buf[numbytes] = '\0';
 

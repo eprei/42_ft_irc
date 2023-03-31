@@ -89,6 +89,9 @@ port_proxy = 8000
 port_server = 6667
 ip_server = '127.0.0.1'
 # ip_server = '159.65.18.165' # testnet.ergo.chat
+# KIWIIRC 
+# testnet.oragono.io port 443
+# wss://testnet.oragono.io/webirc
 
 
 master_server = Proxy(ip_proxy, ip_server, port_server, port_proxy)

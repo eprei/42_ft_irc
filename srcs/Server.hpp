@@ -1,20 +1,9 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <netinet/in.h>
-# include <iostream>
-# include "Client.hpp"
-# include <vector>
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <unistd.h>
-# include <map>
-# include "Channel.hpp"
 # include "Includes.hpp"
-# include "Message.hpp"
 
 class Client;
-
 class Channel;
 
 class Server

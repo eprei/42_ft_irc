@@ -1,6 +1,24 @@
 #ifndef MESSAGE_HPP
 # define MESSAGE_HPP
 
+class Client;
+class Server;
+
+typedef struct s_message {
+    std::string prefix;
+    std::string command;
+    std::vector<std::string> params;
+}	Message;
+
+Message	parseMessage(std::string input);
+// void	process_buffer(const std::string& message);
+void	print_message(const Message& msg);
+void	printAscii(const std::string& str);
+std::string	numeric_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+void		send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+std::string	formatMsgsUsers(const std::string & nickname, const std::string & username, const std::string & hostname);
+
+
 // # include <string>
 // # include <ctime>
 // # include "Client.hpp"
