@@ -36,6 +36,7 @@ class Channel
 		void	addClient(Client *client);
 		void	removeClient(Client *client);
 		bool	hasClient(Client *client) const;
+		bool	isEmpty() const;
 
 		bool	isOperator(Client *client) const;
 		// void	addOperator(Client *to_add);

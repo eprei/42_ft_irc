@@ -23,21 +23,33 @@ int main(int argc, char *argv[])
 	struct sockaddr_in servaddr;
 	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = {
-		"PASS asd\r\n"		,\
-		"NICK pepito\r\n"	,\
-		"USER John\r\n"		,\
-		"JOIN #LOL\r\n" 	,\
-		"LIST\r\n" 			,\
-		"MODE\r\n"			,\
-		"PART\r\n" 			,\
-		"WHOIS raul\r\n"	,\
-		"PRIVMSG\r\n"		,\
+		"PASS asd\r\n"				,\
+		"NICK pepito\r\n"			,\
+		"USER John\r\n"				,\
+		"JOIN #LOL\r\n" 			,\
+		"JOIN &foo fubar\r\n"		,\
+		// Command to join channel &foo using key "fubar".
+		"JOIN #foo,&bar fubar\r\n"		,\
+		//  ; Command to join channel #foo using key "fubar" and &bar using no key.
+		"JOIN #foo,#bar fubar,foobar\r\n"	,\
+		// ; Command to join channel #foo using key "fubar", and channel #bar using key "foobar".
+		"JOIN #foo,#bar\r\n",\
+		"JOIN 0\r\n"		,\
 		"PING\r\n"			,\
 		"KICK\r\n"			,\
 		"CAP LS\r\n"		,\
 		"NOTICE\r\n"		,\
 		"QUIT\r\n" 			\
 		};
+		/*
+		; Command to join channels #foo and #bar.
+		  ; Leave all currently joined channels.
+		"LIST\r\n" 			,\
+		"MODE\r\n"			,\
+		"PART\r\n" 			,\
+		"WHOIS raul\r\n"	,\
+		"PRIVMSG\r\n"		,\
+		*/
 	int i = 0;
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {

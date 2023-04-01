@@ -1,5 +1,5 @@
-# CXX = c++
-CXX = clang++
+CXX = c++
+# CXX = clang++
 # CXX = g++-12
 
 NAME = ircserv
@@ -10,17 +10,27 @@ SRCS =	./srcs/main.cpp\
 		./srcs/Client.cpp\
 		./srcs/parsing.cpp\
 		./srcs/numeric_reply.cpp\
-		./commands/quit.cpp\
-		./commands/pass.cpp\
+		./commands/cap.cpp\
+		./commands/join.cpp\
+		./commands/kick.cpp\
+		./commands/list.cpp\
+		./commands/mode.cpp\
 		./commands/nick.cpp\
+		./commands/notice.cpp\
+		./commands/part.cpp\
+		./commands/pass.cpp\
+		./commands/ping.cpp\
+		./commands/pong.cpp\
+		./commands/privmsg.cpp\
+		./commands/quit.cpp\
 		./commands/user.cpp\
 		./commands/whois.cpp\
-
+		
 SRCS_T =./test/clientTest1.cpp\
 		./test/clientTest2.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
-CFLAGS += -Wfatal-errors  #-pedantic
+CFLAGS += -Wfatal-errors -pedantic
 CFLAGS += -fsanitize=address -g3
 
 OBJ = $(SRCS:.cpp=.o)

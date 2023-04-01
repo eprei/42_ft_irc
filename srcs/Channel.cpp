@@ -3,7 +3,7 @@
 // TO DO: write copilen's functions
 Channel::Channel(Client &owner, std::string name) :
 _oper(&owner), _name(name) 
-{};
+{}
 
 Channel::Channel(Channel &other){ *this = other;}
 
@@ -30,7 +30,7 @@ void Channel::addClient(Client* client) {
 
 void Channel::removeClient(Client* client) {
 	for (std::vector<Client*>::iterator it = members.begin(); it != members.end(); ++it) {
-		if (*it == client) {
+		if ((*it)->getNickname() == client->getNickname()) {
 			members.erase(it);
 			return;
 		}
@@ -46,12 +46,20 @@ bool	Channel::hasClient(Client* client) const {
 	return false;
 }
 
+bool	Channel::isEmpty() const{
+	if (members.empty())
+		return true;
+	return false;
+}
+
 bool	Channel::isOperator(Client *client) const
 {
 	if (_oper->getNickname() == client->getNickname())
 		return (true);
 	return (false);
 }
+
+
 
 //TOPIC
 void	Channel::setTopic(std::string topic) {

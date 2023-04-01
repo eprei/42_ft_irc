@@ -76,55 +76,7 @@ void			Client::execCmd(Message *m){
 	std::cout << RED << ">\t\tunknow command\t\t\t<" << RESET << std::endl;
 }
 
-void			Client::join(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tjoin function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
 
-void			Client::list(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tlist function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::part(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tpart function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::privmsg(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tprivmsg function executed " << RESET <<"by client id: " << _id << "\t<" << std::endl;
-}
-
-void			Client::ping(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tping function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::kick(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tkick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::cap(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tcap function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::notice(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tnotice function executed " << RESET <<"by client id: " << _id << "\t<" << std::endl;
-}
-
-void			Client::mode(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tmode function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
-void			Client::pong(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tpong function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
 
 int					Client::getId( void ) const {return _id;}
 std::string			Client::getNickname( void ) const {return _nickname;}
