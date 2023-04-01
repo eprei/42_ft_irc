@@ -1,12 +1,7 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-// # include <iostream>
-// # include <ctime>
-// # include <netinet/in.h>
 # include "Includes.hpp"
-// # include "Server.hpp"
-// # include "Message.hpp"
 
 class Server;
 
@@ -72,7 +67,6 @@ class Client
 		std::string			_buf;
 		static int			_maxId;
 		Server				*_server;
-
 
 };
 

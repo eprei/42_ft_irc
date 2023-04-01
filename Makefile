@@ -52,6 +52,7 @@ proxy: all
 
 clean:
 	/bin/rm -f $(OBJ)
+	/bin/rm -f $(OBJ_T)
 
 fclean: clean
 	/bin/rm -f $(NAME)

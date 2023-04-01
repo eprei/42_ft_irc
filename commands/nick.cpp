@@ -67,6 +67,7 @@ void	Client::nick(Message *m)
 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 		msg.append("NICK " + _nickname + "\r\n");
 		
+		// std::cout << FC(RED, "NICK =") << _nickname << std::endl;
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");

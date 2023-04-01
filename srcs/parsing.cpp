@@ -75,7 +75,6 @@ Message parseMessage(string input) {
     return msg;
 }
 
-
 //PRINT
 void	print_message(const Message& msg)
 {

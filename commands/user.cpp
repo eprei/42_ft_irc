@@ -1,6 +1,5 @@
 #include "../srcs/Includes.hpp"
 
-
 void			Client::user(Message *m){
 	(void)m;
 
