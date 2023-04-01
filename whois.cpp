@@ -7,12 +7,13 @@ void			Client::whois(Message *m){
 
 	(void) m;
 	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		msg.append( "Youare wonderful " + _realname + "\r\n");
 		// msg.append( "Nickname: " + _nickname + "\nUsername: " + _username + "\nHostname: " + _hostname + "\nReal name: " + _realname + "\nConnected to: " + _server->getName() + "\r\n");
 
-		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-		// if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-		// 	perror("SEND FAILED");
+		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
+			perror("SEND FAILED");
 }
 
 
