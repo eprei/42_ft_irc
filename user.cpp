@@ -18,7 +18,7 @@ void			Client::user(Message *m){
 		// RFC 2812 (usado por getIRC)  ===> Command: USER   /    Parameters: <user> <mode> <unused> <realname>
 		_realname = m->params[3];
 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
-		msg.append("USERNAME " + _username + " HOSTNAME " + _hostname + " REALNAME " + _realname +"\r\n");
+		msg.append( "Nickname: " + _nickname + "\nUsername: " + _username + "\nHostname: " + _hostname + "\nReal name: " + _realname + "\nConnected to: " + _server->getName() + "\r\n");
 
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)

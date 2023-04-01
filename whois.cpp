@@ -1,23 +1,18 @@
 #include "Client.hpp"
 #include "Server.hpp"
 
-// TO DO: Write the write function
+// TO DO: WHOIS FUNCTION !!
 
 void			Client::whois(Message *m){
 
-	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 	(void) m;
-	// if (m->params[0].size() == 0)
-	// {
-	// 	_server->removeClient(this);
-	// 	//TO DO: sendToChannel( client_nickname "has quit the channel");
-	// }
-	// else
-	// {
-	// 	_server->removeClient(this);
-		//TO DO: sendToChannel( client_nickname + m->params[0] + m->params[1] ... etc );
-		//TO DO: sendToChannel( client_nickname "has quit the channel");
-	// }
+	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		// msg.append( "Nickname: " + _nickname + "\nUsername: " + _username + "\nHostname: " + _hostname + "\nReal name: " + _realname + "\nConnected to: " + _server->getName() + "\r\n");
+
+		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+		// if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
+		// 	perror("SEND FAILED");
 }
 
 
