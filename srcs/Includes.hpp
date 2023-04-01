@@ -15,8 +15,9 @@
 # define IS_ON "on"
 # define CLIENT_NICKNAME_NOT_SET "NickNotSet"
 # define CLIENT_USERNAME_NOT_SET "UserNotSet"
-# define CLIENT_HOSTNAME_NOT_SET "HostMotSet"
-# define NUMBER_OF_ACCEPTABLE_COMMANDS 14
+# define CLIENT_HOSTNAME_NOT_SET "HostnameNotSet"
+# define CLIENT_REALNAME_NOT_SET "RealnameNotSet"
+# define NUMBER_OF_ACCEPTABLE_COMMANDS 15
 # define END_CHARACTERS "\r\n"
 
 # include <stdlib.h>

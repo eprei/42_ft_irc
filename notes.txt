@@ -160,3 +160,5 @@ TOPIC: PARSING
 	8. Current Implementations Details ..............................   56
 		8.2 Command Parsing .........................................   57
 
+port_server = 6667
+ip_server = '149.28.246.185'

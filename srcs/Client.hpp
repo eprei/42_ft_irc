@@ -53,6 +53,7 @@ class Client
 		void				notice(Message *m);
 		void				mode(Message *m);
 		void				pong(Message *m);
+		void				whois(Message *m);
 
 	private:
 
@@ -60,6 +61,7 @@ class Client
 		std::string 		_nickname;
 		std::string 		_username;
 		std::string 		_hostname;
+		std::string 		_realname;
 		bool				_isRegistered;
 		std::time_t			_lastCommunication;
 		int 				_socket;

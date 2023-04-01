@@ -13,6 +13,7 @@ SRCS =	./srcs/main.cpp\
 		./commands/pass.cpp\
 		./commands/nick.cpp\
 		./commands/user.cpp\
+		./commands/whois.cpp\
 
 SRCS_T =./test/clientTest1.cpp\
 		./test/clientTest2.cpp\

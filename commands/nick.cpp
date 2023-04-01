@@ -21,7 +21,7 @@
 //                            nickname to Kilroy.
 
 //HACER (en principio no usado)??
-// #define ERR_NICKCOLLISION(nick,user, host) nick + " :Nickname collision KILL from "+ user + "@" + host//436    
+// #define ERR_NICKCOLLISION(nick,user, host) nick + " :Nickname collision KILL from "+ user + "@" + host//436
 //          - Returned by a server to a client when it detects a
 //            nickname collision (registered of a NICK that
 //            already exists by another server).
@@ -34,7 +34,7 @@
 //            when the desired nickname is blocked by the nick delay
 //            mechanism.
 
-// #define ERR_RESTRICTED ":Your connection is restricted!" //484    
+// #define ERR_RESTRICTED ":Your connection is restricted!" //484
 // //          - Sent by the server to a user upon connection to indicate
 // //            the restricted nature of the connection (user mode "+r").
 
@@ -63,11 +63,20 @@ void	Client::nick(Message *m)
 		send_reply(432, this, _server, _nickname, "", "", "");
 	else // "the nick is OK"
 	{
+		// this->setNickname(m->params[0]);
+		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+
 		this->setNickname(m->params[0]);
-		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
-		msg.append("NICK " + _nickname + "\r\n");
+		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 		
-		// std::cout << FC(RED, "NICK =") << _nickname << std::endl;
+		std::string msg = ":"; // formatMsgsUsers(_nickname, _username, getHostname());
+		msg.append(_server->getName());
+		msg.append(" ");
+		msg.append("1");
+		msg.append(" ");
+		msg.append("NICK " + _nickname + " has succesfully changed his nickname\r\n");
+		msg.append("NICK " + _nickname + "\r\n");
+
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
