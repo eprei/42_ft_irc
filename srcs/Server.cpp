@@ -205,6 +205,100 @@ int				Server::getNOfClients( void ) const {return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
 
+void Server::createChannel(Client* owner, std::string channel_name)
+{
+    if (channelExists(channel_name))
+    {
+        std::cout << "Channel " << channel_name << " already exists." << std::endl;
+        return;
+    }
+
+    Channel* new_channel = new Channel(*owner, channel_name);
+    _channelList.push_back(new_channel);
+    std::cout << "Channel " << channel_name << " created." << std::endl;
+}
+
+void Server::addClientToChannel(Client* to_add, std::string channel_name)
+{
+    Channel* channel = getChannel(channel_name);
+    if (channel == NULL)
+    {
+        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
+        return;
+    }
+	if (!channel->hasClient(to_add))
+    	channel->addClient(to_add);
+}
+
+void Server::removeClientFromChannel(Client* client, std::string channel_name)
+{
+    Channel* channel = getChannel(channel_name);
+    if (channel == NULL)
+    {
+        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
+        return;
+    }
+    channel->removeClient(client);
+	// if (channel->isEmpty())
+	// 	removeChannel(channel_name);
+}
+
+void	Server::removeChannel(std::string channel_name)
+{
+    for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); ++it)
+    {
+        if ((*it)->getName() == channel_name)
+        {
+            delete *it; // Liberamos la memoria reservada para el canal
+            _channelList.erase(it); // Eliminamos el puntero al canal del vector
+            return;
+        }
+    }
+}
+
+bool Server::channelExists(std::string channel_name)
+{
+    for (size_t i = 0; i < _channelList.size(); i++)
+    {
+        if (_channelList[i]->getName() == channel_name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Channel*	Server::getChannel(std::string channel_name)
+{
+    for (size_t i = 0; i < _channelList.size(); i++)
+    {
+        if (_channelList[i]->getName() == channel_name)
+        {
+            return _channelList[i];
+        }
+    }
+    return NULL;
+}
+
+void Server::printChannel(std::string channel_name)
+{
+    Channel* channel = getChannel(channel_name);
+    if (channel == NULL)
+    {
+        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
+        return;
+    }
+
+    std::cout << "Channel " << channel_name << " info:" << std::endl;
+    std::cout << "  - Name: " << channel->getName() << std::endl;
+    std::cout << "  - Clients: " << std::endl;
+    std::vector<Client*> clients = channel->getClients();
+    for (size_t i = 0; i < clients.size(); i++)
+    {
+        std::cout << "    - " << clients[i]->getNickname() << std::endl;
+    }
+}
+
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {
 	o << std::endl << YELLOW << "******\tServer info\t******" << RESET << std::endl;
