@@ -1,6 +1,6 @@
-#include "Client.hpp"
-#include "Server.hpp"
+#include "../srcs/Includes.hpp"
 #include <cstring>
+
 // 3.1.2 Nick message
 //       Command: NICK  Parameters: <nickname>
 
@@ -67,13 +67,15 @@ void	Client::nick(Message *m)
 		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 
 		this->setNickname(m->params[0]);
+		// std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		
 		std::string msg = ":"; // formatMsgsUsers(_nickname, _username, getHostname());
 		msg.append(_server->getName());
 		msg.append(" ");
 		msg.append("1");
 		msg.append(" ");
 		msg.append("NICK " + _nickname + " has succesfully changed his nickname\r\n");
-		// msg.append("NICK " + _nickname + "\r\n");
+		msg.append("NICK " + _nickname + "\r\n");
 
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)

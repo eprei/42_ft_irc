@@ -1,10 +1,10 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include <iostream>
-# include <vector>
-# include <string>
-# include "Client.hpp"
+// # include <iostream>
+// # include <vector>
+// # include <string>
+# include "Includes.hpp"
 
 //   Channel: Esta clase representaría a un canal de chat en el servidor.
 //   Sería responsable de mantener una lista de clientes que se han unido al canal,

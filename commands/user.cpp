@@ -1,5 +1,4 @@
-#include "Client.hpp"
-#include "Server.hpp"
+#include "../srcs/Includes.hpp"
 
 // TO DO: Choose a fix client
 

@@ -17,17 +17,25 @@
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
                     " " + version + " " + userModes + " " + channelModes + "\r\n")
+// RPL 461
+#define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+// RPL 462
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
+// RPL 464
+#define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
 
+// RPL 431
 #define ERR_NONICKNAMEGIVEN ":No nickname given" //431
 // - Returned when a nickname parameter expected for a command and isn't found.
 
+// RPL 432
 // #define ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname" //432
 #define ERR_ERRONEUSNICKNAME(nick) nick + " :Erroneous nickname" //432
 //          - Returned after receiving a NICK message which contains
 //            characters which do not fall in the defined set.  See
 //            section 2.3.1 for details on valid nicknames.
 
+// RPL 433
 # define ERR_NICKNAMEINUSE(nick) nick + " :Nickname is already in use" //433
 //          - Returned when a NICK message is processed that results
 //            in an attempt to change to a currently existing

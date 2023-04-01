@@ -1,6 +1,4 @@
-#include "Client.hpp"
-#include "Server.hpp"
-
+#include "../srcs/Includes.hpp"
 // TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
 
 void			Client::quit(Message *m){

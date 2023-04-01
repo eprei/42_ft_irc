@@ -1,5 +1,4 @@
-#include "Client.hpp"
-#include "Server.hpp"
+#include "../srcs/Includes.hpp"
 
 // Numeric Replies: ERR_NEEDMOREPARAMS ERR_ALREADYREGISTRED
 // Example: PASS secretpasswordhere
