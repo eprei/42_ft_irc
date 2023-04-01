@@ -81,11 +81,6 @@ void			Client::join(Message *m){
 	std::cout << GREEN << ">\tjoin function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 }
 
-void			Client::quit(Message *m){
-	(void)m;
-	std::cout << GREEN << ">\tquit function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-}
-
 void			Client::list(Message *m){
 	(void)m;
 	std::cout << GREEN << ">\tlist function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;

@@ -10,6 +10,7 @@ SRCS =	./srcs/main.cpp\
 		./srcs/Client.cpp\
 		./srcs/parsing.cpp\
 		./srcs/numeric_reply.cpp\
+		./commands/quit.cpp\
 		./commands/pass.cpp\
 		./commands/nick.cpp\
 		./commands/user.cpp\
@@ -38,7 +39,7 @@ $(NAME): $(OBJ)
 
 $(TEST_CLIENT_1): $(OBJ_T)
 	$(CXX) $(CFLAGS) ./test/clientTest1.cpp -o $(TEST_CLIENT_1)
- 
+
 $(TEST_CLIENT_2): $(OBJ_T)
 	$(CXX) $(CFLAGS) ./test/clientTest2.cpp -o $(TEST_CLIENT_2)
 
