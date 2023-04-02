@@ -26,7 +26,7 @@ void			Client::part(Message *m){
 	// 	// for (size_t i(0); i < m->params.size(); i++)
 		_server->removeClientFromChannel(this, target->getName());
 
-		std::string msg = formatMsgsUsers(_nickname, _username, _servergetHostname());
+		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 		std::string part_msg = "";
 		
 	// 	if (!m->params[1].empty())//no PART_MSG not_defined

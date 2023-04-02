@@ -20,7 +20,8 @@
 // ERR 462
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
 // ERR 464
-#define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
+// #define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
+#define ERR_PASSWDMISMATCH	"* :Password incorrect"
 
 // NICK COMMAND
 // ERR 431
@@ -42,7 +43,7 @@
 
 //join
 //353
-# define RPL_NAMREPLY(channel, nick) "= " + channel + " :@ " + nick
+# define RPL_NAMREPLY(channel, nick) "= " + channel + " :@" + nick
 // = #lol :@Guest36096 mikeWpit\r\n
 //"( "=" / "*" / "@" ) <channel>
 //:[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )

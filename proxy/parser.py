@@ -8,18 +8,13 @@ CYAN = "\033[36m"
 WHITE = "\033[37m"
 
 def parse(data, port, origin):
-    if origin == "server":
-        print (BLUE, "[", origin, ":", str(port), "]", data, RESET)
-    else:
-        print (GREEN, "[", origin, ":", str(port), "]", data, RESET)
-
-# print (":".join("{:02x}".format(ord(c)) for c in data))
-#il y a un lf ( + un cr) en fin de data, ducoup c'est pour ca que ca print sur 2 lignes, faites un bail du genre pour print sur 1:
-#print ("[" + origin + ":" + str(port) + "]" + data, end='') je c meme pas si ca marche mais c'est un bail du genre pour sur
-
-# HOW TO PRINT
-#print content, with variable substitution
-# print ("content {}".format(variable))
-
-#print combination of variables and strings, single space added automatically
-# print ("content", variable, "other content")
+	# Separar el string en una lista utilizando "\r\n" como delimitador
+	full_msg = data.split(b"\r\n")
+	# Recorrer la lista y procesar cada línea
+	for line in full_msg:
+		line_str = line.decode()
+		if line_str.strip():
+			if origin == "server":
+				print (BLUE, "[", origin, ":", str(port), "]", line_str, RESET)
+			else:
+				print (GREEN, "[", origin, ":", str(port), "]", line_str, RESET)

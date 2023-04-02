@@ -77,7 +77,7 @@ void	Client::join(Message *m)
 			_server->createChannel(this, m->params[i]);
 			_server->addClientToChannel(this, m->params[i]);
 			send_reply(353, this, _server, m->command, _nickname, "", "");
-			send_reply(366, this, _server, m->command, "", "", "");
+			send_reply(366, this, _server, m->params[0], "", "", "");
 		}
 	}
 }
