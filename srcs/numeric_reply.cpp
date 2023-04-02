@@ -31,8 +31,8 @@
 				" :End of /WHOIS list.\r\n")
 // RPL 401
 # define ERR_NOSUCHNICK(nick) (nick + "\r\n")
-// # define ERR_NOSUCHNICK(nick) (": 401" + nick + \
-// 				" is not registered on this server" + "\r\n")
+// # define ERR_NOSUCHNICK(nick) (": 401" + nick + " is not registered on this server" + "\r\n")
+
 // PASS COMMAND
 // RPL 461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
