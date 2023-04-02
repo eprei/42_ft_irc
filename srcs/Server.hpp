@@ -47,6 +47,9 @@ class Server
 		void	removeClientFromChannel(Client* client, std::string channel_name);
 		bool	channelExists(std::string channel_name);
 		bool	isNickUsed(std::string nickname);
+		Client		*getClient(std::string nickname);
+		std::string	getServInfo( void ) const;
+		std::string	isOper(Client *client);
 
 	private:
 

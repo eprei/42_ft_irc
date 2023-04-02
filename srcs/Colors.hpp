@@ -21,5 +21,4 @@
 # define BOLDCYAN		"\033[1m\033[36m"
 # define BOLDWHITE		"\033[1m\033[37m"
 
-
 #endif //COLORS_HPP

@@ -12,7 +12,7 @@
 //    messages to clients.
 
 //    Once a user has joined a channel, he receives information about
-//    all commands his server receives affecting the channel.  
+//    all commands his server receives affecting the channel.
 // This includes JOIN, MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.
 //    This allows channel members to keep track of the other channel
 //    members, as well as channel modes.
@@ -83,7 +83,7 @@ void	Client::join(Message *m)
 }
 
 
-		
+
 
 // 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 // 		this->setNickname(m->params[0]);
@@ -107,7 +107,7 @@ void	Client::join(Message *m)
 // 471
 # define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
 
-// 476  
+// 476
 # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
 
 // 403
@@ -126,7 +126,7 @@ void	Client::join(Message *m)
 # define RPL_TOPIC(channel, topic) (channel + " :" topic)
 
 //353
-// # define RPL_NAMREPLY(channel, nick) ("= " channel + " :@ " + nick) 
+// # define RPL_NAMREPLY(channel, nick) ("= " channel + " :@ " + nick)
 // = #lol :@Guest36096 mikeWpit\r\n
 //"( "=" / "*" / "@" ) <channel>
 //:[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
@@ -149,8 +149,8 @@ void	Client::join(Message *m)
 
 
 
-// [client : 8000] 	'JOIN #LOL\r\n' 
-//  [ server : 6667 ]	
+// [client : 8000] 	'JOIN #LOL\r\n'
+//  [ server : 6667 ]
 // :mikeWpit!~raul@freenode-b8j.srb.vrebei.IP JOIN :#lol\r\n
 // :*.freenode.net 353 mikeWpit = #lol :@Guest36096 mikeWpit\r\n
 // :*.freenode.net 366 mikeWpit #lol :End of /NAMES list.\r\n'

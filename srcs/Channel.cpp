@@ -2,7 +2,7 @@
 
 // TO DO: write copilen's functions
 Channel::Channel(Client &owner, std::string name) :
-_oper(&owner), _name(name) 
+_oper(&owner), _name(name)
 {}
 
 Channel::Channel(Channel &other){ *this = other;}
@@ -18,7 +18,7 @@ std::string	Channel::getName() const
 {
 	return _name;
 }
-    
+
 //Clients
 std::vector<Client*> Channel::getClients() const {
 	return members;
@@ -58,8 +58,6 @@ bool	Channel::isOperator(Client *client) const
 		return (true);
 	return (false);
 }
-
-
 
 //TOPIC
 void	Channel::setTopic(std::string topic) {

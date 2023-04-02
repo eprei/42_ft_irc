@@ -3,16 +3,24 @@
 // TO DO: WHOIS FUNCTION !!
 
 void			Client::whois(Message *m){
-
-	(void) m;
 	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
-		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
-		msg.append( "You are wonderful " + _realname + "\r\n");
-		// msg.append( "Nickname: " + _nickname + "\nUsername: " + _username + "\nHostname: " + _hostname + "\nReal name: " + _realname + "\nConnected to: " + _server->getName() + "\r\n");
+	Client *ptr;
 
-		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-			perror("SEND FAILED");
+	if (m->params.size() == 0)
+			return send_reply(431, this, _server,"", "", "", "");
+	for (size_t i = 0; i < m->params.size(); i++)
+	{
+		if ((ptr = _server->getClient(m->params[i])) != NULL)
+		{
+			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
+			send_reply(312, this, _server, "", "", "", "");
+			send_reply(313, this, _server, ptr->getNickname(), "", "", "");
+			send_reply(317, this, _server, "", "", "", "");
+			send_reply(318, this, _server, "", "", "", "");
+		}
+		else
+			send_reply(401, this, _server, m->params[0], "", "", "");
+	}
 }
 
 
@@ -55,3 +63,4 @@ void			Client::whois(Message *m){
 
 //         311     RPL_WHOISUSER
 //                         "<nick> <user> <host> * :<real name>"
+

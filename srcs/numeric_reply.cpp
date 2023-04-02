@@ -3,7 +3,7 @@
 
 // RPL 001
 # define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network PAPA!" \
-               + nick + "!" + user + "@" + host)
+			+ nick + "!" + user + "@" + host + "\r\n")
 
 // RPL 002
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver)
@@ -13,9 +13,28 @@
 
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
-                    " " + version + " " + userModes + " " + channelModes)
+				" " + version + " " + userModes + " " + channelModes + "\r\n")
+// RPL 311
+# define RPL_WHOISUSER(nickname, user, servername, real_name) (nickname + \
+				" " + user + " " + servername + " * :" + real_name + "\r\n")
+// RPL 312
+# define RPL_WHOISSERVER(nick, server) (nick + \
+				" " + server + " :42Lausanne IRC Server" + "\r\n")
+// RPL 313
+# define RPL_WHOISOPERATOR(nick, privileges) (nick + \
+				" :" + privileges + "\r\n")
+// RPL 317
+# define RPL_WHOISIDLE(nick, seconds) (nick + \
+				" " + seconds + " :seconds idle" + "\r\n")
+// RPL 318
+# define RPL_ENDOFWHOIS(nick) (nick + \
+				" :End of /WHOIS list.\r\n")
+// RPL 401
+# define ERR_NOSUCHNICK(nick) (nick + "\r\n")
+// # define ERR_NOSUCHNICK(nick) (": 401" + nick + \
+// 				" is not registered on this server" + "\r\n")
 // PASS COMMAND
-// ERR 461
+// RPL 461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
 // ERR 462
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
@@ -86,7 +105,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 {
 	std::string		reply = ":";
 
-	reply.append(serv->getName());//:hostname 
+	reply.append(serv->getName());//:hostname
 	reply.append(" ");
 	if (code < 10)
 		reply.append("00");
@@ -94,10 +113,10 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		reply.append("0");
 	reply.append(ft_to_string(code));
 	reply.append(" ");//:hostname 025
-	if (client->getNickname() == "") 
+	if (client->getNickname() == "")
 		reply.append("*"); //:hostname 025 *
 	else
-		reply.append(client->getNickname());//:hostname 025 nick 
+		reply.append(client->getNickname());//:hostname 025 nick
 	reply.append(" ");
 	switch(code)
 	{
@@ -110,6 +129,19 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 			return (reply + RPL_CREATED());
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
+		// whois
+		case 311:
+			return (reply + RPL_WHOISUSER(arg1, arg2, serv->getName(), arg4));
+		case 312:
+			return (reply + RPL_WHOISSERVER(client->getNickname(), serv->getName()));
+		case 313:
+			return (reply + RPL_WHOISOPERATOR(client->getNickname(), serv->isOper(client)));
+		case 317:
+			return (reply + RPL_WHOISIDLE(client->getNickname(), "123")); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+		case 318:
+			return (reply + RPL_ENDOFWHOIS(client->getNickname()));
+		case 401:
+			return (reply + ERR_NOSUCHNICK(arg1));
 		// nick
 		case 353:
 			return (reply + RPL_NAMREPLY(arg1, arg2));
