@@ -51,6 +51,9 @@ class Server
 		std::string	getServInfo( void ) const;
 		std::string	isOper(Client *client);
 
+		bool	finish();
+
+
 	private:
 
 		std::string					_name;

@@ -1,5 +1,7 @@
 # include "Server.hpp"
 
+bool go = true;
+
 Server::Server(): _name("42_IRC"), _nOfClients(0), _serverState(IS_ON){
 }
 
@@ -56,6 +58,10 @@ bool Server::serverSocketConfig(){
 	this->_serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 	// bzero(&(_serverAddress.sin_zero), 8);
 
+	int enable = 1;
+	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
+    	perror("setsockopt(SO_REUSEADDR) failed");
+}
 //	BIND SOCKET WITH A PORT
 	if ((bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress))) < 0){
 		perror("\nerror found at bind");
@@ -126,18 +132,34 @@ bool isSocketClosed(int socket_fd)
 	}
 }
 
+void	signalHandler(int signum)
+{
+	if (signum == SIGINT)
+		go = false;
+}
+
 bool Server::serverLoop(){
 	while (1)
 	{
+		if (signal(SIGINT, signalHandler) == SIG_ERR)
+			std::cerr << "error while handling signal" << std::endl;
 		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
 		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0)
 		{
-			// (errno == EINTR) To verify if we control errno or not because if we do we could go against what is requested in the evaluation
 			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred
+			 if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation
+			  {
+                // Si se recibe una señal durante select(), volver a comprobar go
+                if (!go) {
+                    break;
+                }
+            } else {
 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
+            }
 		}
+
 		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
 		{
 			if (FD_ISSET(SocketNumber, &_readySockets))
@@ -156,6 +178,7 @@ bool Server::serverLoop(){
 		// TO DO: function to deconect all clients with timeout expired
 		usleep(600);
 	}
+	finish();
 	return (EXIT_SUCCESS);
 }
 
@@ -330,6 +353,21 @@ std::string	Server::isOper(Client *client)
 			return "is an IRC operator";
 	}
 	return "is not an operator";
+}
+
+bool	Server::finish()
+{
+    std::cout << "\nTerminating server...\n";
+	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
+		this->removeClient(it->second);
+    close(getServerSocket()); // cerrar el socket
+    return (true); // salir del programa con el codigo de señal
+	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
+	// // removeChannel((*it)->getName());
+	// {
+	// 	delete *it; // Liberamos la memoria reservada para el canal
+    //     _channelList.erase(it);
+	// }
 }
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )

@@ -31,7 +31,7 @@ SRCS_T =./test/clientTest1.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors -pedantic
-CFLAGS += -fsanitize=address -g3
+# CFLAGS += -fsanitize=address -g3
 
 OBJ = $(SRCS:.cpp=.o)
 OBJ_T = $(SRCS_T:.cpp=.o)
