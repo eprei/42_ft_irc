@@ -192,6 +192,18 @@ bool	Server::isNickUsed(std::string nickname)
 	return false;
 }
 
+Client	*Server::getClient(std::string nickname)
+{
+	std::map<int , Client *>::iterator itBegin = _clientsList.begin();
+
+	while (itBegin != _clientsList.end())
+	{
+		if (itBegin->second->getNickname() == nickname)
+			return itBegin->second;
+		itBegin++;
+	}
+	return NULL;
+}
 
 std::string		Server::getName( void ) const{return _name;}
 
@@ -204,6 +216,28 @@ int				Server::getServerSocket( void ) const{return _serverSocket;}
 int				Server::getNOfClients( void ) const {return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
+
+std::string		Server::getServInfo( void ) const{
+	std::string  servInfo = "";
+
+	servInfo.append("Server name: ");
+	servInfo.append(_name);
+	servInfo.append("  Server Address: 127.0.0.1");
+
+	return servInfo;
+}
+
+
+std::string	Server::isOper(Client *client)
+{
+	std::string response = "";
+	for (std::vector<Channel>::iterator it = _channelList.begin() ; it != _channelList.end(); ++it)
+	{
+		if (it->isOperator(client) == true)
+			return "is an IRC operator";
+	}
+	return "is not an operator";
+}
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {

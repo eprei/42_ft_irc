@@ -6,7 +6,7 @@
 
 // RPL 001
 # define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network PAPA!" \
-               + nick + "!" + user + "@" + host + "\r\n")
+			+ nick + "!" + user + "@" + host + "\r\n")
 
 // RPL 002
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver + "\r\n")
@@ -16,7 +16,25 @@
 
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
-                    " " + version + " " + userModes + " " + channelModes + "\r\n")
+				" " + version + " " + userModes + " " + channelModes + "\r\n")
+// RPL 311
+# define RPL_WHOISUSER(nickname, user, servername, real_name) (nickname + \
+				" " + user + " " + servername + " * :" + real_name + "\r\n")
+// RPL 312
+# define RPL_WHOISSERVER(nick, server) (nick + \
+				" " + server + " :42Lausanne IRC Server" + "\r\n")
+// RPL 313
+# define RPL_WHOISOPERATOR(nick, privileges) (nick + \
+				" :" + privileges + "\r\n")
+// RPL 317
+# define RPL_WHOISIDLE(nick, seconds) (nick + \
+				" " + seconds + " :seconds idle" + "\r\n")
+// RPL 318
+# define RPL_ENDOFWHOIS(nick) (nick + \
+				" :End of /WHOIS list.\r\n")
+// RPL 401
+# define ERR_NOSUCHNICK(nick) (": 401" + nick + \
+				" is not registered on this server" + "\r\n")
 // RPL 461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
 // RPL 462
@@ -89,6 +107,19 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 			return (reply + RPL_CREATED());
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
+		// whois
+		case 311:
+			return (reply + RPL_WHOISUSER(arg1, arg2, serv->getName(), arg4));
+		case 312:
+			return (reply + RPL_WHOISSERVER(client->getNickname(), serv->getName()));
+		case 313:
+			return (reply + RPL_WHOISOPERATOR(client->getNickname(), serv->isOper(client)));
+		case 317:
+			return (reply + RPL_WHOISIDLE(client->getNickname(), "123")); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+		case 318:
+			return (reply + RPL_ENDOFWHOIS(client->getNickname()));
+		case 401:
+			return (reply + ERR_NOSUCHNICK(client->getNickname()));
 		// nick
 		case 431:
 			return (reply + ERR_NONICKNAMEGIVEN);
@@ -107,7 +138,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 	return (reply);
 }
 
-// inline void Server::numeric_reply(Client *c, std::string code, std::string arg1, std::string arg2, std::string arg3) 
+// inline void Server::numeric_reply(Client *c, std::string code, std::string arg1, std::string arg2, std::string arg3)
 // void	Server::numeric_reply(Client *c, std::string ) //RPL_WELCOME
 void	send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
 {

@@ -29,6 +29,7 @@ class Client
 		std::string			getNickname( void ) const;
 		std::string			getUsername( void ) const;
 		std::string			getHostname( void ) const;
+		std::string			getRealname( void ) const;
 		std::time_t			getlastCommunication( void ) const;
 		int					getSocket( void ) const;
 		struct sockaddr_in	getAddress( void ) const;

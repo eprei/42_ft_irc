@@ -39,11 +39,14 @@ class Server
 		// void	handle_client_request(Client* client);
 		// IDEAS a implementar
 
-		void	create_channel(std::string channel_name);
-		void	add_client_to_channel(Client* client, std::string channel_name);
-		void	removeClient_from_channel(Client* client, std::string channel_name);
-		bool	channel_exists(std::string channel_name);
-		bool	isNickUsed(std::string nickname);
+		void		create_channel(std::string channel_name);
+		void		add_client_to_channel(Client* client, std::string channel_name);
+		void		removeClient_from_channel(Client* client, std::string channel_name);
+		bool		channel_exists(std::string channel_name);
+		bool		isNickUsed(std::string nickname);
+		Client		*getClient(std::string nickname);
+		std::string	getServInfo( void ) const;
+		std::string	isOper(Client *client);
 
 	private:
 
@@ -56,7 +59,7 @@ class Server
 		fd_set						_readySockets;
 		int							_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
 		std::map<int , Client *>	_clientsList;
-		// std::vector<Channel *>		_channelList;
+		std::vector<Channel>		_channelList;
 		std::string					_serverState;
 		std::string					_buf;
 };

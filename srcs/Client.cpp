@@ -130,6 +130,7 @@ int					Client::getId( void ) const {return _id;}
 std::string			Client::getNickname( void ) const {return _nickname;}
 std::string			Client::getUsername( void ) const{return _username;}
 std::string			Client::getHostname( void ) const{return _hostname;}
+std::string			Client::getRealname( void ) const{return _realname;}
 std::time_t			Client::getlastCommunication( void ) const{return _lastCommunication;}
 int					Client::getSocket( void ) const{return _socket;}
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}

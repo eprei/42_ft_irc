@@ -50,6 +50,7 @@ run2: all
 	./ircserv 6668 asd
 
 proxy: all
+	cd ./proxy && python3 -m compileall ./
 	python3 ./proxy/proxy.py
 
 clean:
