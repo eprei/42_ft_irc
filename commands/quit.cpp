@@ -1,4 +1,7 @@
 #include "../srcs/Includes.hpp"
+
+// made by: epresa-c
+
 // TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
 
 void			Client::quit(Message *m){

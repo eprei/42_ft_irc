@@ -1,26 +1,25 @@
 #include "../srcs/Includes.hpp"
 
-// TO DO: WHOIS FUNCTION !!
+// made by: epresa-c
 
 void			Client::whois(Message *m){
 	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 	Client *ptr;
 
-	if (m->params.size() == 0)
-			return send_reply(431, this, _server,"", "", "", "");
 	for (size_t i = 0; i < m->params.size(); i++)
 	{
 		if ((ptr = _server->getClient(m->params[i])) != NULL)
 		{
 			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
-			send_reply(312, this, _server, "", "", "", "");
+			send_reply(378, this, _server, m->params[i], ptr->getHostname(), "", "");
+			send_reply(312, this, _server, this->_nickname, _server->getName(), ctime(_server->getStartTime()), "");
 			send_reply(313, this, _server, ptr->getNickname(), "", "", "");
-			send_reply(317, this, _server, "", "", "", "");
-			send_reply(318, this, _server, "", "", "", "");
+			send_reply(317, this, _server, std::to_string(ptr->getIdle()), "", "", "");
 		}
 		else
 			send_reply(401, this, _server, m->params[0], "", "", "");
 	}
+	send_reply(318, this, _server,  m->params[0], "", "", "");
 }
 
 

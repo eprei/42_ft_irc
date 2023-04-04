@@ -3,36 +3,46 @@
 
 // RPL 001
 # define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network PAPA!" \
-			+ nick + "!" + user + "@" + host + "\r\n")
+			+ nick + "!" + user + "@" + host + END_CHARACTERS)
 
 // RPL 002
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver)
 
 // RPL 003
-# define RPL_CREATED() (":This server was created 25/03/2023")
+# define RPL_CREATED(_startTime) (":This server was created " + _startTime + END_CHARACTERS)
 
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
-				" " + version + " " + userModes + " " + channelModes + "\r\n")
+				" " + version + " " + userModes + " " + channelModes + END_CHARACTERS)
 // RPL 311
 # define RPL_WHOISUSER(nickname, user, servername, real_name) (nickname + \
-				" " + user + " " + servername + " * :" + real_name + "\r\n")
+				" ~" + user + " " + servername + " * :" + real_name + END_CHARACTERS)
 // RPL 312
-# define RPL_WHOISSERVER(nick, server) (nick + \
-				" " + server + " :42Lausanne IRC Server" + "\r\n")
+# define RPL_WHOISSERVER(nick, server, serverinfo) (nick + \
+				" " + server + " :" + serverinfo + END_CHARACTERS)
 // RPL 313
 # define RPL_WHOISOPERATOR(nick, privileges) (nick + \
-				" :" + privileges + "\r\n")
+				" :" + privileges + END_CHARACTERS)
+// RPL 314
+# define RPL_WHOWASUSER(nick, user, host, realname) (nick + \
+				" " + user + " " + host + " * :" + realname + END_CHARACTERS)
 // RPL 317
 # define RPL_WHOISIDLE(nick, seconds) (nick + \
-				" " + seconds + " :seconds idle" + "\r\n")
+				" " + seconds + " :seconds idle" + END_CHARACTERS)
 // RPL 318
 # define RPL_ENDOFWHOIS(nick) (nick + \
 				" :End of /WHOIS list.\r\n")
+// RPL 369
+# define RPL_ENDOFWHOWAS(nick) (nick + \
+				" :End of WHOWAS\r\n")
+// RPL 378
+# define RPL_BANEXPIRED(nick, hostname, ip) (nick + \
+				" :is connecting from ~"  + nick + "@"+ hostname + " " \
+				+ ip + END_CHARACTERS)
 // RPL 401
-# define ERR_NOSUCHNICK(nick) (nick + "\r\n")
-// # define ERR_NOSUCHNICK(nick) (": 401" + nick + " is not registered on this server" + "\r\n")
-
+# define ERR_NOSUCHNICK(nick) (nick + " :No such nick\r\n")
+// RPL 406
+# define ERR_WASNOSUCHNICK(nick) (nick + " :There was no such nickname\r\n")
 // PASS COMMAND
 // RPL 461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
@@ -126,27 +136,36 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		case 2:
 			return (reply + RPL_YOURHOST(arg1, arg2));
 		case 3:
-			return (reply + RPL_CREATED());
+			return (reply + RPL_CREATED(arg1));
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
 		// whois
 		case 311:
-			return (reply + RPL_WHOISUSER(arg1, arg2, serv->getName(), arg4));
+			return (reply + RPL_WHOISUSER(arg1, arg2, arg3, arg4));
 		case 312:
-			return (reply + RPL_WHOISSERVER(client->getNickname(), serv->getName()));
+			return (reply + RPL_WHOISSERVER(arg1, arg2, arg3));
 		case 313:
 			return (reply + RPL_WHOISOPERATOR(client->getNickname(), serv->isOper(client)));
+		case 314:
+			return (reply + RPL_WHOWASUSER(arg1, arg2, arg3, arg4));
 		case 317:
-			return (reply + RPL_WHOISIDLE(client->getNickname(), "123")); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+			return (reply + RPL_WHOISIDLE(client->getNickname(), arg1)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
 		case 318:
-			return (reply + RPL_ENDOFWHOIS(client->getNickname()));
+			return (reply + RPL_ENDOFWHOIS(arg1));
 		case 401:
 			return (reply + ERR_NOSUCHNICK(arg1));
+		case 406:
+			return (reply + ERR_WASNOSUCHNICK(arg1));
 		// nick
 		case 353:
 			return (reply + RPL_NAMREPLY(arg1, arg2));
 		case 366:
 			return (reply + RPL_ENDOFNAMES(arg1));
+		//whowas
+		case 369:
+			return (reply + RPL_ENDOFWHOWAS(arg1));
+		case 378:
+			return (reply + RPL_BANEXPIRED(arg1, arg2, client->getIp()));
 		// part
 		case 403:
 			return (reply + ERR_NOSUCHCHANNEL(arg1));
@@ -172,7 +191,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 //:testnet.ergo.chat 001 mike + MACROS(arg1, arg2, arg3)
 void	send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
 {
-	std::string reply = numeric_reply(code, client, serv, arg1, arg2, arg3, arg4) + "\r\n";
+	std::string reply = numeric_reply(code, client, serv, arg1, arg2, arg3, arg4) + END_CHARACTERS;
 	std::cout << FC(YELLOW, "Server Reply to be sent:\n") << reply << std::endl;
 	if (send(client->getSocket(), reply.c_str(), reply.length(), 0) < 0)
 		perror("SEND FAILED");
