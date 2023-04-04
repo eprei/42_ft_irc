@@ -36,7 +36,8 @@
 # include <signal.h>
 # include <ctime>
 # include <errno.h>
-#include <arpa/inet.h>
+# include <arpa/inet.h>
+# include <time.h>
 
 # include "Message.hpp"
 # include "Client.hpp"

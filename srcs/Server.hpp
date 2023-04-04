@@ -51,6 +51,7 @@ class Server
 		std::string	getServInfo( void ) const;
 		std::string	isOper(Client *client);
 		bool		finish();
+		time_t		const *getStartTime( void );
 
 	private:
 
@@ -67,6 +68,7 @@ class Server
 		std::string						_serverState;
 		std::string						_buf;
 		std::string						_serverInfo;
+		time_t							_startTime;
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );

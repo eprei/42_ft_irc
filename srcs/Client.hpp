@@ -40,10 +40,10 @@ class Client
 		std::string			getUsername( void ) const;
 		std::string			getHostname( void ) const;
 		std::string			getRealname( void ) const;
-		std::time_t			getlastCommunication( void ) const;
 		int					getSocket( void ) const;
 		struct sockaddr_in	getAddress( void ) const;
 		std::string			getIp( void ) const;
+		double				getIdle( void ) const;
 
 		//Parsing
 		std::string			getBuf( void ) const;
@@ -78,7 +78,7 @@ class Client
 		std::string						_ip;
 		std::string 					_realname;
 		bool							_isRegistered;
-		std::time_t						_lastCommunication;
+		time_t							_lastCommunication;
 		int 							_socket;
 		struct sockaddr_in				_address;
 		std::string						_buf;

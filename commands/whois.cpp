@@ -11,10 +11,10 @@ void			Client::whois(Message *m){
 		if ((ptr = _server->getClient(m->params[i])) != NULL)
 		{
 			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
-			send_reply(378, this, _server, ptr->getNickname(), ptr->getHostname(), "", "");
-			send_reply(312, this, _server, this->_nickname, _server->getName(), _server->getServInfo(), "");
+			send_reply(378, this, _server, m->params[i], ptr->getHostname(), "", "");
+			send_reply(312, this, _server, this->_nickname, _server->getName(), ctime(_server->getStartTime()), "");
 			send_reply(313, this, _server, ptr->getNickname(), "", "", "");
-			send_reply(317, this, _server, "", "", "", "");
+			send_reply(317, this, _server, std::to_string(ptr->getIdle()), "", "", "");
 		}
 		else
 			send_reply(401, this, _server, m->params[0], "", "", "");

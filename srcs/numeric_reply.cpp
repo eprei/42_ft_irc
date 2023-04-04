@@ -9,7 +9,7 @@
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver)
 
 // RPL 003
-# define RPL_CREATED() (":This server was created 25/03/2023")
+# define RPL_CREATED(_startTime) (":This server was created " + _startTime + END_CHARACTERS)
 
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
@@ -136,7 +136,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		case 2:
 			return (reply + RPL_YOURHOST(arg1, arg2));
 		case 3:
-			return (reply + RPL_CREATED());
+			return (reply + RPL_CREATED(arg1));
 		case 4:
 			return (reply + RPL_MYINFO(arg1, arg2, arg3, arg4));
 		// whois
@@ -149,7 +149,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		case 314:
 			return (reply + RPL_WHOWASUSER(arg1, arg2, arg3, arg4));
 		case 317:
-			return (reply + RPL_WHOISIDLE(client->getNickname(), "123")); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+			return (reply + RPL_WHOISIDLE(client->getNickname(), arg1)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
 		case 318:
 			return (reply + RPL_ENDOFWHOIS(arg1));
 		case 401:
@@ -165,7 +165,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		case 369:
 			return (reply + RPL_ENDOFWHOWAS(arg1));
 		case 378:
-			return (reply + RPL_BANEXPIRED(client->getNickname(), arg2, client->getIp()));
+			return (reply + RPL_BANEXPIRED(arg1, arg2, client->getIp()));
 		// part
 		case 403:
 			return (reply + ERR_NOSUCHCHANNEL(arg1));

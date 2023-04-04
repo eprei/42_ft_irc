@@ -45,6 +45,7 @@ bool Server::launchServ(){
 }
 
 bool Server::serverSocketConfig(){
+	time(&_startTime);
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
 		std::cout << "ERROR: socket function error" << std::endl;
@@ -237,6 +238,8 @@ int				Server::getServerSocket( void ) const{return _serverSocket;}
 int				Server::getNOfClients( void ) const {return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
+
+time_t		const *Server::getStartTime( void ) { return &_startTime;}
 
 void Server::createChannel(Client* owner, std::string channel_name)
 {

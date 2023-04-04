@@ -10,6 +10,7 @@ Client::Client(Server *s): _nickname(CLIENT_NICKNAME_NOT_SET),
 	_maxId += 1;
 	_id = Client::_maxId;
 	_isRegistered = false;
+	time(&_lastCommunication);
 }
 
 Client::Client(Client &other){ *this = other;}
@@ -32,6 +33,7 @@ void 				Client::setAddress(struct sockaddr_in address){_address = address;}
 void				Client::setIp(std::string ip){_ip = ip;}
 
 void 				Client::setBuf(std::string buf){
+	time(&_lastCommunication);
 	_buf += buf;
 	if (_buf.find(END_CHARACTERS) != std::string::npos )
 	{
@@ -83,12 +85,17 @@ std::string			Client::getNickname( void ) const {return _nickname;}
 std::string			Client::getUsername( void ) const{return _username;}
 std::string			Client::getHostname( void ) const{return _hostname;}
 std::string			Client::getRealname( void ) const{return _realname;}
-std::time_t			Client::getlastCommunication( void ) const{return _lastCommunication;}
 int					Client::getSocket( void ) const{return _socket;}
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}
 std::string			Client::getBuf( void ) const{return _buf;}
 int					Client::getMaxId( void ) const {return _maxId;}
 std::string			Client::getIp( void ) const{return _ip;}
+double 				Client::getIdle( void ) const{
+	time_t actual;
+
+	time(&actual);
+	return std::difftime(actual, _lastCommunication);
+}
 
 std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 {
@@ -97,7 +104,7 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 	o << "Nickname: " << rhs.getNickname() << std::endl;
 	o << "Username: " << rhs.getUsername() << std::endl;
 	o << "Hostname: " << rhs.getHostname() << std::endl;
-	o << "Last communication: " << rhs.getlastCommunication() << std::endl;
+	o << "Last communication: " << rhs.getIdle() << std::endl;
 	o << "Client Socket: " << rhs.getSocket() << std::endl;
 	// o << "Address: " << rhs.getAddress() << std::endl; TO CONSIDER: if it's usefull to print this infos to debug
 	return o;
