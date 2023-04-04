@@ -2,7 +2,8 @@
 
 bool go = true;
 
-Server::Server(): _name("42_IRC"), _nOfClients(0), _serverState(IS_ON){
+// TO DO: inicialice _serveInfo with the right timestamp info
+Server::Server(): _name("*.42irc.net"), _nOfClients(0), _serverState(IS_ON), _serverInfo("Fri Mar 31 2023 08:40:25"){
 }
 
 Server::Server(Server &other){ *this = other;}
@@ -24,7 +25,6 @@ bool Server::checkArgs(int argc, char **argv){
 		return printCorrectUse();
 	_port = atoi(argv[1]);
 	_password = argv[2];
-	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
 	return EXIT_SUCCESS;
 }
 
@@ -95,6 +95,7 @@ void Server::addNewClient(){
 	}
 	neo->setSocket(clientSocketLocal);
 	neo->setAddress(clientAddr);
+	neo->setIp(inet_ntoa(clientAddr.sin_addr));
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
 	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo;
@@ -118,18 +119,14 @@ bool isSocketClosed(int socket_fd)
 	char buffer[1];
 	int result = recv(socket_fd, buffer, 1, MSG_PEEK);
 
-	if (result == 0) {
-		// std::cout << "the socket is closed" << std::endl;
+	if (result == 0)
 		return true;
-	}
 	else if (result < 0) {
 		// std::cout << "error found at isSocketClosed function" << std::endl;
 		return false;
 	}
-	else {
-		// std::cout << "the socket is open" << std::endl;
+	else
 		return false;
-	}
 }
 
 void	signalHandler(int signum)
@@ -139,6 +136,7 @@ void	signalHandler(int signum)
 }
 
 bool Server::serverLoop(){
+	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
 	while (1)
 	{
 		if (signal(SIGINT, signalHandler) == SIG_ERR)
@@ -334,15 +332,7 @@ void Server::printChannel(std::string channel_name)
     }
 }
 
-std::string		Server::getServInfo( void ) const{
-	std::string  servInfo = "";
-
-	servInfo.append("Server name: ");
-	servInfo.append(_name);
-	servInfo.append("  Server Address: 127.0.0.1");
-
-	return servInfo;
-}
+std::string		Server::getServInfo( void ) const{ return _serverInfo;}
 
 
 std::string	Server::isOper(Client *client)
@@ -381,5 +371,3 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 	o << "State: " << rhs.getServerState() << std::endl;
 	return o;
 }
-
-

@@ -65,13 +65,28 @@ void	Client::nick(Message *m)
 	{
 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 		this->setNickname(m->params[0]);
-		msg.append("NICK " + _nickname + "\r\n");
+		msg.append("NICK " + _nickname + END_CHARACTERS);
 
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
+		addToNicksHistory();
 	}
 }
+
+void	Client::addToNicksHistory( void ){
+	nicksBackup newNick;
+
+	newNick.nick = this->_nickname;
+	newNick.server = this->_server->getName();
+	newNick.serverInfo = this->_server->getServInfo();
+	newNick.user = this->_username;
+	newNick.host = this->_hostname;
+	newNick.realname = this->_realname;
+	_nicksHistory.push_back(newNick);
+}
+
+
 // :raul!~u@fpgxjxgh98zbk.oragono NICK patata47\r\n'
 // :nick!user@client_host_name? NICK patata47\r\n'
 
@@ -84,6 +99,6 @@ void	Client::nick(Message *m)
 // 	{
 // 		msg_nick = formatMsgsUsers(currentUser->getNickName(), currentUser->getUserName(), currentUser->getHostNameUser());
 // 		currentUser->setNickName(args);
-// 		serv->sendToAllUsersInServ(msg_nick + "NICK " + args + "\r\n");
+// 		serv->sendToAllUsersInServ(msg_nick + "NICK " + args + END_CHARACTERS);
 // 	}
 // }

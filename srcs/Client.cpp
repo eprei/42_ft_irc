@@ -2,6 +2,7 @@
 
 // TO DO: write copilen's functions
 int Client::_maxId = 0;
+std::vector<nicksBackup>	Client::_nicksHistory;
 
 Client::Client(Server *s): _nickname(CLIENT_NICKNAME_NOT_SET),
  _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET),
@@ -28,6 +29,7 @@ void				Client::setHostname(std::string hostname){_hostname = hostname;}
 void				Client::setLastCommunication(std::time_t lastCommunication){_lastCommunication = lastCommunication;}
 void 				Client::setSocket(int socket){_socket = socket;}
 void 				Client::setAddress(struct sockaddr_in address){_address = address;}
+void				Client::setIp(std::string ip){_ip = ip;}
 
 void 				Client::setBuf(std::string buf){
 	_buf += buf;
@@ -58,11 +60,12 @@ void	Client::process_buffer(const std::string& buf)
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] =\
 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
-	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG" , "WHOIS" }; // ISON ?
+	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG" , "WHOIS" , "WHOWAS" };
 	void	(Client::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
 	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
-	&Client::ping , &Client::kick , &Client::cap , &Client::notice , &Client::mode, &Client::pong , &Client::whois };
+	&Client::ping , &Client::kick , &Client::cap , &Client::notice , \
+	&Client::mode, &Client::pong , &Client::whois , &Client::whowas };
 
 	std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
@@ -73,10 +76,7 @@ void			Client::execCmd(Message *m){
 			return ;
 		}
 	}
-	std::cout << RED << ">\t\tunknow command\t\t\t<" << RESET << std::endl;
 }
-
-
 
 int					Client::getId( void ) const {return _id;}
 std::string			Client::getNickname( void ) const {return _nickname;}
@@ -88,6 +88,7 @@ int					Client::getSocket( void ) const{return _socket;}
 struct sockaddr_in	Client::getAddress( void ) const{return _address;}
 std::string			Client::getBuf( void ) const{return _buf;}
 int					Client::getMaxId( void ) const {return _maxId;}
+std::string			Client::getIp( void ) const{return _ip;}
 
 std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 {

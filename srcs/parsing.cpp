@@ -8,7 +8,7 @@ using namespace std;
 
 // void	process_buffer(const std::string& buf)
 // {
-//     // Separar la cadena en tokens utilizando el delimitador "\r\n"
+//     // Separar la cadena en tokens utilizando el delimitador END_CHARACTERS
 // 	Message	m;
 //     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
 //     while (token != NULL) {

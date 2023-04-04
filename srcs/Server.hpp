@@ -41,37 +41,34 @@ class Server
 
 		void 		printChannel(std::string channel_name);
 		Channel*	getChannel(std::string channel_name);
-		void	createChannel(Client* client, std::string channel_name);
-		void	removeChannel(std::string channel_name);
-		void	addClientToChannel(Client* client, std::string channel_name);
-		void	removeClientFromChannel(Client* client, std::string channel_name);
-		bool	channelExists(std::string channel_name);
-		bool	isNickUsed(std::string nickname);
+		void		createChannel(Client* client, std::string channel_name);
+		void		removeChannel(std::string channel_name);
+		void		addClientToChannel(Client* client, std::string channel_name);
+		void		removeClientFromChannel(Client* client, std::string channel_name);
+		bool		channelExists(std::string channel_name);
+		bool		isNickUsed(std::string nickname);
 		Client		*getClient(std::string nickname);
 		std::string	getServInfo( void ) const;
 		std::string	isOper(Client *client);
-
-		bool	finish();
-
+		bool		finish();
 
 	private:
 
-		std::string					_name;
-		std::string					_password;
-		int							_port;
-		int							_serverSocket;
-		struct sockaddr_in			_serverAddress;
-		fd_set						_currentSockets;
-		fd_set						_readySockets;
-		int							_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
-		std::map<int , Client *>	_clientsList;
-		std::vector<Channel *>		_channelList;
-		std::string					_serverState;
-		std::string					_buf;
+		std::string						_name;
+		std::string						_password;
+		int								_port;
+		int								_serverSocket;
+		struct sockaddr_in				_serverAddress;
+		fd_set							_currentSockets;
+		fd_set							_readySockets;
+		int								_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
+		std::map<int , Client *>		_clientsList;
+		std::vector<Channel *>			_channelList;
+		std::string						_serverState;
+		std::string						_buf;
+		std::string						_serverInfo;
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );
 
 #endif
-
-// };

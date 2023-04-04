@@ -5,6 +5,15 @@
 
 class Server;
 
+typedef struct s_nicksBackup {
+    std::string nick;
+    std::string server;
+    std::string serverInfo;
+    std::string user;
+    std::string host;
+    std::string realname;
+}	nicksBackup;
+
 class Client
 {
 	public:
@@ -24,6 +33,7 @@ class Client
 		void				setAddress(struct sockaddr_in address);
 		void				setBuf(std::string buf);
 		int					getMaxId( void ) const ;
+		void				setIp(std::string ip);
 
 		int					getId( void ) const;
 		std::string			getNickname( void ) const;
@@ -33,6 +43,7 @@ class Client
 		std::time_t			getlastCommunication( void ) const;
 		int					getSocket( void ) const;
 		struct sockaddr_in	getAddress( void ) const;
+		std::string			getIp( void ) const;
 
 		//Parsing
 		std::string			getBuf( void ) const;
@@ -55,21 +66,25 @@ class Client
 		void				mode(Message *m);
 		void				pong(Message *m);
 		void				whois(Message *m);
+		void				whowas(Message *m);
+		void				addToNicksHistory( void );
 
 	private:
 
-		int					_id;
-		std::string 		_nickname;
-		std::string 		_username;
-		std::string 		_hostname;
-		std::string 		_realname;
-		bool				_isRegistered;
-		std::time_t			_lastCommunication;
-		int 				_socket;
-		struct sockaddr_in	_address;
-		std::string			_buf;
-		static int			_maxId;
-		Server				*_server;
+		int								_id;
+		std::string 					_nickname;
+		std::string 					_username;
+		std::string 					_hostname;
+		std::string						_ip;
+		std::string 					_realname;
+		bool							_isRegistered;
+		std::time_t						_lastCommunication;
+		int 							_socket;
+		struct sockaddr_in				_address;
+		std::string						_buf;
+		static int						_maxId;
+		Server							*_server;
+		static std::vector<nicksBackup>	_nicksHistory;
 
 };
 

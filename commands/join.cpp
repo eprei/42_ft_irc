@@ -1,5 +1,7 @@
 #include "../srcs/Includes.hpp"
 
+// made by: mpons
+
 // 3.2.1 Join message
 
 //       Command: JOIN
@@ -87,7 +89,7 @@ void	Client::join(Message *m)
 
 // 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 // 		this->setNickname(m->params[0]);
-// 		msg.append("NICK " + _nickname + "\r\n");
+// 		msg.append("NICK " + _nickname + END_CHARACTERS);
 
 // 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 // 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)

@@ -1,6 +1,8 @@
 #include "../srcs/Includes.hpp"
 
-// 442   
+// made by: mpons
+
+// 442
 // # define ERR_NOTONCHANNEL(channel) channel + " :You're not on that channel"
 
 // 403
@@ -28,24 +30,24 @@ void			Client::part(Message *m){
 
 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
 		std::string part_msg = "";
-		
+
 	// 	if (!m->params[1].empty())//no PART_MSG not_defined
 		if (m->params.size() == 1)//no PART_MSG not_defined
 			part_msg = "\"hasta la vista Baby\"";
 		else
 			part_msg = "\"" + m->params[1] + "\"";
-			// PART :#PATATA\r\n' 
-			// PART #PATATA :"me voy"\r\n' 
+			// PART :#PATATA\r\n'
+			// PART #PATATA :"me voy"\r\n'
 			// PART #USA :"hasta la vista Baby"\r\n'
 
-		msg.append("PART " + m->params[0] + " :" + part_msg + "\r\n");
+		msg.append("PART " + m->params[0] + " :" + part_msg + END_CHARACTERS);
 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
-// [ client : 8000 ] b'PART #PATATA\r\n' 
-//  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART :#PATATA\r\n' 
-// [ client : 8000 ] b'PART #PATATA :me voy\r\n' 
-//  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART #PATATA :"me voy"\r\n' 
+// [ client : 8000 ] b'PART #PATATA\r\n'
+//  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART :#PATATA\r\n'
+// [ client : 8000 ] b'PART #PATATA :me voy\r\n'
+//  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART #PATATA :"me voy"\r\n'
 	}
 }
 

@@ -1,5 +1,5 @@
-CXX = c++
-# CXX = clang++
+# CXX = c++
+CXX = clang++
 # CXX = g++-12
 
 NAME = ircserv
@@ -25,7 +25,8 @@ SRCS =	./srcs/main.cpp\
 		./commands/quit.cpp\
 		./commands/user.cpp\
 		./commands/whois.cpp\
-		
+		./commands/whowas.cpp\
+
 SRCS_T =./test/clientTest1.cpp\
 		./test/clientTest2.cpp\
 
@@ -60,12 +61,10 @@ run2: all
 	./ircserv 6668 asd
 
 proxy: all
-	python3 -m compileall ./proxy
-	python3 ./proxy/proxy.py
+	python3 -m compileall ./proxy && python3 ./proxy/proxy.py
 
 proxyfree: all
-	python3 -m compileall ./proxyfree
-	python3 ./proxyfree/proxy.py
+	python3 -m compileall ./proxyfree && python3 ./proxyfree/proxy.py
 
 
 clean:

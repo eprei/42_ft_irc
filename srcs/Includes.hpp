@@ -17,7 +17,7 @@
 # define CLIENT_USERNAME_NOT_SET "UserNotSet"
 # define CLIENT_HOSTNAME_NOT_SET "HostnameNotSet"
 # define CLIENT_REALNAME_NOT_SET "RealnameNotSet"
-# define NUMBER_OF_ACCEPTABLE_COMMANDS 15
+# define NUMBER_OF_ACCEPTABLE_COMMANDS 16
 # define END_CHARACTERS "\r\n"
 
 # include <stdlib.h>
@@ -36,14 +36,12 @@
 # include <signal.h>
 # include <ctime>
 # include <errno.h>
+#include <arpa/inet.h>
 
 # include "Message.hpp"
 # include "Client.hpp"
 # include "Server.hpp"
 # include "Channel.hpp"
 # include "Colors.hpp"
-
-//se puede borrar esto??
-//  int g_server_is_on = TRUE; 
 
 #endif //INCLUDES_HPP
