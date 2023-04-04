@@ -21,6 +21,7 @@ class Channel
 	    Client *_oper;
 		std::string	_name;
 		std::string _topic;
+		std::string _modes;
 	    std::vector<Client*> members;
 	    // std::vector<Client*> oper;
 
@@ -44,6 +45,8 @@ class Channel
 
 		void		setTopic(std::string topic);
 		std::string	getTopic() const;
+		std::string	getModes() const;
+
 
 };
 

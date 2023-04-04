@@ -70,7 +70,8 @@ void	Client::join(Message *m)
 		send_reply(461, this, _server, m->command, "", "", "");
 		return;
 	}
-	// if (m->params[0] == "0")
+	// to do (leave all channel where the user is present)
+	// if (m->params[0] == "0")  
 	// 	return (leaveAll());
  	else // "the channel is OK"
 	{
@@ -78,7 +79,12 @@ void	Client::join(Message *m)
 		{
 			_server->createChannel(this, m->params[i]);
 			_server->addClientToChannel(this, m->params[i]);
-			send_reply(353, this, _server, m->command, _nickname, "", "");
+			std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+			msg.append("JOIN " + m->params[0] + END_CHARACTERS);
+			std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+			if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
+				perror("SEND FAILED");
+			send_reply(353, this, _server, m->params[0], _nickname, "", "");
 			send_reply(366, this, _server, m->params[0], "", "", "");
 		}
 	}

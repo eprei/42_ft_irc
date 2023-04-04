@@ -90,6 +90,9 @@
 // 442
 # define ERR_NOTONCHANNEL(channel) channel + " :You're not on that channel"
 
+// 324
+# define RPL_CHANNELMODEIS(channel, mode) (channel + " :" + mode)
+
 std::string	ft_to_string(int value)
 {
 	std::string output;
@@ -183,6 +186,8 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 			return (reply + ERR_ALREADYREGISTERED);
 		case 464:
 			return (reply + ERR_PASSWDMISMATCH);
+		case 324:
+			return (reply + RPL_CHANNELMODEIS(arg1, arg2));
 	}
 	return (reply);
 }
@@ -204,6 +209,7 @@ std::string	formatMsgsUsers(const std::string & nickname, const std::string & us
 	msg.append(":");
 	msg.append(nickname);
 	msg.append("!");
+	// msg.append("~");
 	msg.append(username);
 	msg.append("@");
 	msg.append(hostname);

@@ -2,7 +2,9 @@
 
 // TO DO: write copilen's functions
 Channel::Channel(Client &owner, std::string name) :
-_oper(&owner), _name(name)
+_oper(&owner), _name(name),
+_modes("+nt")
+// _modes("+i")
 {}
 
 Channel::Channel(Channel &other){ *this = other;}
@@ -65,4 +67,9 @@ void	Channel::setTopic(std::string topic) {
 }
 std::string	Channel::getTopic() const {
 	return _topic;
+}
+
+std::string	Channel::getModes() const
+{
+	return _modes;
 }

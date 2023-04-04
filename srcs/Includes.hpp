@@ -17,6 +17,8 @@
 # define CLIENT_USERNAME_NOT_SET "UserNotSet"
 # define CLIENT_HOSTNAME_NOT_SET "HostnameNotSet"
 # define CLIENT_REALNAME_NOT_SET "RealnameNotSet"
+# define USERSMODES		"io"
+# define CHANNELSMODES	"kobil"
 # define NUMBER_OF_ACCEPTABLE_COMMANDS 16
 # define END_CHARACTERS "\r\n"
 

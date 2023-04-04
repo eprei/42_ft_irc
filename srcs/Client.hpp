@@ -68,10 +68,12 @@ class Client
 		void				whois(Message *m);
 		void				whowas(Message *m);
 		void				addToNicksHistory( void );
+		void				welcome();
 
 	private:
 
 		int								_id;
+		// bool							_passChecked;
 		std::string 					_nickname;
 		std::string 					_username;
 		std::string 					_hostname;
