@@ -1,7 +1,13 @@
 #include "../srcs/Includes.hpp"
 
-// made by: epresa-c
+std::string to_string(double value)
+{
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
+}
 
+// made by: epresa-c
 void			Client::whois(Message *m){
 	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 	Client *ptr;
@@ -14,7 +20,7 @@ void			Client::whois(Message *m){
 			send_reply(378, this, _server, m->params[i], ptr->getHostname(), "", "");
 			send_reply(312, this, _server, this->_nickname, _server->getName(), ctime(_server->getStartTime()), "");
 			send_reply(313, this, _server, ptr->getNickname(), "", "", "");
-			send_reply(317, this, _server, std::to_string(ptr->getIdle()), "", "", "");
+			send_reply(317, this, _server, to_string(ptr->getIdle()), "", "", "");
 		}
 		else
 			send_reply(401, this, _server, m->params[0], "", "", "");
