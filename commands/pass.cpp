@@ -30,7 +30,7 @@ void	Client::pass(Message *m)
 	else if (!m->params[0].compare(_server->getPassword()))
 	{
 		_isRegistered = true;
-		welcome();
+		// welcome();
 		// if (_nickname.compare(CLIENT_NICKNAME_NOT_SET) || _username.compare(CLIENT_USERNAME_NOT_SET))
 	}
 	else //wrong pass

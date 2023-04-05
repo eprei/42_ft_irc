@@ -32,12 +32,12 @@ void			Client::mode(Message *m)
 	{
 		std::string msg;
 		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
-		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
 	}
-//  [ client : 8000 ] MODE Rony +i 
-//  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i 
+//  [ client : 8000 ] MODE Rony +i
+//  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i
 }
 
 

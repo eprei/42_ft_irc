@@ -15,8 +15,8 @@
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
 				" " + version + " " + userModes + " " + channelModes + END_CHARACTERS)
 // RPL 311
-# define RPL_WHOISUSER(nickname, user, servername, real_name) (nickname + \
-				" ~" + user + " " + servername + " * :" + real_name + END_CHARACTERS)
+# define RPL_WHOISUSER(nickwhoask, nickaskedfor, servername, real_name) (nickwhoask + \
+				" ~" + nickaskedfor + " " + servername + " * :" + real_name + END_CHARACTERS)
 // RPL 312
 # define RPL_WHOISSERVER(nick, server, serverinfo) (nick + \
 				" " + server + " :" + serverinfo + END_CHARACTERS)
@@ -65,11 +65,11 @@
 //            section 2.3.1 for details on valid nicknames.
 
 // ERR 433
-# define ERR_NICKNAMEINUSE(nick) (nick + " :Nickname is already in use") //433
+# define ERR_NICKNAMEINUSE(arg1) (arg1 + " :Nickname is already in use") //433
 //          - Returned when a NICK message is processed that results
 //            in an attempt to change to a currently existing
 //            nickname..
-
+//  [ server : 6667 ] :*.freenode.net 433 * epresa-c :Nickname is already in use.
 //join
 //353
 # define RPL_NAMREPLY(channel, nick) "= " + channel + " :@" + nick
@@ -148,11 +148,11 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 		case 312:
 			return (reply + RPL_WHOISSERVER(arg1, arg2, arg3));
 		case 313:
-			return (reply + RPL_WHOISOPERATOR(client->getNickname(), serv->isOper(client)));
+			return (reply + RPL_WHOISOPERATOR(arg1, serv->isOper(client)));
 		case 314:
 			return (reply + RPL_WHOWASUSER(arg1, arg2, arg3, arg4));
 		case 317:
-			return (reply + RPL_WHOISIDLE(client->getNickname(), arg1)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+			return (reply + RPL_WHOISIDLE(arg1, arg2)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
 		case 318:
 			return (reply + RPL_ENDOFWHOIS(arg1));
 		case 401:
@@ -197,7 +197,7 @@ std::string	numeric_reply(const int code, Client *client, Server *serv, std::str
 void	send_reply(const int code, Client *client, Server *serv, std::string arg1, std::string arg2, std::string arg3, std::string arg4)
 {
 	std::string reply = numeric_reply(code, client, serv, arg1, arg2, arg3, arg4) + END_CHARACTERS;
-	std::cout << FC(YELLOW, "Server Reply to be sent:\n") << reply << std::endl;
+	// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << reply << std::endl;
 	if (send(client->getSocket(), reply.c_str(), reply.length(), 0) < 0)
 		perror("SEND FAILED");
 }

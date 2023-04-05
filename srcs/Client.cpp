@@ -4,12 +4,13 @@
 int Client::_maxId = 0;
 std::vector<nicksBackup>	Client::_nicksHistory;
 
-Client::Client(Server *s): _nickname(CLIENT_NICKNAME_NOT_SET),
+Client::Client(Server *s): /*_nickname(CLIENT_NICKNAME_NOT_SET),
  _username(CLIENT_USERNAME_NOT_SET), _hostname(CLIENT_HOSTNAME_NOT_SET),
- _realname(CLIENT_REALNAME_NOT_SET), _server(s){
+ _realname(CLIENT_REALNAME_NOT_SET),*/ _server(s){
 	_maxId += 1;
 	_id = Client::_maxId;
 	_isRegistered = false;
+	_alreadyWelcomed = false;
 	time(&_lastCommunication);
 }
 
@@ -50,10 +51,10 @@ void	Client::process_buffer(const std::string& buf)
     while (token != NULL)
 	{
         std::string command(token);// Convierte token en string
-        std::cout << "Comando recibido: " << command << std::endl;
+        // std::cout << "Comando recibido: " << command << std::endl;
 		m = parseMessage(command);
-		std::cout << FC(GREEN, "Message parsed =") << std::endl;
-		print_message(m);
+		// std::cout << FC(GREEN, "Message parsed =") << std::endl;
+		// print_message(m);
 		execCmd(&m);
         token = strtok(NULL, END_CHARACTERS); // Siguiente token
     }
@@ -69,7 +70,7 @@ void			Client::execCmd(Message *m){
 	&Client::ping , &Client::kick , &Client::cap , &Client::notice , \
 	&Client::mode, &Client::pong , &Client::whois , &Client::whowas };
 
-	std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
+	// std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
 	{
 		if (acceptableCommands[i].compare(m->command) == 0)
