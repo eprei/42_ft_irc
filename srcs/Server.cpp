@@ -3,8 +3,7 @@
 bool go = true;
 
 // TO DO: inicialice _serveInfo with the right timestamp info
-Server::Server(): _name("*.42irc.net"), _nOfClients(0), _serverState(IS_ON), _serverInfo("Fri Mar 31 2023 08:40:25"){
-}
+Server::Server(): _name("*.42irc.net"), _nOfClients(0), _serverState(IS_ON){}
 
 Server::Server(Server &other){ *this = other;}
 
@@ -99,9 +98,8 @@ void Server::addNewClient(){
 	neo->setIp(inet_ntoa(clientAddr.sin_addr));
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << *neo;
+	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n";
 	_nOfClients += 1;
-	// std::cout << *this << std::endl;
 }
 
 void	Server::removeClient(Client* client){

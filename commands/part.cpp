@@ -41,7 +41,7 @@ void			Client::part(Message *m){
 			// PART #USA :"hasta la vista Baby"\r\n'
 
 		msg.append("PART " + m->params[0] + " :" + part_msg + END_CHARACTERS);
-		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
 // [ client : 8000 ] b'PART #PATATA\r\n'

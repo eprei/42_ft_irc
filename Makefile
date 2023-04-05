@@ -61,10 +61,10 @@ run2: all
 	./ircserv 6668 asd
 
 proxy: all
-	python3 -m compileall ./proxy && python3 ./proxy/proxy.py
+	python3 ./proxy/proxy.py
 
 proxyfree: all
-	python3 -m compileall ./proxyfree && python3 ./proxyfree/proxy.py
+	python3 ./proxyfree/proxy.py
 
 
 clean:

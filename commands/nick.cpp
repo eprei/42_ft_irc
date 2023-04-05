@@ -54,23 +54,29 @@ bool	validNickName(std::string nickname)
 
 void	Client::nick(Message *m)
 {
-	std::cout << GREEN << ">\tnick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	// std::cout << GREEN << ">\tnick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (_server->isNickUsed(m->params[0]))
-		send_reply(433, this, _server, "", "", "", "");
-	if (m->params[0].empty())
+		send_reply(433, this, _server, m->params[0], "", "", "");
+	else if (m->params[0].empty())
 		send_reply(431, this, _server, _nickname, "", "", "");
-	if (!validNickName(m->params[0]))
+	else if (!validNickName(m->params[0]))
 		send_reply(432, this, _server, _nickname, "", "", "");
 	else // "the nick is OK"
 	{
-		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		std::string oldnick = _alreadyWelcomed ? _nickname : m->params[0];
 		this->setNickname(m->params[0]);
+		std::string msg = formatMsgsUsers(oldnick, _username, getHostname());
 		msg.append("NICK " + _nickname + END_CHARACTERS);
-
-		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+		std::cout << *this << std::endl;
+		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
 		addToNicksHistory();
+		if (_alreadyWelcomed == false)
+		{
+			welcome();
+			_alreadyWelcomed = true;
+		}
 	}
 }
 

@@ -87,6 +87,7 @@ class Client
 		static int						_maxId;
 		Server							*_server;
 		static std::vector<nicksBackup>	_nicksHistory;
+		bool							_alreadyWelcomed;
 
 };
 

@@ -16,11 +16,11 @@ void			Client::whois(Message *m){
 	{
 		if ((ptr = _server->getClient(m->params[i])) != NULL)
 		{
-			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
+			send_reply(311, this, _server, ptr->getNickname(), m->params[i], ptr->getHostname(), ptr->getRealname());
 			send_reply(378, this, _server, m->params[i], ptr->getHostname(), "", "");
-			send_reply(312, this, _server, this->_nickname, _server->getName(), ctime(_server->getStartTime()), "");
-			send_reply(313, this, _server, ptr->getNickname(), "", "", "");
-			send_reply(317, this, _server, to_string(ptr->getIdle()), "", "", "");
+			send_reply(312, this, _server,  m->params[i], _server->getName(), ctime(_server->getStartTime()), "");
+			send_reply(313, this, _server, m->params[i], "", "", "");
+			send_reply(317, this, _server, m->params[i], to_string(ptr->getIdle()), "", "");
 		}
 		else
 			send_reply(401, this, _server, m->params[0], "", "", "");
