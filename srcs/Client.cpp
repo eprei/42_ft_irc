@@ -63,7 +63,8 @@ void	Client::process_buffer(const std::string& buf)
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] =\
 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
-	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG" , "WHOIS" , "WHOWAS" };
+	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG"\
+	, "WHOIS" , "WHOWAS" };
 	void	(Client::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
 	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
@@ -74,10 +75,7 @@ void			Client::execCmd(Message *m){
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
 	{
 		if (acceptableCommands[i].compare(m->command) == 0)
-		{
-			(this->*p[i])(m);
-			return ;
-		}
+			return ((this->*p[i])(m));
 	}
 }
 

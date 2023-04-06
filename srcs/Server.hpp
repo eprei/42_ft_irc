@@ -22,7 +22,7 @@ class Server
 		bool	serverSocketConfig();
 		bool	serverLoop();
 		void	addNewClient();
-		void	removeClient(Client* client);
+		void	removeClientFromServer(Client* client, std::string reason);
 		void	send_message_to_client(Client* client, std::string message);
 
 		std::string		getName( void ) const;
@@ -52,6 +52,7 @@ class Server
 		std::string	isOper(Client *client);
 		bool		finish();
 		time_t		const *getStartTime( void ) const;
+		void		checkInactiveUsers( void );
 
 	private:
 

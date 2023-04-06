@@ -10,12 +10,12 @@ void			Client::quit(Message *m){
 
 	if (m->params[0].size() == 0)
 	{
-		_server->removeClient(this);
+		_server->removeClientFromServer(this, "");
 		//TO DO: sendToChannel( client_nickname "has quit the channel");
 	}
 	else
 	{
-		_server->removeClient(this);
+		_server->removeClientFromServer(this, "");
 		//TO DO: sendToChannel( client_nickname + m->params[0] + m->params[1] ... etc );
 		//TO DO: sendToChannel( client_nickname "has quit the channel");
 	}

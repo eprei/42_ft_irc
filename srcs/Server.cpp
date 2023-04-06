@@ -102,15 +102,17 @@ void Server::addNewClient(){
 	_nOfClients += 1;
 }
 
-void	Server::removeClient(Client* client){
+void	Server::removeClientFromServer(Client* client, std::string reason){
 	int sock = client->getSocket();
 
 	close(sock);
-	delete _clientsList[sock];
+	// delete _clientsList[sock];
+	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
 	_nOfClients -= 1;
-	// TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
+	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
+	std::cout << "Client " << client->getId() << " " << reason << std::endl;
 }
 
 bool isSocketClosed(int socket_fd)
@@ -135,7 +137,7 @@ void	signalHandler(int signum)
 }
 
 bool Server::serverLoop(){
-	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
+	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl;
 	while (1)
 	{
 		if (signal(SIGINT, signalHandler) == SIG_ERR)
@@ -166,17 +168,25 @@ bool Server::serverLoop(){
 				else
 				{
 					if (isSocketClosed(SocketNumber) == true)
-						removeClient(_clientsList[SocketNumber]);
+						removeClientFromServer(_clientsList[SocketNumber], "has been disconnected unexpectedly");
 					else
 						messageHandling(SocketNumber);
 				}
 			}
 		}
-		// TO DO: function to deconect all clients with timeout expired
+		checkInactiveUsers();
 		usleep(600);
 	}
 	finish();
 	return (EXIT_SUCCESS);
+}
+
+void			Server::checkInactiveUsers( void ){
+	for (std::map<int , Client *>::iterator it; it != _clientsList.end(); it++)
+	{
+		if (it->second->getIdle() > TIMEOUT)
+			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
+	}
 }
 
 void			Server::messageHandling(int userSocketNumber){
@@ -350,7 +360,7 @@ bool	Server::finish()
 {
     std::cout << "\nTerminating server...\n";
 	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
-		this->removeClient(it->second);
+		this->removeClientFromServer(it->second, "");
     close(getServerSocket()); // cerrar el socket
     return (true); // salir del programa con el codigo de señal
 	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
