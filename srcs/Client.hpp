@@ -71,6 +71,9 @@ class Client
 		void				addToNicksHistory( void );
 		void				welcome();
 
+		// TOOLS
+		std::vector<std::string>	subSplitString(const std::string& str, char c);
+
 	private:
 
 		int								_id;

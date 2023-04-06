@@ -189,7 +189,7 @@ void			Server::checkInactiveUsers( void ){
 
 	while( !_clientsList.empty() && it != itEnd )
 	{
-		std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
+		// std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
 		if (it->second->getIdle() > TIMEOUT)
 			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
 		if(!_clientsList.empty()){

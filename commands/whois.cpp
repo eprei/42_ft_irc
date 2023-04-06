@@ -1,5 +1,7 @@
 #include "../srcs/Includes.hpp"
 
+// made by: epresa-c
+
 std::string to_string(double value)
 {
     std::stringstream ss;
@@ -7,28 +9,27 @@ std::string to_string(double value)
     return ss.str();
 }
 
-// made by: epresa-c
 void			Client::whois(Message *m){
 	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
 	Client *ptr;
+	std::vector<std::string> subsplited = subSplitString(m->params[0], ',');
 
-	for (size_t i = 0; i < m->params.size(); i++)
+	for (size_t i = 0; i < subsplited.size(); i++)
 	{
-		if ((ptr = _server->getClient(m->params[i])) != NULL)
+		if ((ptr = _server->getClient(subsplited[i])) != NULL)
 		{
 			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
 			if (ptr->getNickname() == _nickname)
 				send_reply(378, this, _server, ptr->getUsername(), ptr->getHostname(), "", "");
-			send_reply(312, this, _server,  m->params[i], _server->getName(), ctime(_server->getStartTime()), "");
+			send_reply(312, this, _server,  subsplited[i], _server->getName(), ctime(_server->getStartTime()), "");
 			// send_reply(313, this, _server, m->params[i], "", "", ""); // is operator
 			// send_reply(317, this, _server, m->params[i], to_string(ptr->getIdle()), "", ""); // last connection
 		}
 		else
-			send_reply(401, this, _server, m->params[0], "", "", "");
+			send_reply(401, this, _server, subsplited[i], "", "", "");
+		send_reply(318, this, _server, subsplited[i], "", "", "");
 	}
-	send_reply(318, this, _server,  m->params[0], "", "", "");
 }
-
 
 // 4.5.2 Whois query
 

@@ -112,3 +112,13 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 //  Client: Esta clase representaría a cada cliente que se conecta al servidor IRC.
 //   Sería responsable de mantener una conexión con el servidor, recibir y enviar mensajes,
 //    y unirse o abandonar canales.
+
+std::vector<std::string> Client::subSplitString(const std::string& str, char c) {
+	std::vector<std::string> result;
+	std::stringstream ss(str);
+	std::string strSplited;
+
+	while (std::getline(ss, strSplited, c))
+		result.push_back(strSplited);
+	return result;
+}
