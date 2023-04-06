@@ -9,7 +9,7 @@ SRCS =	./srcs/main.cpp\
 		./srcs/Channel.cpp\
 		./srcs/Client.cpp\
 		./srcs/parsing.cpp\
-		./srcs/numeric_reply.cpp\
+		./srcs/NumericReply.cpp\
 		./commands/cap.cpp\
 		./commands/join.cpp\
 		./commands/kick.cpp\

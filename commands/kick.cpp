@@ -2,5 +2,5 @@
 
 void			Client::kick(Message *m){
 	(void)m;
-	std::cout << GREEN << ">\tkick function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\tkick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 }

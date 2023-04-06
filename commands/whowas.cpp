@@ -6,22 +6,22 @@
 //			When you ask for yourself you have the real hostname, otherway you have the masked hostname
 
 void			Client::whowas(Message *m){
-	std::cout << GREEN << ">\twhowas function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\twhowas function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	int found = false;
 
 	for (size_t i = _nicksHistory.size() - 1; i > 0 ; i--)
 	{
 		if (_nicksHistory[i].nick == m->params[0])
 		{
-			send_reply(314, this, _server, _nicksHistory[i].nick, _nicksHistory[i].user, _nicksHistory[i].host, _nicksHistory[i].realname);
-			send_reply(312, this, _server, _nicksHistory[i].nick, _nicksHistory[i].server,  ctime(_nicksHistory[i].serverStartTime), "");
+			sendReply(314, _nicksHistory[i].nick, _nicksHistory[i].user, _nicksHistory[i].host, _nicksHistory[i].realname);
+			sendReply(312, _nicksHistory[i].nick, _nicksHistory[i].server,  ctime(_nicksHistory[i].serverStartTime), "");
  			found = true;
 			std::cout << "found = " << std::boolalpha << found << std::endl;
 		}
 	}
 	if (found == false)
-		send_reply(406, this, _server, m->params[0], "", "", "");
-	send_reply(369, this, _server, m->params[0], "", "", "");
+		sendReply(406, m->params[0], "", "", "");
+	sendReply(369, m->params[0], "", "", "");
 }
 
 // 4.5.3 Whowas

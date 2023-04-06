@@ -4,6 +4,7 @@
 # include "Includes.hpp"
 
 class Server;
+class Channel;
 
 typedef struct s_nicksBackup {
 	std::string	nick;
@@ -50,6 +51,12 @@ class Client
 		std::string			getBuf( void ) const;
 		void				execCmd(Message *m);
 		void				process_buffer(const std::string& message);
+		std::string			numericReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+		std::string			formatMsgsReply(const int code);
+		void				sendReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
+		std::string			formatMsgsUsers();
+
+
 
 		// CMDS
 		void				nick(Message *m);
@@ -70,6 +77,9 @@ class Client
 		void				whowas(Message *m);
 		void				addToNicksHistory( void );
 		void				welcome();
+		void				leaveAll(std::string cmd, std::string part_msg);
+		void				sendMsg(std::string msg);
+
 
 		// TOOLS
 		std::vector<std::string>	subSplitString(const std::string& str, char c);
@@ -77,7 +87,6 @@ class Client
 	private:
 
 		int								_id;
-		// bool							_passChecked;
 		std::string 					_nickname;
 		std::string 					_username;
 		std::string 					_hostname;
@@ -92,6 +101,9 @@ class Client
 		Server							*_server;
 		static std::vector<nicksBackup>	_nicksHistory;
 		bool							_alreadyWelcomed;
+		// bool							_passChecked;
+		std::vector<Channel *>			_joinedChannels;
+		
 
 };
 

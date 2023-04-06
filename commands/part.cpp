@@ -12,45 +12,38 @@
 // m->params[1] = part message
 
 void			Client::part(Message *m){
-	std::cout << GREEN << ">\tpart function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\tpart function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
 	{
-		send_reply(461, this, _server, m->command, "", "", "");
+		sendReply(461, m->command, "", "", "");
 		return;
 	}
 
 	Channel *target = _server->getChannel((m->params[0]));
 	if (target == NULL)
-		send_reply(403, this, _server, target->getName(), "", "", "");
+		sendReply(403, target->getName(), "", "", "");
 	else if (!target->hasClient(this))
-		send_reply(442, this, _server, target->getName(), "", "", "");
+		sendReply(442, target->getName(), "", "", "");
 	else {
 	// 	// for (size_t i(0); i < m->params.size(); i++)
 		_server->removeClientFromChannel(this, target->getName());
 
-		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+		std::string msg = formatMsgsUsers();
 		std::string part_msg = "";
 
-	// 	if (!m->params[1].empty())//no PART_MSG not_defined
-		if (m->params.size() == 1)//no PART_MSG not_defined
+		if (m->params.size() == 1)// PART_MSG not_defined
 			part_msg = "\"hasta la vista Baby\"";
 		else
 			part_msg = "\"" + m->params[1] + "\"";
-			// PART :#PATATA\r\n'
-			// PART #PATATA :"me voy"\r\n'
-			// PART #USA :"hasta la vista Baby"\r\n'
-
 		msg.append("PART " + m->params[0] + " :" + part_msg + END_CHARACTERS);
-		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-			perror("SEND FAILED");
+		sendMsg(msg);
+	}
+}
+
 // [ client : 8000 ] b'PART #PATATA\r\n'
 //  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART :#PATATA\r\n'
 // [ client : 8000 ] b'PART #PATATA :me voy\r\n'
 //  [ server : 6667 ] b':raul_!~raul@freenode-b8j.srb.vrebei.IP PART #PATATA :"me voy"\r\n'
-	}
-}
-
 // 3.2.2 Part message
 
 //       Command: PART

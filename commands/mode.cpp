@@ -5,17 +5,15 @@
 // :*server_name 324 nick #CHANNEL :+nt
 // :DESKTOP-MQD5OHQ 324 Rony #people [+n]  ccomis
 
-	// std::map<char, bool> &getModes();
-	// bool hasMode(char mode);
-
-		// std::string						_mode;
+// bool hasMode(char mode);
+// std::string		_mode;
 
 void			Client::mode(Message *m)
 {
-	std::cout << GREEN << ">\tmode function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\tmode function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
 	{
-		send_reply(461, this, _server, m->command, "", "", "");
+		sendReply(461, m->command, "", "", "");
 		return;
 	}
 	Channel *target= _server->getChannel(m->params[0]);
@@ -24,17 +22,15 @@ void			Client::mode(Message *m)
 		// for (size_t i(0); i < m->params.size(); i++)
 		// {
 			Channel *target = _server->getChannel(m->params[0]);
-			send_reply(324, this, _server, m->params[0], target->getModes(), "", "");
-			// send_reply(366, this, _server, m->params[0], "", "", "");
+			sendReply(324, m->params[0], target->getModes(), "", "");
+			// sendReply(366, m->params[0], "", "", "");
 		// }
 	}
  	else //no hay respuesta
 	{
 		std::string msg;
 		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
-		// std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-			perror("SEND FAILED");
+		sendMsg(msg);
 	}
 //  [ client : 8000 ] MODE Rony +i
 //  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i
@@ -58,8 +54,6 @@ void			Client::mode(Message *m)
 
 //    MODE &oulu +b                   ; Command to list ban masks set for
                                 //    the channel "&oulu".
-
-
 
 
 

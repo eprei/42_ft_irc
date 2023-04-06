@@ -53,8 +53,8 @@ void	Client::process_buffer(const std::string& buf)
         std::string command(token);// Convierte token en string
         // std::cout << "Comando recibido: " << command << std::endl;
 		m = parseMessage(command);
-		// std::cout << FC(GREEN, "Message parsed =") << std::endl;
-		// print_message(m);
+		std::cout << FC(GREEN, "Message parsed =") << std::endl;
+		print_message(m);
 		execCmd(&m);
         token = strtok(NULL, END_CHARACTERS); // Siguiente token
     }
@@ -71,7 +71,7 @@ void			Client::execCmd(Message *m){
 	&Client::ping , &Client::kick , &Client::cap , &Client::notice , \
 	&Client::mode, &Client::pong , &Client::whois , &Client::whowas };
 
-	// std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<" << RESET << std::endl;
+	// std::cout << FC(BLUE, ">\texeccmd function executed ") << "by client id: " << _id << "\t<") << std::endl;
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
 	{
 		if (acceptableCommands[i].compare(m->command) == 0)

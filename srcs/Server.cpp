@@ -19,7 +19,22 @@ Server::~Server(){
 	// TO DO: delete all mallocs like _clientList.seconds and _channelList objects
 }
 
-bool Server::checkArgs(int argc, char **argv){
+bool	Server::finish()
+{
+    std::cout << "\nTerminating server...\n";
+	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
+		this->removeClientFromServer(it->second, "");
+    close(getServerSocket()); // cerrar el socket
+    return (true); // salir del programa con el codigo de señal
+	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
+	// // removeChannel((*it)->getName());
+	// {
+	// 	delete *it; // Liberamos la memoria reservada para el canal
+    //     _channelList.erase(it);
+	// }
+}
+
+bool	Server::checkArgs(int argc, char **argv){
 	if (argc != 3 || !(DEFAULT_MIN_PORT <= atoi(argv[1]) && atoi(argv[1]) <= DEFAULT_MAX_PORT))
 		return printCorrectUse();
 	_port = atoi(argv[1]);
@@ -27,7 +42,7 @@ bool Server::checkArgs(int argc, char **argv){
 	return EXIT_SUCCESS;
 }
 
-bool Server::printCorrectUse() const
+bool	Server::printCorrectUse() const
 {
 	std::cout << "Correct use of ircserv: ./ircserv <port> <password>" << std::endl;
 	std::cout << "<port> must be a number between 6665-6669" << std::endl;
@@ -35,7 +50,7 @@ bool Server::printCorrectUse() const
 	return EXIT_FAILURE;
 }
 
-bool Server::launchServ(){
+bool	Server::launchServ(){
 	if (serverSocketConfig())
 		return (EXIT_FAILURE);
 	if (serverLoop())
@@ -43,7 +58,7 @@ bool Server::launchServ(){
 	return (EXIT_SUCCESS);
 }
 
-bool Server::serverSocketConfig(){
+bool	Server::serverSocketConfig(){
 	time(&_startTime);
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
@@ -82,42 +97,8 @@ bool Server::serverSocketConfig(){
 	return (EXIT_SUCCESS);
 }
 
-void Server::addNewClient(){
-	int addrSize = sizeof(struct sockaddr_in);
-	int clientSocketLocal;
-	struct sockaddr_in clientAddr;
-	Client *neo = new Client(this);
 
-	if ((clientSocketLocal = accept(this->_serverSocket, (struct sockaddr*)&clientAddr, (socklen_t*)&addrSize)) < 0){
-		perror("\nerror found at accept"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-		delete neo;
-		return ;
-	}
-	neo->setSocket(clientSocketLocal);
-	neo->setAddress(clientAddr);
-	neo->setIp(inet_ntoa(clientAddr.sin_addr));
-	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
-	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << std::endl;
-	_nOfClients += 1;
-}
-
-void	Server::removeClientFromServer(Client* client, std::string reason){
-	int sock = client->getSocket();
-
-	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
-	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
-	close(sock);
-	// delete _clientsList[sock];
-	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
-	FD_CLR(sock, &_currentSockets);
-	_clientsList.erase(sock);
-	// std::cout << RED << "removeClientFromServer _client list is empty: " << std::boolalpha << _clientsList.empty()  << WHITE << std::endl;
-	_nOfClients -= 1;
-	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
-}
-
-bool isSocketClosed(int socket_fd)
+bool	isSocketClosed(int socket_fd)
 {
 	char buffer[1];
 	int result = recv(socket_fd, buffer, 1, MSG_PEEK);
@@ -183,24 +164,11 @@ bool Server::serverLoop(){
 	return (EXIT_SUCCESS);
 }
 
-void			Server::checkInactiveUsers( void ){
-	std::map<int , Client *>::iterator it = _clientsList.begin();
-	std::map<int , Client *>::iterator itEnd = _clientsList.end();
+// CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
+// CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
+// CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
 
-	while( !_clientsList.empty() && it != itEnd )
-	{
-		// std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
-		if (it->second->getIdle() > TIMEOUT)
-			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
-		if(!_clientsList.empty()){
-			++it;
-			itEnd = _clientsList.end();
-		}
-	}
-}
-
-void			Server::messageHandling(int userSocketNumber){
-
+void	Server::messageHandling(int userSocketNumber){
 	char bufferLocal[MAX_BUFF + 1];
 	ssize_t  numOfBytesReceived;
 
@@ -216,8 +184,59 @@ void			Server::messageHandling(int userSocketNumber){
 	_clientsList[userSocketNumber]->setBuf(_buf);
 	_buf.erase();
 	// std::cout << *this << std::endl;
-
 }
+
+void			Server::checkInactiveUsers(){
+	std::map<int , Client *>::iterator it = _clientsList.begin();
+	std::map<int , Client *>::iterator itEnd = _clientsList.end();
+
+	while( !_clientsList.empty() && it != itEnd )
+	{
+		// std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
+		if (it->second->getIdle() > TIMEOUT)
+			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
+		if(!_clientsList.empty()){
+			++it;
+			itEnd = _clientsList.end();
+		}
+	}
+}
+
+void	Server::addNewClient(){
+	int addrSize = sizeof(struct sockaddr_in);
+	int clientSocketLocal;
+	struct sockaddr_in clientAddr;
+	Client *neo = new Client(this);
+
+	if ((clientSocketLocal = accept(this->_serverSocket, (struct sockaddr*)&clientAddr, (socklen_t*)&addrSize)) < 0){
+		perror("\nerror found at accept"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
+		delete neo;
+		return ;
+	}
+	neo->setSocket(clientSocketLocal);
+	neo->setAddress(clientAddr);
+	neo->setIp(inet_ntoa(clientAddr.sin_addr));
+	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
+	FD_SET(clientSocketLocal, &_currentSockets);
+	std::cout << FC(GREEN, "++++++\tClient ") << neo->getId() << " added\t++++++\n";
+	_nOfClients += 1;
+}
+
+void	Server::removeClientFromServer(Client* client, std::string reason){
+	int sock = client->getSocket();
+
+	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
+	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
+	close(sock);
+	// delete _clientsList[sock];
+	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
+	FD_CLR(sock, &_currentSockets);
+	_clientsList.erase(sock);
+	// std::cout << RED << "removeClientFromServer _client list is empty: " << std::boolalpha << _clientsList.empty()  << WHITE << std::endl;
+	_nOfClients -= 1;
+	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
+}
+
 
 bool	Server::isNickUsed(std::string nickname)
 {
@@ -232,34 +251,33 @@ bool	Server::isNickUsed(std::string nickname)
 	return false;
 }
 
-Client	*Server::getClient(std::string nickname)
+std::string	Server::isOper(Client *client)
 {
-	std::map<int , Client *>::iterator itBegin = _clientsList.begin();
-
-	while (itBegin != _clientsList.end())
+	for (size_t i = 0; i < _channelList.size(); i++)
 	{
-		if (itBegin->second->getNickname() == nickname)
-			return itBegin->second;
-		itBegin++;
+		if (_channelList[i]->isOperator(client) == true)
+			return "is an IRC operator";
 	}
-	return NULL;
+	return "is not an operator";
 }
 
-std::string		Server::getName( void ) const{return _name;}
+// CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS
+// CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS
+// CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS CHANNELS
 
-std::string		Server::getPassword( void ) const{return _password;}
+bool	Server::channelExists(std::string channel_name)
+{
+    for (size_t i = 0; i < _channelList.size(); i++)
+    {
+        if (_channelList[i]->getName() == channel_name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
-int				Server::getPort( void ) const{return _port;}
-
-int				Server::getServerSocket( void ) const{return _serverSocket;}
-
-int				Server::getNOfClients( void ) const {return _nOfClients;}
-
-std::string		Server::getServerState( void ) const{return _serverState;}
-
-time_t		const *Server::getStartTime( void ) const { return &_startTime;}
-
-void Server::createChannel(Client* owner, std::string channel_name)
+void	Server::createChannel(Client* owner, std::string channel_name)
 {
     if (channelExists(channel_name))
     {
@@ -270,31 +288,6 @@ void Server::createChannel(Client* owner, std::string channel_name)
     Channel* new_channel = new Channel(*owner, channel_name);
     _channelList.push_back(new_channel);
     std::cout << "Channel " << channel_name << " created." << std::endl;
-}
-
-void Server::addClientToChannel(Client* to_add, std::string channel_name)
-{
-    Channel* channel = getChannel(channel_name);
-    if (channel == NULL)
-    {
-        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
-        return;
-    }
-	if (!channel->hasClient(to_add))
-    	channel->addClient(to_add);
-}
-
-void Server::removeClientFromChannel(Client* client, std::string channel_name)
-{
-    Channel* channel = getChannel(channel_name);
-    if (channel == NULL)
-    {
-        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
-        return;
-    }
-    channel->removeClient(client);
-	// if (channel->isEmpty())
-	// 	removeChannel(channel_name);
 }
 
 void	Server::removeChannel(std::string channel_name)
@@ -310,31 +303,32 @@ void	Server::removeChannel(std::string channel_name)
     }
 }
 
-bool Server::channelExists(std::string channel_name)
+void	Server::addClientToChannel(Client* to_add, std::string channel_name)
 {
-    for (size_t i = 0; i < _channelList.size(); i++)
+    Channel* channel = getChannel(channel_name);
+    if (channel == NULL)
     {
-        if (_channelList[i]->getName() == channel_name)
-        {
-            return true;
-        }
+        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
+        return;
     }
-    return false;
+	if (!channel->hasClient(to_add))
+    	channel->addClient(to_add);
 }
 
-Channel*	Server::getChannel(std::string channel_name)
+void	Server::removeClientFromChannel(Client* client, std::string channel_name)
 {
-    for (size_t i = 0; i < _channelList.size(); i++)
+    Channel* channel = getChannel(channel_name);
+    if (channel == NULL)
     {
-        if (_channelList[i]->getName() == channel_name)
-        {
-            return _channelList[i];
-        }
+        std::cout << "Channel " << channel_name << " does not exist." << std::endl;
+        return;
     }
-    return NULL;
+    channel->removeClient(client);
+	// if (channel->isEmpty())
+	// 	removeChannel(channel_name);
 }
 
-void Server::printChannel(std::string channel_name)
+void	Server::printChannel(std::string channel_name)
 {
     Channel* channel = getChannel(channel_name);
     if (channel == NULL)
@@ -353,37 +347,47 @@ void Server::printChannel(std::string channel_name)
     }
 }
 
-std::string		Server::getServInfo( void ) const{ return _serverInfo;}
+// GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS
+// GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS
+// GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS
 
+time_t const*	Server::getStartTime() const { return &_startTime;}
+std::string		Server::getName() const {return _name;}
+std::string		Server::getPassword() const {return _password;}
+std::string		Server::getServerState() const {return _serverState;}
+std::string		Server::getServInfo() const{ return _serverInfo;}
+int				Server::getPort() const {return _port;}
+int				Server::getServerSocket() const {return _serverSocket;}
+int				Server::getNOfClients() const {return _nOfClients;}
 
-std::string	Server::isOper(Client *client)
+Client*			Server::getClient(std::string nickname)
 {
-	for (size_t i = 0; i < _channelList.size(); i++)
+	std::map<int , Client *>::iterator itBegin = _clientsList.begin();
+
+	while (itBegin != _clientsList.end())
 	{
-		if (_channelList[i]->isOperator(client) == true)
-			return "is an IRC operator";
+		if (itBegin->second->getNickname() == nickname)
+			return itBegin->second;
+		itBegin++;
 	}
-	return "is not an operator";
+	return NULL;
 }
 
-bool	Server::finish()
+Channel*		Server::getChannel(std::string channel_name)
 {
-    std::cout << "\nTerminating server...\n";
-	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
-		this->removeClientFromServer(it->second, "");
-    close(getServerSocket()); // cerrar el socket
-    return (true); // salir del programa con el codigo de señal
-	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
-	// // removeChannel((*it)->getName());
-	// {
-	// 	delete *it; // Liberamos la memoria reservada para el canal
-    //     _channelList.erase(it);
-	// }
+    for (size_t i = 0; i < _channelList.size(); i++)
+    {
+        if (_channelList[i]->getName() == channel_name)
+        {
+            return _channelList[i];
+        }
+    }
+	return NULL;
 }
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {
-	o << std::endl << YELLOW << "******\tServer info\t******" << RESET << std::endl;
+	o << std::endl << FC(YELLOW, "******\tServer info\t******") << std::endl;
 	o << "Name: " << rhs.getName() << std::endl;
 	o << "Password: " << rhs.getPassword() << std::endl;
 	o << "Port: " << rhs.getPort() << std::endl;
