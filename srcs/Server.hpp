@@ -51,7 +51,7 @@ class Server
 		std::string	getServInfo( void ) const;
 		std::string	isOper(Client *client);
 		bool		finish();
-		time_t		const *getStartTime( void );
+		time_t		const *getStartTime( void ) const;
 
 	private:
 

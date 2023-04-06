@@ -6,12 +6,13 @@
 class Server;
 
 typedef struct s_nicksBackup {
-    std::string nick;
-    std::string server;
-    std::string serverInfo;
-    std::string user;
-    std::string host;
-    std::string realname;
+	std::string	nick;
+	std::string	server;
+	std::string	serverInfo;
+	std::string	user;
+	std::string	host;
+	std::string	realname;
+	const time_t	*serverStartTime;
 }	nicksBackup;
 
 class Client

@@ -10,7 +10,7 @@ void	Client::welcome()
 	send_reply(1, this, _server, getNickname(), getUsername(), getHostname(), "");
 	send_reply(2, this, _server, _server->getName(), "1.0", "", "");
 	send_reply(3, this, _server, ctime(_server->getStartTime()), "", "", "");
-	send_reply(4, this, _server, _server->getName(), "1.0", "usermode Hacer", "channelModes Hacer");
+	// send_reply(4, this, _server, _server->getName(), "1.0", "usermode Hacer", "channelModes Hacer");
 }
 
 void	Client::pass(Message *m)

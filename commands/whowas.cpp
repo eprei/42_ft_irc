@@ -14,7 +14,7 @@ void			Client::whowas(Message *m){
 		if (_nicksHistory[i].nick == m->params[0])
 		{
 			send_reply(314, this, _server, _nicksHistory[i].nick, _nicksHistory[i].user, _nicksHistory[i].host, _nicksHistory[i].realname);
-			send_reply(312, this, _server, _nicksHistory[i].nick, _nicksHistory[i].server, _nicksHistory[i].serverInfo, "");
+			send_reply(312, this, _server, _nicksHistory[i].nick, _nicksHistory[i].server,  ctime(_nicksHistory[i].serverStartTime), "");
  			found = true;
 			std::cout << "found = " << std::boolalpha << found << std::endl;
 		}

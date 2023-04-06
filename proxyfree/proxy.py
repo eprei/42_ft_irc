@@ -84,7 +84,7 @@ class Proxy(Thread):
             self.p2s.start()
 
 ip_proxy = '127.0.0.1'
-port_proxy = 8000
+port_proxy = 9000
 
 port_server = 6667
 # ip_server = '127.0.0.1'

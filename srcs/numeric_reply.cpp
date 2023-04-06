@@ -2,7 +2,7 @@
 // #define MSG_001 ":Welcome to the Internet Relay Network" + client->getNickname() + "!" + client->getUsername() + "@" + _name
 
 // RPL 001
-# define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network PAPA!" \
+# define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network " \
 			+ nick + "!" + user + "@" + host + END_CHARACTERS)
 
 // RPL 002

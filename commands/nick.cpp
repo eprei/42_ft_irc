@@ -89,6 +89,7 @@ void	Client::addToNicksHistory( void ){
 	newNick.user = this->_username;
 	newNick.host = this->_hostname;
 	newNick.realname = this->_realname;
+	newNick.serverStartTime = this->_server->getStartTime();
 	_nicksHistory.push_back(newNick);
 }
 

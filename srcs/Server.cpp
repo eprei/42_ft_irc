@@ -237,7 +237,7 @@ int				Server::getNOfClients( void ) const {return _nOfClients;}
 
 std::string		Server::getServerState( void ) const{return _serverState;}
 
-time_t		const *Server::getStartTime( void ) { return &_startTime;}
+time_t		const *Server::getStartTime( void ) const { return &_startTime;}
 
 void Server::createChannel(Client* owner, std::string channel_name)
 {
@@ -370,5 +370,6 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 	o << "Server Socket: " << rhs.getServerSocket() << std::endl;
 	o << "Number of clients: " << rhs.getNOfClients() << std::endl;
 	o << "State: " << rhs.getServerState() << std::endl;
+	o << "Created: " << ctime(rhs.getStartTime()) << std::endl;
 	return o;
 }
