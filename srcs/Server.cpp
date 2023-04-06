@@ -23,7 +23,7 @@ bool	Server::finish()
 {
     std::cout << "\nTerminating server...\n";
 	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
-		this->removeClient(it->second);
+		this->removeClientFromServer(it->second, "");
     close(getServerSocket()); // cerrar el socket
     return (true); // salir del programa con el codigo de señal
 	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
@@ -97,11 +97,6 @@ bool	Server::serverSocketConfig(){
 	return (EXIT_SUCCESS);
 }
 
-void	signalHandler(int signum)
-{
-	if (signum == SIGINT)
-		go = false;
-}
 
 bool	isSocketClosed(int socket_fd)
 {
@@ -118,8 +113,14 @@ bool	isSocketClosed(int socket_fd)
 		return false;
 }
 
-bool	Server::serverLoop(){
-	std::cout << FC(BOLDRED, "IRC_SERVER initialized... Welcome") << std::endl;
+void	signalHandler(int signum)
+{
+	if (signum == SIGINT)
+		go = false;
+}
+
+bool Server::serverLoop(){
+	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl;
 	while (1)
 	{
 		if (signal(SIGINT, signalHandler) == SIG_ERR)
@@ -150,13 +151,13 @@ bool	Server::serverLoop(){
 				else
 				{
 					if (isSocketClosed(SocketNumber) == true)
-						removeClient(_clientsList[SocketNumber]);
+						removeClientFromServer(_clientsList[SocketNumber], "has been disconnected unexpectedly");
 					else
 						messageHandling(SocketNumber);
 				}
 			}
 		}
-		// TO DO: function to deconect all clients with timeout expired
+		checkInactiveUsers(); // TO DO: Check with TIMEOUT numbers smaller than the time lapse between each PING of the irssi client
 		usleep(600);
 	}
 	finish();
@@ -168,7 +169,6 @@ bool	Server::serverLoop(){
 // CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
 
 void	Server::messageHandling(int userSocketNumber){
-
 	char bufferLocal[MAX_BUFF + 1];
 	ssize_t  numOfBytesReceived;
 
@@ -184,6 +184,22 @@ void	Server::messageHandling(int userSocketNumber){
 	_clientsList[userSocketNumber]->setBuf(_buf);
 	_buf.erase();
 	// std::cout << *this << std::endl;
+}
+
+void			Server::checkInactiveUsers(){
+	std::map<int , Client *>::iterator it = _clientsList.begin();
+	std::map<int , Client *>::iterator itEnd = _clientsList.end();
+
+	while( !_clientsList.empty() && it != itEnd )
+	{
+		// std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
+		if (it->second->getIdle() > TIMEOUT)
+			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
+		if(!_clientsList.empty()){
+			++it;
+			itEnd = _clientsList.end();
+		}
+	}
 }
 
 void	Server::addNewClient(){
@@ -206,16 +222,21 @@ void	Server::addNewClient(){
 	_nOfClients += 1;
 }
 
-void	Server::removeClient(Client* client){
+void	Server::removeClientFromServer(Client* client, std::string reason){
 	int sock = client->getSocket();
 
+	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
+	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
 	close(sock);
-	delete _clientsList[sock];
+	// delete _clientsList[sock];
+	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
+	// std::cout << RED << "removeClientFromServer _client list is empty: " << std::boolalpha << _clientsList.empty()  << WHITE << std::endl;
 	_nOfClients -= 1;
-	// TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
+	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
 }
+
 
 bool	Server::isNickUsed(std::string nickname)
 {
@@ -361,7 +382,7 @@ Channel*		Server::getChannel(std::string channel_name)
             return _channelList[i];
         }
     }
-    return NULL;
+	return NULL;
 }
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )

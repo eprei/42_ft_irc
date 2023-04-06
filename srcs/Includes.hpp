@@ -21,6 +21,7 @@
 # define CHANNELSMODES	"kobil"
 # define NUMBER_OF_ACCEPTABLE_COMMANDS 16
 # define END_CHARACTERS "\r\n"
+# define TIMEOUT 60.0
 
 # include <stdlib.h>
 # include <unistd.h>

@@ -81,6 +81,9 @@ class Client
 		void				sendMsg(std::string msg);
 
 
+		// TOOLS
+		std::vector<std::string>	subSplitString(const std::string& str, char c);
+
 	private:
 
 		int								_id;

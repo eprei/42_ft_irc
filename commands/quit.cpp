@@ -3,7 +3,6 @@
 // made by: epresa-c
 // modified by :mpons
 // TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
-
 void	Client::leaveAll(std::string cmd, std::string part_msg)
 {
 	std::string msg = formatMsgsUsers();
@@ -36,5 +35,9 @@ void			Client::quit(Message *m){
 	sendMsg(msg);
 	leaveAll("QUIT", part_msg);
 	_server->removeClient(this);
+	// if (m->params[0].size() == 0)
+	// 	_server->removeClientFromServer(this, "");
+	// else
+	// 	_server->removeClientFromServer(this, m->params[0]);
 }
 

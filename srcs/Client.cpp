@@ -63,7 +63,8 @@ void	Client::process_buffer(const std::string& buf)
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] =\
 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
-	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG" , "WHOIS" , "WHOWAS" };
+	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG"\
+	, "WHOIS" , "WHOWAS" };
 	void	(Client::*p[NUMBER_OF_ACCEPTABLE_COMMANDS])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
 	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
@@ -74,10 +75,7 @@ void			Client::execCmd(Message *m){
 	for (int i = 0; i < NUMBER_OF_ACCEPTABLE_COMMANDS; i++)
 	{
 		if (acceptableCommands[i].compare(m->command) == 0)
-		{
-			(this->*p[i])(m);
-			return ;
-		}
+			return ((this->*p[i])(m));
 	}
 }
 
@@ -114,3 +112,13 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 //  Client: Esta clase representaría a cada cliente que se conecta al servidor IRC.
 //   Sería responsable de mantener una conexión con el servidor, recibir y enviar mensajes,
 //    y unirse o abandonar canales.
+
+std::vector<std::string> Client::subSplitString(const std::string& str, char c) {
+	std::vector<std::string> result;
+	std::stringstream ss(str);
+	std::string strSplited;
+
+	while (std::getline(ss, strSplited, c))
+		result.push_back(strSplited);
+	return result;
+}

@@ -24,9 +24,10 @@ class Server
 		bool		serverLoop();
 		
 		// CLIENT
+		void		checkInactiveUsers();
 		void		messageHandling(int userSocketNumber);
 		void		addNewClient();
-		void		removeClient(Client* client);
+		void		removeClientFromServer(Client* client, std::string reason);
 		bool		isNickUsed(std::string nickname);
 		std::string	isOper(Client *client);
 
