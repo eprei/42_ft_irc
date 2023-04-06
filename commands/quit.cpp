@@ -34,10 +34,6 @@ void			Client::quit(Message *m){
 	msg.append("QUIT :Quit: " + part_msg + END_CHARACTERS);
 	sendMsg(msg);
 	leaveAll("QUIT", part_msg);
-	_server->removeClient(this);
-	// if (m->params[0].size() == 0)
-	// 	_server->removeClientFromServer(this, "");
-	// else
-	// 	_server->removeClientFromServer(this, m->params[0]);
+	_server->removeClientFromServer(this, "QUIT ");
 }
 
