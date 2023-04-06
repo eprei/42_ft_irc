@@ -47,5 +47,7 @@
 # include "Server.hpp"
 # include "Channel.hpp"
 # include "Colors.hpp"
+# include "numeric_macros.hpp"
+# include "Utils.hpp"
 
 #endif //INCLUDES_HPP

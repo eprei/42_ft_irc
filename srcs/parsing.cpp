@@ -1,40 +1,13 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include "Includes.hpp"
-#include "Client.hpp"
-
-using namespace std;
-
-// void	process_buffer(const std::string& buf)
-// {
-//     // Separar la cadena en tokens utilizando el delimitador END_CHARACTERS
-// 	Message	m;
-//     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
-//     while (token != NULL) {
-//         // Convertir el token en una cadena de C++
-//         std::string command(token);
-//         std::cout << "Comando recibido: " << command << std::endl;
-//         // Procesar el comando aquí...
-// 		m = parseMessage(token);
-// 		// std::cout << FC(YELLOW, "Ascii Message :") << std::endl;
-// 		// printAscii(_buf);
-// 		std::cout << FC(GREEN, "Message parsed =") << std::endl;
-// 		print_message(m);
-// 		Client::execCmd(&m);
-//         // Obtener el siguiente token
-//         token = strtok(NULL, END_CHARACTERS);
-//     }
-// }
 
 //el comando llega sin \r\n
-Message parseMessage(string input) {
+Message parseMessage(std::string input) {
     Message msg;
 
     // Parsing prefix
     if (input[0] == ':') {
         size_t prefixEnd = input.find(' ');
-        if (prefixEnd != string::npos) {
+        if (prefixEnd != std::string::npos) {
             msg.prefix = input.substr(1, prefixEnd-1);
             input = input.substr(prefixEnd+1);
         } else {
@@ -45,7 +18,7 @@ Message parseMessage(string input) {
 
     // Parsing command
     size_t commandEnd = input.find(' ');
-    if (commandEnd != string::npos) {
+    if (commandEnd != std::string::npos) {
         msg.command = input.substr(0, commandEnd);
         input = input.substr(commandEnd+1);
     } else {
@@ -63,7 +36,7 @@ Message parseMessage(string input) {
             break;
         } else {
             size_t paramEnd = input.find(' ');
-            if (paramEnd != string::npos) {
+            if (paramEnd != std::string::npos) {
                 msg.params.push_back(input.substr(0, paramEnd));
                 input = input.substr(paramEnd+1);
             } else {

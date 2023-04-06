@@ -9,24 +9,24 @@ std::string to_string(double value)
 
 // made by: epresa-c
 void			Client::whois(Message *m){
-	std::cout << GREEN << ">\twhois function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\twhois function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	Client *ptr;
 
 	for (size_t i = 0; i < m->params.size(); i++)
 	{
 		if ((ptr = _server->getClient(m->params[i])) != NULL)
 		{
-			send_reply(311, this, _server, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
+			sendReply(311, ptr->getNickname(), ptr->getUsername(), ptr->getHostname(), ptr->getRealname());
 			if ( ptr->getNickname() == _nickname)
-				send_reply(378, this, _server, ptr->getUsername(), ptr->getHostname(), "", "");
-			send_reply(312, this, _server,  m->params[i], _server->getName(), ctime(_server->getStartTime()), "");
-			// send_reply(313, this, _server, m->params[i], "", "", ""); // is operator
-			// send_reply(317, this, _server, m->params[i], to_string(ptr->getIdle()), "", ""); // last connection
+				sendReply(378, ptr->getUsername(), ptr->getHostname(), "", "");
+			sendReply(312,  m->params[i], _server->getName(), ctime(_server->getStartTime()), "");
+			// sendReply(313, m->params[i], "", "", ""); // is operator
+			// sendReply(317, m->params[i], to_string(ptr->getIdle()), "", ""); // last connection
 		}
 		else
-			send_reply(401, this, _server, m->params[0], "", "", "");
+			sendReply(401, m->params[0], "", "", "");
 	}
-	send_reply(318, this, _server,  m->params[0], "", "", "");
+	sendReply(318,  m->params[0], "", "", "");
 }
 
 

@@ -62,46 +62,31 @@
 //    :WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone ; JOIN message from WiZ
 //                                    on channel #Twilight_zone
 
+
 void	Client::join(Message *m)
 {
-	std::cout << GREEN << ">\tjoin function executed " << RESET <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::cout << FC(GREEN, ">\tjoin function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
 	{
-		send_reply(461, this, _server, m->command, "", "", "");
+		sendReply(461, m->command, "", "", "");
 		return;
 	}
-	// to do (leave all channel where the user is present)
-	// if (m->params[0] == "0")  
-	// 	return (leaveAll());
+	// if (m->params[0] == "#0")  
+	// 	return (leaveAll("PART", ""));
  	else // "the channel is OK"
 	{
 		for (size_t i(0); i < m->params.size(); i++)
 		{
 			_server->createChannel(this, m->params[i]);
 			_server->addClientToChannel(this, m->params[i]);
-			std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
+			std::string msg = formatMsgsUsers();
 			msg.append("JOIN " + m->params[0] + END_CHARACTERS);
-			std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-			if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-				perror("SEND FAILED");
-			send_reply(353, this, _server, m->params[0], _nickname, "", "");
-			send_reply(366, this, _server, m->params[0], "", "", "");
+			sendMsg(msg);
+			sendReply(353, m->params[0], _nickname, "", "");
+			sendReply(366, m->params[0], "", "", "");
 		}
 	}
 }
-
-
-
-
-// 		std::string msg = formatMsgsUsers(_nickname, _username, getHostname());
-// 		this->setNickname(m->params[0]);
-// 		msg.append("NICK " + _nickname + END_CHARACTERS);
-
-// 		std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
-// 		if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
-// 			perror("SEND FAILED");
-// }
-
 
 //473
 # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
