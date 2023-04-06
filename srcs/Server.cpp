@@ -98,21 +98,23 @@ void Server::addNewClient(){
 	neo->setIp(inet_ntoa(clientAddr.sin_addr));
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n";
+	std::cout << GREEN << "++++++\tClient " << neo->getId() << " added\t++++++\n" << RESET << std::endl;
 	_nOfClients += 1;
 }
 
 void	Server::removeClientFromServer(Client* client, std::string reason){
 	int sock = client->getSocket();
 
+	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
+	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
 	close(sock);
 	// delete _clientsList[sock];
 	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
+	// std::cout << RED << "removeClientFromServer _client list is empty: " << std::boolalpha << _clientsList.empty()  << WHITE << std::endl;
 	_nOfClients -= 1;
-	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
-	std::cout << "Client " << client->getId() << " " << reason << std::endl;
+	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
 }
 
 bool isSocketClosed(int socket_fd)
@@ -174,7 +176,7 @@ bool Server::serverLoop(){
 				}
 			}
 		}
-		checkInactiveUsers();
+		checkInactiveUsers(); // TO DO: Check with TIMEOUT numbers smaller than the time lapse between each PING of the irssi client
 		usleep(600);
 	}
 	finish();
@@ -182,10 +184,18 @@ bool Server::serverLoop(){
 }
 
 void			Server::checkInactiveUsers( void ){
-	for (std::map<int , Client *>::iterator it; it != _clientsList.end(); it++)
+	std::map<int , Client *>::iterator it = _clientsList.begin();
+	std::map<int , Client *>::iterator itEnd = _clientsList.end();
+
+	while( !_clientsList.empty() && it != itEnd )
 	{
+		std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
 		if (it->second->getIdle() > TIMEOUT)
 			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
+		if(!_clientsList.empty()){
+			++it;
+			itEnd = _clientsList.end();
+		}
 	}
 }
 

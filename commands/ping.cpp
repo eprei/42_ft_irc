@@ -16,6 +16,6 @@ void			Client::ping(Message *m){
 		// 	return (send_reply(this, ERR_NOSUCHSERVER, m->params[0], "", ""));
 		std::string to_send = "PONG " + m->params[0] + END_CHARACTERS;
 		send(getSocket(), to_send.c_str(), to_send.size(), 0);
-		std::cout << std::endl << *this << std::endl;
+		// std::cout << std::endl << *this << std::endl;
 	}
 }
