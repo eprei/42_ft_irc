@@ -94,6 +94,19 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_PASSWDMISMATCH);
 		case 324:
 			return (RPL_CHANNELMODEIS(arg1, arg2));
+		//KICK
+		case 476:
+			return (ERR_BADCHANMASK(arg1));
+		case 482:
+			return (ERR_CHANOPRIVSNEEDED(arg1));
+		case 441:   
+			return (ERR_USERNOTINCHANNEL(arg1, arg2));
+		case 411:    
+			return (ERR_NORECIPIENT(arg1));
+		case 412:    
+			return (ERR_NOTEXTTOSEND);
+		case 404:    
+			return (ERR_CANNOTSENDTOCHAN(arg1));
 	}
 	return ("");
 }
@@ -116,3 +129,33 @@ void	Client::sendMsg(std::string msg)
 	if (send(getSocket(), msg.c_str(), msg.length(), 0) < 0)
 			perror("SEND FAILED");
 }
+
+void	Client::sendMsgClient(std::string msg, Client *target)
+{
+	std::cout << FC(YELLOW, "Server Reply to be sent:\n") << msg << std::endl;
+	if (send(target->getSocket(), msg.c_str(), msg.length(), 0) < 0)
+			perror("SEND FAILED");
+}
+
+void	Client::sendMsgChannel(std::string msg, Channel *target)
+{
+	std::vector<Client *> members = target->getMembers();
+	for (std::vector<Client *>::iterator it = members.begin(); it != members.end(); it++)
+	{
+		// std::cout << FC(GREEN, "members.client nick ->") << (*it)->getNickname() << std::endl;
+		// std::cout << FC(RED, "sender nick ->") << _nickname << std::endl;
+		if ((*it)->getNickname() != _nickname)
+			sendMsgClient(msg, (*it));
+	}
+}
+
+void	Client::sendMsgJoinedChannels(std::string msg)
+{
+	if (_joinedChannels.empty())
+		return ;
+	for (std::vector<Channel *>::iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); it++)
+		sendMsgChannel(msg, (*it));
+}
+
+//cl_list hecho con push_back de differentes clientes para mandar el mensaje
+// void	Client::sendMsgClientsList(std::string msg, vector<Client *> &cl_list);

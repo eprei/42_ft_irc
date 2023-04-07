@@ -21,7 +21,7 @@ void			Client::part(Message *m){
 
 	Channel *target = _server->getChannel((m->params[0]));
 	if (target == NULL)
-		sendReply(403, target->getName(), "", "", "");
+		return (sendReply(403, target->getName(), "", "", ""));
 	else if (!target->hasClient(this))
 		sendReply(442, target->getName(), "", "", "");
 	else {
@@ -36,6 +36,7 @@ void			Client::part(Message *m){
 		else
 			part_msg = "\"" + m->params[1] + "\"";
 		msg.append("PART " + m->params[0] + " :" + part_msg + END_CHARACTERS);
+		sendMsgChannel(msg, target);
 		sendMsg(msg);
 	}
 }
@@ -50,7 +51,7 @@ void			Client::part(Message *m){
 //    Parameters: <channel> *( "," <channel> ) [ <Part Message> ]
 
 //    The PART command causes the user sending the message to be removed
-//    from the list of active members for all given channels listed in the
+//    from the list of active _members for all given channels listed in the
 //    parameter string.  If a "Part Message" is given, this will be sent
 //    instead of the default message, the nickname.  This request is always
 //    granted by the server.

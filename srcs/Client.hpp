@@ -56,7 +56,9 @@ class Client
 		void				sendReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 		std::string			formatMsgsUsers();
 
-
+		bool				isJoinedChannel(Channel *ch) const;
+		void				addJoinedChannel(Channel *ch);
+		void				removeJoinedChannel(Channel *ch);
 
 		// CMDS
 		void				nick(Message *m);
@@ -79,7 +81,9 @@ class Client
 		void				welcome();
 		void				leaveAll(std::string cmd, std::string part_msg);
 		void				sendMsg(std::string msg);
-
+		void				sendMsgClient(std::string msg, Client *target);
+		void				sendMsgChannel(std::string msg, Channel *target);
+		void				sendMsgJoinedChannels(std::string msg);
 
 		// TOOLS
 		std::vector<std::string>	subSplitString(const std::string& str, char c);

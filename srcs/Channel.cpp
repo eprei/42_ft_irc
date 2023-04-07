@@ -22,25 +22,25 @@ std::string	Channel::getName() const
 }
 
 //Clients
-std::vector<Client*> Channel::getClients() const {
-	return members;
+std::vector<Client*> Channel::getMembers() const {
+	return _members;
 }
 
 void Channel::addClient(Client* client) {
-	members.push_back(client);
+	_members.push_back(client);
 }
 
 void Channel::removeClient(Client* client) {
-	for (std::vector<Client*>::iterator it = members.begin(); it != members.end(); ++it) {
+	for (std::vector<Client*>::iterator it = _members.begin(); it != _members.end(); ++it) {
 		if ((*it)->getNickname() == client->getNickname()) {
-			members.erase(it);
+			_members.erase(it);
 			return;
 		}
 	}
 }
 
 bool	Channel::hasClient(Client* client) const {
-	for (std::vector<Client*>::const_iterator it = members.begin(); it != members.end(); ++it) {
+	for (std::vector<Client*>::const_iterator it = _members.begin(); it != _members.end(); ++it) {
 		if (*it == client) {
 			return true;
 		}
@@ -49,7 +49,7 @@ bool	Channel::hasClient(Client* client) const {
 }
 
 bool	Channel::isEmpty() const{
-	if (members.empty())
+	if (_members.empty())
 		return true;
 	return false;
 }

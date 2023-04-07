@@ -1,51 +1,53 @@
-#ifndef NUMERIC_MACROS_HPP
-# define NUMERIC_MACROS_HPP
+#ifndef ROS_HPP
+# define ROS_HPP
 
 // RPL 001
 # define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network " \
-			+ nick + "!" + user + "@" + host + END_CHARACTERS)
+			+ nick + "!" + user + "@" + host)
 
 // RPL 002
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver)
 
 // RPL 003
-# define RPL_CREATED(_startTime) (":This server was created " + _startTime + END_CHARACTERS)
+# define RPL_CREATED(_startTime) (":This server was created " + _startTime)
 
 // RPL 004
 # define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
-				" " + version + " " + userModes + " " + channelModes + END_CHARACTERS)
+				" " + version + " " + userModes + " " + channelModes)
 // RPL 311
 # define RPL_WHOISUSER(nickwhoask, nickaskedfor, servername, real_name) (nickwhoask + \
-				" ~" + nickaskedfor + " " + servername + " * :" + real_name + END_CHARACTERS)
+				" ~" + nickaskedfor + " " + servername + " * :" + real_name)
 // RPL 312
 # define RPL_WHOISSERVER(nick, server, serverinfo) (nick + \
-				" " + server + " :" + serverinfo + END_CHARACTERS)
+				" " + server + " :" + serverinfo)
 // RPL 313
 # define RPL_WHOISOPERATOR(nick, privileges) (nick + \
-				" :" + privileges + END_CHARACTERS)
+				" :" + privileges)
 // RPL 314
 # define RPL_WHOWASUSER(nick, user, host, realname) (nick + \
-				" " + user + " " + host + " * :" + realname + END_CHARACTERS)
+				" " + user + " " + host + " * :" + realname)
 // RPL 317
 # define RPL_WHOISIDLE(nick, seconds) (nick + \
-				" " + seconds + " :seconds idle" + END_CHARACTERS)
+				" " + seconds + " :seconds idle")
 // RPL 318
 # define RPL_ENDOFWHOIS(nick) (nick + \
-				" :End of /WHOIS list.\r\n")
+				" :End of /WHOIS list.")
 // RPL 369
 # define RPL_ENDOFWHOWAS(nick) (nick + \
-				" :End of WHOWAS\r\n")
+				" :End of WHOWAS")
 // RPL 378
 # define RPL_BANEXPIRED(nick, hostname, ip) (nick + \
 				" :is connecting from ~"  + nick + "@"+ hostname + " " \
-				+ ip + END_CHARACTERS)
+				+ ip)
 // RPL 401
-# define ERR_NOSUCHNICK(nick) (nick + " :No such nick\r\n")
+# define ERR_NOSUCHNICK(nick) (nick + " :No such nick")
 // RPL 406
-# define ERR_WASNOSUCHNICK(nick) (nick + " :There was no such nickname\r\n")
+# define ERR_WASNOSUCHNICK(nick) (nick + " :There was no such nickname")
 // PASS COMMAND
-// RPL 461
+
+// ERR 461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+
 // ERR 462
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
 // ERR 464
@@ -73,7 +75,7 @@
 //join
 //353
 # define RPL_NAMREPLY(channel, nick) "= " + channel + " :@" + nick
-// = #lol :@Guest36096 mikeWpit\r\n
+// = #lol :@Guest36096 mikeWpit
 //"( "=" / "*" / "@" ) <channel>
 //:[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
 
@@ -87,13 +89,37 @@
 // 403
 # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
 
-// 442
-# define ERR_NOTONCHANNEL(channel) channel + " :You're not on that channel"
+// ERR 442    
+# define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
+// - Returned by the server whenever a client tries to perform a
+// channel affecting command for which the client isn't a member.
 
 // 324
 # define RPL_CHANNELMODEIS(channel, mode) (channel + " :" + mode)
 
-#endif // NUMERIC_MACROS_HPP
+//KICK
+// ERR 476
+# define ERR_BADCHANMASK(channel) (channel+ " :Bad Channel Mask")
+
+//ERR 482
+# define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
+// - Any command requiring 'chanop' privileges (such as MODE messages) 
+// MUST return this error if the client making the attempt is not a 
+// chanop on the specified channel.
+
+// ERR 441    
+# define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
+// - Returned by the server to indicate that the target
+// user of the command is not on the given channel.
+
+//PRIVMSG
+// ERR411    
+# define ERR_NORECIPIENT(command) (":No recipient given (" + command + ")")
+// ERR412    
+# define ERR_NOTEXTTOSEND ":No text to send"
+// ERR404    
+# define ERR_CANNOTSENDTOCHAN(channel_name) (channel_name + " :Cannot send to channel")
+#endif // ROS_HPP
 
 /*
 5. Replies

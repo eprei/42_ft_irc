@@ -22,7 +22,7 @@ class Channel
 		std::string	_name;
 		std::string _topic;
 		std::string _modes;
-	    std::vector<Client*> members;
+	    std::vector<Client*> _members;
 	    // std::vector<Client*> oper;
 
 	public:
@@ -33,7 +33,7 @@ class Channel
 		~Channel();
 
   		std::string				getName() const;
-		std::vector<Client*>	getClients() const;
+		std::vector<Client*>	getMembers() const;
 		void	addClient(Client *client);
 		void	removeClient(Client *client);
 		bool	hasClient(Client *client) const;

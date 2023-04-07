@@ -17,12 +17,12 @@ void	Client::leaveAll(std::string cmd, std::string part_msg)
 		else
 			part_msg = "\"" + part_msg + "\"";
 		msg.append(cmd + " " + ch_name + " :" + part_msg + END_CHARACTERS);
+		sendMsgJoinedChannels(msg);
 		sendMsg(msg);
 	}
 }
 
 void			Client::quit(Message *m){
-
 	std::cout << FC(GREEN ,">\tquit function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
 	std::string part_msg = "";
 
