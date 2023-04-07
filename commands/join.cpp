@@ -1,10 +1,8 @@
 #include "../srcs/Includes.hpp"
 
-// made by: mpons
-
-// 3.2.1 Join message
-
-//       Command: JOIN
+//  made by: mpons
+//  3.2.1 Join message
+//    Command: JOIN
 //    Parameters: ( <channel> *( "," <channel> ) [ <key> *( "," <key> ) ] )
 //                / "0"
 
@@ -15,9 +13,9 @@
 
 //    Once a user has joined a channel, he receives information about
 //    all commands his server receives affecting the channel.
-// This includes JOIN, MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.
-//    This allows channel members to keep track of the other channel
-//    members, as well as channel modes.
+//	  This includes JOIN, MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.
+//    This allows channel _members to keep track of the other channel
+//    _members, as well as channel modes.
 
 //    If a JOIN is successful, the user receives a JOIN message as
 //    confirmation and is then sent the channel's topic (using RPL_TOPIC) and
@@ -31,7 +29,6 @@
 //    of.
 
 //    Numeric Replies:
-
 //            ERR_NEEDMOREPARAMS              ERR_BANNEDFROMCHAN
 //            ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
 //            ERR_CHANNELISFULL               ERR_BADCHANMASK
@@ -62,7 +59,6 @@
 //    :WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone ; JOIN message from WiZ
 //                                    on channel #Twilight_zone
 
-
 void	Client::join(Message *m)
 {
 	std::cout << FC(GREEN, ">\tjoin function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
@@ -81,9 +77,12 @@ void	Client::join(Message *m)
 			_server->addClientToChannel(this, m->params[i]);
 			std::string msg = formatMsgsUsers();
 			msg.append("JOIN " + m->params[0] + END_CHARACTERS);
+			sendMsgChannel(msg, _server->getChannel(m->params[i]));
 			sendMsg(msg);
 			sendReply(353, m->params[0], _nickname, "", "");
 			sendReply(366, m->params[0], "", "", "");
+			// :server.name 353 operador = #patata :operador @cliente1 @cliente2
+
 		}
 	}
 }
@@ -101,7 +100,7 @@ void	Client::join(Message *m)
 # define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
 
 // 476
-# define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
+// # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
 
 // 403
 // # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")

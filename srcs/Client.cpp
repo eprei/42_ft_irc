@@ -122,3 +122,33 @@ std::vector<std::string> Client::subSplitString(const std::string& str, char c) 
 		result.push_back(strSplited);
 	return result;
 }
+
+void	Client::addJoinedChannel(Channel *ch)
+{
+	_joinedChannels.push_back(ch);
+}
+
+void	Client::removeJoinedChannel(Channel *ch)
+{
+	for (std::vector<Channel*>::iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); ++it)
+	{
+		if ((*it)->getName() == ch->getName()) 
+		{	
+			_joinedChannels.erase(it);
+			return;
+		}
+	}
+}
+
+// bool	Client::isJoinedChannel(Channel *ch) const
+// {
+// 	std::string target_name = ch->getName();
+// 	for (std::vector<Channel*>::const_iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); ++it)
+// 	{
+// 		if ((*it)->getName() == client) {
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
+

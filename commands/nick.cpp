@@ -78,6 +78,7 @@ void	Client::nick(Message *m)
 		// this->setNickname(m->params[0]);
 		// std::string msg = formatMsgsUsers(oldnick, _username, getHostname());
 		msg.append("NICK " + _nickname + END_CHARACTERS);
+		sendMsgJoinedChannels(msg);
 		sendMsg(msg);
 		addToNicksHistory();
 		if (_alreadyWelcomed == false)

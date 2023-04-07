@@ -97,7 +97,6 @@ bool	Server::serverSocketConfig(){
 	return (EXIT_SUCCESS);
 }
 
-
 bool	isSocketClosed(int socket_fd)
 {
 	char buffer[1];
@@ -186,7 +185,7 @@ void	Server::messageHandling(int userSocketNumber){
 	// std::cout << *this << std::endl;
 }
 
-void			Server::checkInactiveUsers(){
+void	Server::checkInactiveUsers(){
 	std::map<int , Client *>::iterator it = _clientsList.begin();
 	std::map<int , Client *>::iterator itEnd = _clientsList.end();
 
@@ -303,7 +302,7 @@ void	Server::removeChannel(std::string channel_name)
     }
 }
 
-void	Server::addClientToChannel(Client* to_add, std::string channel_name)
+void	Server::addClientToChannel(Client* client, std::string channel_name)
 {
     Channel* channel = getChannel(channel_name);
     if (channel == NULL)
@@ -311,8 +310,11 @@ void	Server::addClientToChannel(Client* to_add, std::string channel_name)
         std::cout << "Channel " << channel_name << " does not exist." << std::endl;
         return;
     }
-	if (!channel->hasClient(to_add))
-    	channel->addClient(to_add);
+	if (!channel->hasClient(client))
+	{
+    	channel->addClient(client);
+		client->addJoinedChannel(channel);
+	}
 }
 
 void	Server::removeClientFromChannel(Client* client, std::string channel_name)
@@ -324,6 +326,7 @@ void	Server::removeClientFromChannel(Client* client, std::string channel_name)
         return;
     }
     channel->removeClient(client);
+	client->removeJoinedChannel(channel);
 	// if (channel->isEmpty())
 	// 	removeChannel(channel_name);
 }
@@ -340,7 +343,7 @@ void	Server::printChannel(std::string channel_name)
     std::cout << "Channel " << channel_name << " info:" << std::endl;
     std::cout << "  - Name: " << channel->getName() << std::endl;
     std::cout << "  - Clients: " << std::endl;
-    std::vector<Client*> clients = channel->getClients();
+    std::vector<Client*> clients = channel->getMembers();
     for (size_t i = 0; i < clients.size(); i++)
     {
         std::cout << "    - " << clients[i]->getNickname() << std::endl;
