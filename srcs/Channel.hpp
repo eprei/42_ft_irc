@@ -23,6 +23,7 @@ class Channel
 		std::string _topic;
 		std::string _modes;
 	    std::vector<Client*> _members;
+		std::vector<Client*> _invited;
 	    // std::vector<Client*> oper;
 
 	public:
@@ -33,6 +34,7 @@ class Channel
 		~Channel();
 
   		std::string				getName() const;
+		std::string				getMembersNicks();
 		std::vector<Client*>	getMembers() const;
 		void	addClient(Client *client);
 		void	removeClient(Client *client);
@@ -46,8 +48,12 @@ class Channel
 		void		setTopic(std::string topic);
 		std::string	getTopic() const;
 		std::string	getModes() const;
-
+		std::string	setModes(std::string to_add);
+		bool		hasModes(std::string m) const;
+		bool		isInvited(Client *client) const;
+		void		addInvited(Client* client);
 
 };
 
 #endif
+

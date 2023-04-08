@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	int sockfd, numbytes;
 	struct sockaddr_in servaddr;
 	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
-	std::string acceptableCommands[NUMBER_OF_ACCEPTABLE_COMMANDS] = {
+	std::string acceptableCommands[NUMBER_OF_CMD] = {
 		"PASS asd\r\n"				,\
 		"NICK pepito\r\n"			,\
 		"USER John\r\n"				,\
@@ -75,13 +75,13 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		if ((numbytes=send(sockfd, acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].c_str(), acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length(), 0)) < 0) {
+		if ((numbytes=send(sockfd, acceptableCommands[i % NUMBER_OF_CMD].c_str(), acceptableCommands[i % NUMBER_OF_CMD].length(), 0)) < 0) {
 			perror("send");
 			exit(1);
 		}
-		// if (numbytes != (int)sizeof(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()))
-		std::cout << "string length = " << (int)(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()) << std::endl;
-		if (numbytes != (int)(acceptableCommands[i % NUMBER_OF_ACCEPTABLE_COMMANDS].length()))
+		// if (numbytes != (int)sizeof(acceptableCommands[i % NUMBER_OF_CMD].length()))
+		std::cout << "string length = " << (int)(acceptableCommands[i % NUMBER_OF_CMD].length()) << std::endl;
+		if (numbytes != (int)(acceptableCommands[i % NUMBER_OF_CMD].length()))
 			std::cout << "numbytes sended = " << numbytes << "the test message has been partially sent" << std::endl;
 		else
 			std::cout << "the message has been completely sent" << std::endl;

@@ -119,7 +119,29 @@
 # define ERR_NOTEXTTOSEND ":No text to send"
 // ERR404    
 # define ERR_CANNOTSENDTOCHAN(channel_name) (channel_name + " :Cannot send to channel")
+
+//TOPIC
+// RPL331    
+# define RPL_NOTOPIC(channel) (channel + " :No topic is set")
+// RPL332
+# define RPL_TOPIC(channel, topic) (channel + " :" + topic)
+
+//MODE
+// ERR472 
+# define ERR_UNKNOWNMODE(char) (char + " :is not a recognised channel mode.")
+
+//INVITE
+// ERR443
+# define ERR_USERONCHANNEL(user, channel) (user + " " + channel + " :is already on channel")
+
+// RPL341
+# define RPL_INVITING(invited, channel) (invited + " :" + channel)
+
+//473
+# define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
+
 #endif // ROS_HPP
+
 
 /*
 5. Replies

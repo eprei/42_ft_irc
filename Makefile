@@ -26,6 +26,8 @@ SRCS =	./srcs/main.cpp\
 		./commands/user.cpp\
 		./commands/whois.cpp\
 		./commands/whowas.cpp\
+		./commands/topic.cpp\
+		./commands/invite.cpp\
 
 SRCS_T =./test/clientTest1.cpp\
 		./test/clientTest2.cpp\

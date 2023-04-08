@@ -107,6 +107,21 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_NOTEXTTOSEND);
 		case 404:    
 			return (ERR_CANNOTSENDTOCHAN(arg1));
+		//TOPIC
+		case 331:    
+			return (RPL_NOTOPIC(arg1));
+		case 332:
+			return (RPL_TOPIC(arg1, arg2));
+		//MODE
+		case 472:
+			return (ERR_UNKNOWNMODE(arg1));
+		//INVITE
+		case 443:
+			return (ERR_USERONCHANNEL(arg1, arg2)); 
+		case 341:
+			return (RPL_INVITING(arg1, arg2));
+		case 473:
+			return (ERR_INVITEONLYCHAN(arg1));
 	}
 	return ("");
 }
