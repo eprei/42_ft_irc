@@ -67,55 +67,64 @@ void	Client::join(Message *m)
 		sendReply(461, m->command, "", "", "");
 		return;
 	}
-	// if (m->params[0] == "#0")  
-	// 	return (leaveAll("PART", ""));
  	else // "the channel is OK"
 	{
 		for (size_t i(0); i < m->params.size(); i++)
 		{
 			_server->createChannel(this, m->params[i]);
+			Channel *ch = _server->getChannel(m->params[i]);
+			if (ch->hasModes("i") && !ch->isInvited(this))
+				return (sendReply(473, m->params[0], "", "", ""));
 			_server->addClientToChannel(this, m->params[i]);
 			std::string msg = formatMsgsUsers();
 			msg.append("JOIN " + m->params[0] + END_CHARACTERS);
-			sendMsgChannel(msg, _server->getChannel(m->params[i]));
+			sendMsgChannel(msg, ch);
 			sendMsg(msg);
-			sendReply(353, m->params[0], _nickname, "", "");
+			std::string topic = ch->getTopic();
+			if (!(topic.empty()))
+				sendReply(332, m->params[0], topic, "", "");
+			sendReply(353, m->params[0], ch->getMembersNicks(), "", "");
 			sendReply(366, m->params[0], "", "", "");
 			// :server.name 353 operador = #patata :operador @cliente1 @cliente2
-
 		}
 	}
 }
+// [ client : 9000 ] JOIN #buinbui 
+//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
+//  [ server : 6667 ] :*.freenode.net 353 mikeymi = #buinbui :@jonyony mikeymi 
+//  [ server : 6667 ] :*.freenode.net 366 mikeymi #buinbui :End of /NAMES list. 
+//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
 
-//473
-# define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
 
-//474
-# define ERR_BANNEDFROMCHAN(channel) (channel + " :Cannot join channel (+b)")
+// //473
+// # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
 
-//475
-# define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
+// //474
+// # define ERR_BANNEDFROMCHAN(channel) (channel + " :Cannot join channel (+b)")
 
-// 471
-# define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
+// //475
+// # define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
 
+// // 471
+// # define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
+
+// //405
+// # define ERR_TOOMANYCHANNELS(channel_name) (channel_name + " :You have joined too many channels")
+
+// //407
+// # define ERR_TOOMANYTARGETS(target, error_code, abort_message) (target + " :" + error code + "recipients. " + abort message)
 // 476
 // # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask")
 
 // 403
 // # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
 
-//405
-# define ERR_TOOMANYCHANNELS(channel_name) (channel_name + " :You have joined too many channels")
-
-//407
-# define ERR_TOOMANYTARGETS(target, error_code, abort_message) (target + " :" + error code + "recipients. " + abort message)
 
 //437
 // # define ERR_UNAVAILRESOURCE(nick_or_channel) (nick_or_channel + " :Nick/channel is temporarily unavailable")
 
 //332
-# define RPL_TOPIC(channel, topic) (channel + " :" topic)
+// # define RPL_TOPIC(channel, topic) (channel + " :" topic)
 
 //353
 // # define RPL_NAMREPLY(channel, nick) ("= " channel + " :@ " + nick)

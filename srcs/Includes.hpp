@@ -19,7 +19,7 @@
 # define CLIENT_REALNAME_NOT_SET "RealnameNotSet"
 # define USERSMODES		"io"
 # define CHANNELSMODES	"kobil"
-# define NUMBER_OF_ACCEPTABLE_COMMANDS 16
+# define NUMBER_OF_CMD 19
 # define END_CHARACTERS "\r\n"
 # define TIMEOUT 60.0
 

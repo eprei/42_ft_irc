@@ -49,10 +49,7 @@
 void			Client::kick(Message *m){
 	std::cout << FC(GREEN, ">\tkick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.size() < 2)
-	{
-		sendReply(461, m->command, "", "", "");
-		return;
-	}
+		return (sendReply(461, m->command, "", "", ""));
 	Channel		*ch = _server->getChannel((m->params[0]));
 	if (ch == NULL)//no existe canal
 		return (sendReply(403, m->params[0], "", "", ""));

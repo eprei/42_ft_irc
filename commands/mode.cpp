@@ -1,61 +1,122 @@
 #include "../srcs/Includes.hpp"
 
-// 324
-// RPL_CHANNELMODEIS(channel, mode, mode_params) "<channel> <mode> <mode params>"
-// :*server_name 324 nick #CHANNEL :+nt
-// :DESKTOP-MQD5OHQ 324 Rony #people [+n]  ccomis
 
-// bool hasMode(char mode);
-// std::string		_mode;
+// [ client : 8000 ] MODE raul +i 
+// [ server : 6667 ] MODE raul +i 
+
+//  [ client : 8000 ] MODE #usa 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+nt 
+
+//hay que bannear a algien me imagino para que pase a modo +b
+//  [ client : 8000 ] MODE #usa +b 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+b
+
+//  [ client : 8000 ] MODE #usa -i 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :-i 
+
+
+//  [ client : 9000 ] MODE #pitusa -sizpqwe 
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
+//  [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
+
+//  [ client : 9000 ] MODE #pitusa +si 
+//a todo los del canal
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :+si 
+
+// // MODE +i (invite_only channel)
+// // MODE +t (Change the channel topic in a mode +t channel)
+//  n - no messages to channel from clients on the outside;
+
+//mode -i cuando no esta (+nt)
+std::pair<std::string, std::string> splitString(const std::string& str)
+{
+    std::pair<std::string, std::string> result;
+    std::string::size_type pos = str.find('_');
+    if (pos == std::string::npos) {
+        // El delimitador no fue encontrado
+        result.first = str;
+        result.second = "";
+    } else {
+        result.first = str.substr(0, pos);
+        result.second = str.substr(pos + 1);
+    }
+    return result;
+}
 
 void			Client::mode(Message *m)
 {
+	// m->params[0] == channel ou nick
+	// m->params[0] == channel ou nick
 	std::cout << FC(GREEN, ">\tmode function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
 	{
 		sendReply(461, m->command, "", "", "");
 		return;
 	}
-	Channel *target= _server->getChannel(m->params[0]);
-	if (target) //channel param
+	if (m->params[0].at(0) == '#') //->channel
 	{
-		// for (size_t i(0); i < m->params.size(); i++)
-		// {
-			Channel *target = _server->getChannel(m->params[0]);
-			sendReply(324, m->params[0], target->getModes(), "", "");
-			// sendReply(366, m->params[0], "", "", "");
-		// }
+		Channel		*ch = _server->getChannel((m->params[0]));
+		if (ch == NULL)//no existe canal -> MODE #spadposa ?????
+			return (sendReply(403, m->params[0], "", "", ""));
+		std::string ch_name = ch->getName();
+		if (!ch->hasClient(this))//no estoy en el canal
+			// sendReply(442, ch_name, "", "", "");
+			return (sendReply(441, _nickname, ch_name, "", ""));
+		else if (m->params.size() == 1)//devuelvo modos del canal
+			return (sendReply(324, ch_name, ch->getModes(), "", ""));
+		else if (!ch->isOperator(this))//no soy operador
+			return (sendReply(482, ch_name, "", "", ""));
+		
+		std::string set = m->params[1];
+		if (set == "b")
+			return ;
+		if (set.empty() || (set[0] != '+' && set[0] != '-'))
+		{
+			std::string err;
+			err = set.at(0);
+			return (sendReply(472, err, ch_name, "", ""));
+		}
+		std::pair<std::string, std::string> ret;
+		ret = splitString(ch->setModes(set));
+		std::cout << FC(MAGENTA, "Set = ") << set << std::endl;
+		std::cout << FC(RED, "First = ") <<ret.first << std::endl;
+		std::cout << FC(RED, "Second = ") <<ret.second << std::endl;
+		if (!ret.first.empty())// hay modo a agregar
+		{
+			std::string msg = formatMsgsUsers();
+			msg.append("MODE " + ch_name + " :" + set[0] + ret.first + END_CHARACTERS);
+			// :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
+			sendMsgChannel(msg, ch);
+			sendMsg(msg);
+		}
+		if (!ret.second.empty())//error encontrado
+		{
+			std::string err;
+			err = ret.second.at(0);
+			return (sendReply(472, err, "", "", ""));
+		}
+		// [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
 	}
- 	else //no hay respuesta
+
+// ERR472   ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
+// RPL325    
+// # define RPL_UNIQOPIS(channel, nickname) (channel + " " + nickname)
+// RPL346    
+// # define RPL_INVITELIST(channel, invitemask) (channel + " " + invitemask)
+// RPL347    
+// # define RPL_ENDOFINVITELIST(channel) (channel + " :End of channel invite list")
+
+//  [ client : 8000 ] MODE Rony +i
+//  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i
+	else //nick
 	{
+	// if (no_soy_yo)
 		std::string msg;
 		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
 		sendMsg(msg);
 	}
-//  [ client : 8000 ] MODE Rony +i
-//  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i
 }
-
-
-// 329 RPL_CREATIONTIME  (pas obliger de le faire)
-// :*server_name 329 nick #CHANNEL :89238923892?
-
-//        367    RPL_BANLIST
-//               "<channel> <banmask>"
-//        368    RPL_ENDOFBANLIST
-//               "<channel> :End of channel ban list"
-
-//          - When listing the active 'bans' for a given channel,
-//            a server is required to send the list back using the
-//            RPL_BANLIST and RPL_ENDOFBANLIST messages.  A separate
-//            RPL_BANLIST is sent for each active banmask.  After the
-//            banmasks have been listed (or if none present) a
-//            RPL_ENDOFBANLIST MUST be sent.
-
-//    MODE &oulu +b                   ; Command to list ban masks set for
-                                //    the channel "&oulu".
-
-
 
 // 3.2.3 Channel mode message
 
@@ -70,14 +131,36 @@ void			Client::mode(Message *m)
 
 //    Numeric Replies:
 
-//            ERR_NEEDMOREPARAMS              ERR_KEYSET
-//            ERR_NOCHANMODES                 ERR_CHANOPRIVSNEEDED
-//            ERR_USERNOTINCHANNEL            ERR_UNKNOWNMODE
-//            RPL_CHANNELMODEIS
-//            RPL_BANLIST                     RPL_ENDOFBANLIST
-//            RPL_EXCEPTLIST                  RPL_ENDOFEXCEPTLIST
-//            RPL_INVITELIST                  RPL_ENDOFINVITELIST
-//            RPL_UNIQOPIS
+// ERR 461
+// #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+//    477    ERR_NOCHANMODES              "<channel> :Channel doesn't support modes" no se usa mepa
+
+//ERR 482
+// # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
+
+// ERR 441    
+// # define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
+
+// 324
+// # define RPL_CHANNELMODEIS(channel, mode) (channel + " :" + mode)
+// :*server_name 324 nick #CHANNEL :+nt
+// :DESKTOP-MQD5OHQ 324 Rony #people [+n]  ccomis
+ 
+
+// // ERR467    
+// # define ERR_KEYSET(channel) (channel + " :Channel key already set")
+
+// // ERR472    
+// # define ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
+
+// // RPL325    
+// # define RPL_UNIQOPIS(channel, nickname) (channel + " " + nickname)
+
+// // RPL346    
+// # define RPL_INVITELIST(channel, invitemask) (channel + " " + invitemask)
+
+// // RPL347    
+// # define RPL_ENDOFINVITELIST(channel) (channel + " :End of channel invite list")
 
 //    The following examples are given to help understanding the syntax of
 //    the MODE command, but refer to modes defined in "Internet Relay Chat:
@@ -104,15 +187,6 @@ void			Client::mode(Message *m)
 
 //    MODE #42 -k oulu                ; Command to remove the "oulu"
 //                                    channel key on channel "#42".
-
-
-
-
-// Kalt                         Informational                     [Page 18]
-
-
-// RFC 2812          Internet Relay Chat: Client Protocol        April 2000
-
 
 //    MODE #eu-opers +l 10            ; Command to set the limit for the
 //                                    number of users on channel

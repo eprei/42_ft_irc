@@ -61,7 +61,7 @@ void	print_message(const Message& msg)
     std::cout << "msg.params =";
 	for (std::vector<std::string>::const_iterator it = msg.params.begin(); it != msg.params.end(); ++it)
 	{
-        std::cout << " " << *it;
+        std::cout << " " << *it << std::endl;
     }
     std::cout << std::endl << std::endl;
 }

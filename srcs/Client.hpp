@@ -77,6 +77,9 @@ class Client
 		void				pong(Message *m);
 		void				whois(Message *m);
 		void				whowas(Message *m);
+		void				topic(Message *m);
+		void				invite(Message *m);
+
 		void				addToNicksHistory( void );
 		void				welcome();
 		void				leaveAll(std::string cmd, std::string part_msg);
