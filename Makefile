@@ -14,6 +14,7 @@ SRCS =	./srcs/main.cpp\
 		./commands/join.cpp\
 		./commands/kick.cpp\
 		./commands/list.cpp\
+		./commands/names.cpp\
 		./commands/mode.cpp\
 		./commands/nick.cpp\
 		./commands/notice.cpp\

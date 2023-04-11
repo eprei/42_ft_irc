@@ -62,12 +62,12 @@ void	Client::process_buffer(const std::string& buf)
 
 void			Client::execCmd(Message *m){
 	std::string acceptableCommands[NUMBER_OF_CMD] =\
-	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "PART"\
+	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "NAMES", "PART"\
 	, "PRIVMSG" , "PING" , "KICK" , "CAP" , "NOTICE" , "MODE", "PONG"\
 	, "WHOIS" , "WHOWAS", "TOPIC", "INVITE"};
 	void	(Client::*p[NUMBER_OF_CMD])(Message *) =\
 	{ &Client::nick , &Client::user , &Client::pass , &Client::join, \
-	&Client::quit, &Client::list, &Client::part , &Client::privmsg , \
+	&Client::quit, &Client::list, &Client::names, &Client::part , &Client::privmsg , \
 	&Client::ping , &Client::kick , &Client::cap , &Client::notice , \
 	&Client::mode, &Client::pong , &Client::whois , &Client::whowas, \
 	&Client::topic, &Client::invite};
@@ -131,7 +131,8 @@ void	Client::addJoinedChannel(Channel *ch)
 
 void	Client::removeJoinedChannel(Channel *ch)
 {
-	for (std::vector<Channel*>::iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); ++it)
+	std::vector<Channel*>::iterator it = _joinedChannels.begin();
+	for ( ; it != _joinedChannels.end(); ++it)
 	{
 		if ((*it)->getName() == ch->getName()) 
 		{	
@@ -140,16 +141,3 @@ void	Client::removeJoinedChannel(Channel *ch)
 		}
 	}
 }
-
-// bool	Client::isJoinedChannel(Channel *ch) const
-// {
-// 	std::string target_name = ch->getName();
-// 	for (std::vector<Channel*>::const_iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); ++it)
-// 	{
-// 		if ((*it)->getName() == client) {
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
-

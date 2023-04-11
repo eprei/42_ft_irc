@@ -74,9 +74,6 @@ void	Client::nick(Message *m)
 			setNickname(m->params[0]);
 			msg = formatMsgsUsers();
 		}
-		// std::string oldnick = _alreadyWelcomed ? _nickname : m->params[0];
-		// this->setNickname(m->params[0]);
-		// std::string msg = formatMsgsUsers(oldnick, _username, getHostname());
 		msg.append("NICK " + _nickname + END_CHARACTERS);
 		sendMsgJoinedChannels(msg);
 		sendMsg(msg);
@@ -102,19 +99,3 @@ void	Client::addToNicksHistory( void ){
 	_nicksHistory.push_back(newNick);
 }
 
-
-// :raul!~u@fpgxjxgh98zbk.oragono NICK patata47\r\n'
-// :nick!user@client_host_name? NICK patata47\r\n'
-
-// send(it->first, it->second.c_str(), std::strlen(it->second.c_str()), MSG_NOSIGNAL);
-// void    cmd_nick( IrcServer *serv, user	*currentUser, std::string & args )
-// {
-// 	std::string		msg_nick;
-// 	std::string		old_nick = currentUser->getNickName();
-// 	if (check_args(serv, currentUser, args) == true)
-// 	{
-// 		msg_nick = formatMsgsUsers(currentUser->getNickName(), currentUser->getUserName(), currentUser->getHostNameUser());
-// 		currentUser->setNickName(args);
-// 		serv->sendToAllUsersInServ(msg_nick + "NICK " + args + END_CHARACTERS);
-// 	}
-// }

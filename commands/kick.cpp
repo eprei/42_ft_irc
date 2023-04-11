@@ -63,15 +63,13 @@ void			Client::kick(Message *m){
 		sendReply(441, m->params[1], ch_name, "", "");
 	else if (!ch->isOperator(this))//no soy operador
 		sendReply(482, ch_name, "", "", "");
-		//MODES?
-		// # define ERR_BADCHANMASK(channel) (channel+ " :Bad Channel Mask")// ERR 476
 	else
 	{
 		std::string part_msg;
 		if (m->params.size() == 2)// PART_MSG not_defined
-			part_msg = "\"has been kicked\"";
+			part_msg = "has been kicked";
 		else
-			part_msg = "\"" + m->params[2] + "\"";
+			part_msg = m->params[2];
 		std::string msg = formatMsgsUsers();
 		msg.append("KICK " + ch_name + " " + m->params[1] + " :" + part_msg + END_CHARACTERS);
 		sendMsgChannel(msg, ch);// a todos los clientes del canal?

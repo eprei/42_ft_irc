@@ -1,5 +1,53 @@
 #include "../srcs/Includes.hpp"
 
+ template<typename T>
+void    PrintVector(const std::vector<T> &v)
+{
+		std::cout << GREEN << "VECTOR" << "\033[0;0m\n";
+		for(typename std::vector<T>::const_iterator it(v.begin()); it != v.end(); it++)
+		{
+				std::cout << *it << "\n";
+		}
+}
+
+
+ 	// else // "the channel is OK" join ,a ->join # + join a
+void	Client::join(Message *m)
+{
+	std::cout << FC(GREEN, ">\tjoin function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
+	if (m->params.empty())
+		return (sendReply(461, m->command, "", "", ""));
+
+	std::stringstream ss(m->params[0]);
+	std::string chan;
+	while (std::getline(ss, chan, ','))
+	{
+		std::cout << FC(GREEN, "Canal =") << chan << std::endl;
+		_server->createChannel(this, chan);
+		Channel *ch = _server->getChannel(chan);
+		if (ch->hasModes("i") && !ch->isInvited(this))
+			return (sendReply(473, chan, "", "", ""));
+		_server->addClientToChannel(this, chan);
+		std::string msg = formatMsgsUsers();
+		msg.append("JOIN " + chan + END_CHARACTERS);
+		sendMsgChannel(msg, ch);
+		sendMsg(msg);
+		std::string topic = ch->getTopic();
+		if (!(topic.empty()))
+			sendReply(332, chan, topic, "", "");
+		sendReply(353, chan, ch->getMembersNicks(), "", "");
+		sendReply(366, chan, "", "", "");
+	}
+}
+
+// [ client : 9000 ] JOIN #buinbui 
+//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
+//  [ server : 6667 ] :*.freenode.net 353 mikeymi = #buinbui :@jonyony mikeymi 
+//  [ server : 6667 ] :*.freenode.net 366 mikeymi #buinbui :End of /NAMES list. 
+//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
+
+
+
 //  made by: mpons
 //  3.2.1 Join message
 //    Command: JOIN
@@ -59,42 +107,6 @@
 //    :WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone ; JOIN message from WiZ
 //                                    on channel #Twilight_zone
 
-void	Client::join(Message *m)
-{
-	std::cout << FC(GREEN, ">\tjoin function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
-	if (m->params.empty())
-	{
-		sendReply(461, m->command, "", "", "");
-		return;
-	}
- 	else // "the channel is OK"
-	{
-		for (size_t i(0); i < m->params.size(); i++)
-		{
-			_server->createChannel(this, m->params[i]);
-			Channel *ch = _server->getChannel(m->params[i]);
-			if (ch->hasModes("i") && !ch->isInvited(this))
-				return (sendReply(473, m->params[0], "", "", ""));
-			_server->addClientToChannel(this, m->params[i]);
-			std::string msg = formatMsgsUsers();
-			msg.append("JOIN " + m->params[0] + END_CHARACTERS);
-			sendMsgChannel(msg, ch);
-			sendMsg(msg);
-			std::string topic = ch->getTopic();
-			if (!(topic.empty()))
-				sendReply(332, m->params[0], topic, "", "");
-			sendReply(353, m->params[0], ch->getMembersNicks(), "", "");
-			sendReply(366, m->params[0], "", "", "");
-			// :server.name 353 operador = #patata :operador @cliente1 @cliente2
-		}
-	}
-}
-// [ client : 9000 ] JOIN #buinbui 
-//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
-//  [ server : 6667 ] :*.freenode.net 353 mikeymi = #buinbui :@jonyony mikeymi 
-//  [ server : 6667 ] :*.freenode.net 366 mikeymi #buinbui :End of /NAMES list. 
-//  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
-
 
 // //473
 // # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
@@ -147,8 +159,6 @@ void	Client::join(Message *m)
 //            channels and contents are sent back in a series of
 //            RPL_NAMEREPLY messages with a RPL_ENDOFNAMES to mark
 //            the end.
-
-
 
 // [client : 8000] 	'JOIN #LOL\r\n'
 //  [ server : 6667 ]

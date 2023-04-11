@@ -130,6 +130,9 @@
 // ERR472 
 # define ERR_UNKNOWNMODE(char) (char + " :is not a recognised channel mode.")
 
+// ERR502
+# define ERR_USERSDONTMATCH(action, modes) (":Can't " + action + " " + modes + " for other users")
+
 //INVITE
 // ERR443
 # define ERR_USERONCHANNEL(user, channel) (user + " " + channel + " :is already on channel")
@@ -139,6 +142,12 @@
 
 //473
 # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
+
+// RPL322
+# define RPL_LIST(channel, total_users , modes, topic) (channel + " " + total_users + " :[" + modes + "] " + topic)
+// RPL323
+# define RPL_LISTEND ":End of LIST"
+
 
 #endif // ROS_HPP
 

@@ -67,6 +67,7 @@ class Client
 		void				join(Message *m);
 		void				quit(Message *m);
 		void				list(Message *m);
+		void				names(Message *m);
 		void				part(Message *m);
 		void				privmsg(Message *m);
 		void				ping(Message *m);

@@ -291,16 +291,21 @@ void	Server::createChannel(Client* owner, std::string channel_name)
 
 void	Server::removeChannel(std::string channel_name)
 {
-    for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); ++it)
+	std::vector<Channel *>::iterator it = _channelList.begin();
+    for ( ; it != _channelList.end(); ++it)
     {
         if ((*it)->getName() == channel_name)
         {
-            delete *it; // Liberamos la memoria reservada para el canal
-            _channelList.erase(it); // Eliminamos el puntero al canal del vector
+			// Channel *tmp = *it;
+            // _channelList.erase(it); // Eliminamos el puntero al canal del vector
+            // delete tmp; // Liberamos la memoria reservada para el canal
+			delete *it; // Liberamos la memoria reservada para el canal
+			_channelList.erase(it); // Eliminamos el puntero al canal del vector
             return;
         }
     }
 }
+			// std::cout << FC(RED, "LLEGAMOS AQUI????") << std::endl;
 
 void	Server::addClientToChannel(Client* client, std::string channel_name)
 {
@@ -327,8 +332,8 @@ void	Server::removeClientFromChannel(Client* client, std::string channel_name)
     }
     channel->removeClient(client);
 	client->removeJoinedChannel(channel);
-	// if (channel->isEmpty())
-	// 	removeChannel(channel_name);
+	if (channel->isEmpty())
+		removeChannel(channel_name);
 }
 
 void	Server::printChannel(std::string channel_name)
@@ -387,6 +392,13 @@ Channel*		Server::getChannel(std::string channel_name)
     }
 	return NULL;
 }
+
+std::vector<Channel *> *Server::getChannelList()
+{
+	return (&_channelList);
+}
+
+
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {

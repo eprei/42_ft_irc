@@ -115,6 +115,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 		//MODE
 		case 472:
 			return (ERR_UNKNOWNMODE(arg1));
+		case 502:
+			return (ERR_USERSDONTMATCH(arg1 ,arg2));
 		//INVITE
 		case 443:
 			return (ERR_USERONCHANNEL(arg1, arg2)); 
@@ -122,6 +124,11 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (RPL_INVITING(arg1, arg2));
 		case 473:
 			return (ERR_INVITEONLYCHAN(arg1));
+		//LIST
+		case 322:
+			return (RPL_LIST(arg1, arg2, arg3, arg4));
+		case 323:
+			return (RPL_LISTEND);
 	}
 	return ("");
 }
@@ -155,7 +162,8 @@ void	Client::sendMsgClient(std::string msg, Client *target)
 void	Client::sendMsgChannel(std::string msg, Channel *target)
 {
 	std::vector<Client *> members = target->getMembers();
-	for (std::vector<Client *>::iterator it = members.begin(); it != members.end(); it++)
+	std::vector<Client *>::iterator it = members.begin();
+	for ( ; it != members.end(); it++)
 	{
 		// std::cout << FC(GREEN, "members.client nick ->") << (*it)->getNickname() << std::endl;
 		// std::cout << FC(RED, "sender nick ->") << _nickname << std::endl;
