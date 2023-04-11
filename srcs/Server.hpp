@@ -51,6 +51,9 @@ class Server
 		int			getNOfClients() const;
 		Client*		getClient(std::string nickname);
 		Channel*	getChannel(std::string channel_name);
+		std::vector<Channel *> *getChannelList();
+
+
 
 	private:
 

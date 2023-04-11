@@ -14,30 +14,31 @@
 void			Client::part(Message *m){
 	std::cout << FC(GREEN, ">\tpart function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
+		return (sendReply(461, m->command, "", "", ""));
+
+	std::string part_msg = "";
+	if (m->params.size() == 1)// PART_MSG not_defined
+		part_msg = "hasta la vista Baby";
+	else
+		part_msg = m->params[1];
+
+	std::stringstream ss(m->params[0]);
+	std::string chan;
+	while (std::getline(ss, chan, ','))
 	{
-		sendReply(461, m->command, "", "", "");
-		return;
-	}
-
-	Channel *target = _server->getChannel((m->params[0]));
-	if (target == NULL)
-		return (sendReply(403, target->getName(), "", "", ""));
-	else if (!target->hasClient(this))
-		sendReply(442, target->getName(), "", "", "");
-	else {
-	// 	// for (size_t i(0); i < m->params.size(); i++)
-		_server->removeClientFromChannel(this, target->getName());
-
-		std::string msg = formatMsgsUsers();
-		std::string part_msg = "";
-
-		if (m->params.size() == 1)// PART_MSG not_defined
-			part_msg = "\"hasta la vista Baby\"";
+		Channel *target = _server->getChannel((chan));
+		if (target == NULL)
+			return (sendReply(403, target->getName(), "", "", ""));
+		else if (!target->hasClient(this))
+			sendReply(442, target->getName(), "", "", "");
 		else
-			part_msg = "\"" + m->params[1] + "\"";
-		msg.append("PART " + m->params[0] + " :" + part_msg + END_CHARACTERS);
-		sendMsgChannel(msg, target);
-		sendMsg(msg);
+		{
+			std::string msg = formatMsgsUsers();
+			msg.append("PART " + chan + " :" + part_msg + END_CHARACTERS);
+			sendMsgChannel(msg, target);
+			sendMsg(msg);
+			_server->removeClientFromChannel(this, chan);
+		}
 	}
 }
 

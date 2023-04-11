@@ -1,5 +1,15 @@
 #include "../srcs/Includes.hpp"
 
+//  [ client : 9000 ] MODE #anime b 
+//  [ server : 6667 ] :ChanServ!services@services.freenode.net NOTICE raul_ :[#anime] Welcome to freenode #anime IRC! Be aware conversations can be slow at times, so if you don't get a response immediately, please do stick around ☺ 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode/user/antifascist elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~technet@* elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~simon@* elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode-frpvje.rlp1.7tn1.4hb93e.IP elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 368 raul_ #anime :End of channel ban list 
+
+
+
 
 // [ client : 8000 ] MODE raul +i 
 // [ server : 6667 ] MODE raul +i 
@@ -98,6 +108,26 @@ void			Client::mode(Message *m)
 		}
 		// [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
 	}
+	else if (m->params[0] == _nickname)
+	{
+		std::string msg = formatMsgsUsers();
+		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
+		sendMsg(msg);
+	}
+	else if (m->params.size() == 1)
+		return (sendReply(502, "view", "modes", "", "")); //Can't view modes for other users 
+	else if (m->params.size() == 2)
+		return (sendReply(502, "change", "mode", "", "")); //Can't change mode for other users 
+}
+
+
+
+	// }
+//  c-> MODE raul 
+//  s-> :*.freenode.net 502 raul_ :Can't view modes for other users 
+//  c-> MODE raul -i 
+//  s-> :*.freenode.net 502 glingla :Can't change mode for other users 
+
 
 // ERR472   ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
 // RPL325    
@@ -109,14 +139,6 @@ void			Client::mode(Message *m)
 
 //  [ client : 8000 ] MODE Rony +i
 //  [ server : 6667 ] :Rony!raul@127.0.0.1 MODE Rony +i
-	else //nick
-	{
-	// if (no_soy_yo)
-		std::string msg;
-		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
-		sendMsg(msg);
-	}
-}
 
 // 3.2.3 Channel mode message
 

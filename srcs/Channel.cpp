@@ -50,8 +50,10 @@ void Channel::removeClient(Client* client) {
 }
 
 bool	Channel::hasClient(Client* client) const {
-	for (std::vector<Client*>::const_iterator it = _members.begin(); it != _members.end(); ++it) {
-		if (*it == client) {
+	std::string client_nick = client->getNickname();
+	std::vector<Client*>::const_iterator it = _members.begin();
+	for ( ; it != _members.end(); ++it) {
+		if ((*it)->getNickname() == client_nick) {
 			return true;
 		}
 	}

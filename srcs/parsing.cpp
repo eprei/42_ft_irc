@@ -20,16 +20,15 @@ Message parseMessage(std::string input) {
     size_t commandEnd = input.find(' ');
     if (commandEnd != std::string::npos) {
         msg.command = input.substr(0, commandEnd);
-        input = input.substr(commandEnd+1);
+        input = input.substr(commandEnd + 1);
     } else {
         // Invalid message
         return msg;
     }
 
     // Parsing parameters
-    while (input[0] == ' ') {
+    while (input[0] == ' ')
         input = input.substr(1);
-    }
     while (input.length() > 0) {
         if (input[0] == ':') {
             msg.params.push_back(input.substr(1));
@@ -38,7 +37,7 @@ Message parseMessage(std::string input) {
             size_t paramEnd = input.find(' ');
             if (paramEnd != std::string::npos) {
                 msg.params.push_back(input.substr(0, paramEnd));
-                input = input.substr(paramEnd+1);
+                input = input.substr(paramEnd + 1);
             } else {
                 msg.params.push_back(input);
                 break;

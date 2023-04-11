@@ -1,5 +1,8 @@
 #include "../srcs/Includes.hpp"
 
+// - Verify that private messages (PRIVMSG) and notices (NOTICE) 
+// fully functional with different parameters
+
 void			Client::privmsg(Message *m){
 	// m->params[0] target
 	// m->params[1] text
@@ -13,7 +16,7 @@ void			Client::privmsg(Message *m){
 	if (ch != NULL) //mandamos al canal
 	{
 		std::string	ch_name = ch->getName();
-		if (!ch->hasClient(this))//no estoy en el canal
+		if (ch->hasModes("n") && !ch->hasClient(this))//no estoy en el canal
 			sendReply(404, ch_name, "", "", "");
 		else {
 		std::string msg = formatMsgsUsers();
