@@ -2,33 +2,15 @@
 
 // made by: epresa-c
 // modified by :mpons
-// TO DO: send messages to the corresponding channel after sendMsgToChannel() function is implemented
-void	Client::leaveAll(std::string cmd, std::string part_msg)
+void	Client::leaveAll()
 {
-	std::string msg = formatMsgsUsers();
-	if (part_msg.empty())
-		part_msg = "hasta la vista Baby";
-		
 	std::vector<Channel *>::iterator it = _joinedChannels.begin();
 	while (it != _joinedChannels.end())
-	{
-		// std::cout << FC(GREEN, "Canal QUIT =") << ch_name << std::endl;
-		std::string ch_name = (*it)->getName();
-		msg.append(cmd + " " + ch_name + " :" + part_msg + END_CHARACTERS);
-		// sendMsgChannel(msg, *it);
-		++it;
-	}
-	it = _joinedChannels.begin();
-	while (it != _joinedChannels.end())
-	{
-		std::string ch_name = (*it)->getName();
-		std::cout << FC(GREEN, "Canal QUIT =") << ch_name << std::endl;
-		_server->removeClientFromChannel(this, ch_name);
-		it++;
-	}
+		_server->removeClientFromChannel(this, (*it)->getName());
 }
 
-void			Client::quit(Message *m){
+void			Client::quit(Message *m)
+{
 	std::cout << FC(GREEN ,">\tquit function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
 	std::string part_msg = "";
 
@@ -39,11 +21,24 @@ void			Client::quit(Message *m){
 	std::string msg = formatMsgsUsers();
 	msg.append("QUIT :Quit: " + part_msg + END_CHARACTERS);
 	sendMsg(msg);
-	leaveAll("QUIT", part_msg);
-	_server->removeClientFromServer(this, "QUIT ");
+	sendMsgSharedUsers(msg); 
+	leaveAll();
+	_quiting = true;
 }
 
+// ERGO CHAT
+// [ client : 9000 ] NICK pepi 
+//  [ server : 6667 ] :raul_!~u@2v9h9hjx6pxc6.oragono NICK pepi 
+//  [ server : 6667 ] :raul_!~u@2v9h9hjx6pxc6.oragono NICK pepi 
+//  [ client : 9000 ] PING testnet.ergo.chat 
+//  [ server : 6667 ] :testnet.ergo.chat PONG testnet.ergo.chat testnet.ergo.chat 
 //  [ client : 9000 ] QUIT :me fui 
+//  [ server : 6667 ] :pepi!~u@2v9h9hjx6pxc6.oragono QUIT :Quit: me fui 
+//  [ server : 6667 ] :pepi!~u@2v9h9hjx6pxc6.oragono QUIT :Quit: me fui 
+//  [ server : 6667 ] ERROR :Quit: me fui 
+//  [ client : 9000 ] QUIT :me fui 
+//  [ server : 6667 ] :pepi!raul@127.0.0.1.hosted-by-42lausanne.ch QUIT :Quit: leaving
+//  [ server : 6667 ] ERROR :Closing link: (raul@127.0.0.1.hosted-by-42lausanne.ch) [Quit: me fui] 
 //  [ server : 6667 ] :pepinsa!~raul@freenode-7kj.edl.vrebei.IP QUIT :Quit: me fui 
 //  [ server : 6667 ] ERROR :Closing link: (~raul@xcpe-62-167-164-111.cgn.res.adslplus.ch) [Quit: me fui] 
 
@@ -65,3 +60,7 @@ void			Client::quit(Message *m){
 
 //    :syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch ; User
 //                                    syrk has quit IRC to have lunch.
+// std::cout << FC(GREEN, "Iterador chName =") << (*it)->getName() << std::endl;
+// std::cout << FC(GREEN, "Antes de hacer ++") << std::endl;
+// PrintVectorPointer(_joinedChannels);
+// std::cout << FC(GREEN, "Channel QUIT =") << ch_name << std::endl;

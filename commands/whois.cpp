@@ -1,7 +1,6 @@
 #include "../srcs/Includes.hpp"
 
 // made by: epresa-c
-
 void			Client::whois(Message *m){
 	std::cout << FC(GREEN, ">\twhois function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	Client *ptr;

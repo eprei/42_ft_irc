@@ -10,7 +10,6 @@ SRCS =	./srcs/main.cpp\
 		./srcs/Client.cpp\
 		./srcs/parsing.cpp\
 		./srcs/NumericReply.cpp\
-		./commands/cap.cpp\
 		./commands/join.cpp\
 		./commands/kick.cpp\
 		./commands/list.cpp\
@@ -35,7 +34,8 @@ SRCS_T =./test/clientTest1.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors -pedantic
-CFLAGS += -fsanitize=address -g3
+# CFLAGS += -g
+# CFLAGS += -fsanitize=address -g3
 
 OBJ = $(SRCS:.cpp=.o)
 OBJ_T = $(SRCS_T:.cpp=.o)
@@ -62,6 +62,12 @@ run: all
 
 run2: all
 	./ircserv 6668 asd
+
+val: all
+	valgrind ./ircserv 6667 asd
+
+leak: all
+	valgrind --leak-check=full ./ircserv 6667 asd
 
 proxy: all
 	python3 ./proxy/proxy.py

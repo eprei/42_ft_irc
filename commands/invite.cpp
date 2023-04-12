@@ -1,42 +1,5 @@
 #include "../srcs/Includes.hpp"
 
-// 3.2.7 Invite message
-
-//       Command: INVITE
-//    Parameters: <nickname> <channel>
-
-//    The INVITE command is used to invite a user to a channel.  The
-//    parameter <nickname> is the nickname of the person to be invited to
-//    the target channel <channel>.  There is no requirement that the
-//    channel the target user is being invited to must exist or be a valid
-//    channel.  However, if the channel exists, only members of the channel
-//    are allowed to invite other users.  When the channel has invite-only
-//    flag set, only channel operators may issue INVITE command.
-//    Only the user inviting and the user being invited will receive
-//    notification of the invitation.  Other channel members are not
-//    notified.  (This is unlike the MODE changes, and is occasionally the
-//    source of trouble for users.)
-
-//    Numeric Replies:
-// ERR_NEEDMOREPARAMS    461 (command)
-// ERR_NOSUCHNICK(nick) (nick + " :No such nick") 401
-// ERR_NOTONCHANNEL   (channel)    442
-// // ERR443
-// # define ERR_USERONCHANNEL (user, channel) (user + " " + channel + " :is already on channel")
-// ERR_CHANOPRIVSNEEDED 482 (channel)
-// RPL341
-// # define RPL_INVITING (channel, nick) (nick + " is inviting you to " + channel)
-// RPL_AWAY
-
-//    Examples:
-//    :Angel!wings@irc.org INVITE Wiz #Dust
-
-//                                    ; Message to WiZ when he has been
-//                                    invited by user Angel to channel
-//                                    #Dust
-
-//    INVITE Wiz #Twilight_Zone       ; Command to invite WiZ to
-//                                    #Twilight_zone
 // m->params[0] nick
 // m->params[1] channel
 void	Client::invite(Message *m)
@@ -60,13 +23,52 @@ void	Client::invite(Message *m)
 			return (sendReply(482, ch_name, "", "", ""));
 		ch->addInvited(to_invite);
 	}
-		std::string msg = formatMsgsUsers();
-		msg.append("INVITE " + m->params[0] + " :" + m->params[1] + END_CHARACTERS);
-		sendMsgClient(msg, to_invite);
-		sendReply(341, m->params[0], m->params[1], "", "");
+	std::string msg = formatMsgsUsers();
+	msg.append("INVITE " + m->params[0] + " :" + m->params[1] + END_CHARACTERS);
+	sendMsgClient(msg, to_invite);
+	sendReply(341, m->params[0], m->params[1], "", "");
 }
-// [ client : 9000 ] INVITE raul__ #glingla 
-//  [ server : 6667 ] :jonyoli!~raul@freenode-oov.edl.vrebei.IP INVITE raul__ :#glingla 
+//  [ client : 9000 ] INVITE raul__ #glingla 
+//  [ server : 6667 ] :jonyoli!~user@freenode-oov.edl.vrebei.IP INVITE raul__ :#glingla 
 //  [ server : 6667 ] :*.freenode.net 341 jonyoli raul__ :#glingla
-					//:hostname 025 pepi invitado #canal
+//:hostname 025 pepi invitado #canal
+
+// 3.2.7 Invite message
+
+//       Command: INVITE
+//    Parameters: <nickname> <channel>
+
+//    The INVITE command is used to invite a user to a channel.  The
+//    parameter <nickname> is the nickname of the person to be invited to
+//    the target channel <channel>.  There is no requirement that the
+//    channel the target user is being invited to must exist or be a valid
+//    channel.  However, if the channel exists, only members of the channel
+//    are allowed to invite other users.  When the channel has invite-only
+//    flag set, only channel operators may issue INVITE command.
+//    Only the user inviting and the user being invited will receive
+//    notification of the invitation.  Other channel members are not
+//    notified.  (This is unlike the MODE changes, and is occasionally the
+//    source of trouble for users.)
+
+//    Numeric Replies:
+
+// ERR_NEEDMOREPARAMS    461 (command)
+// ERR_NOSUCHNICK(nick) (nick + " :No such nick") 401
+// ERR_NOTONCHANNEL   (channel)    442
+// // ERR443
+// # define ERR_USERONCHANNEL (user, channel) (user + " " + channel + " :is already on channel")
+// ERR_CHANOPRIVSNEEDED 482 (channel)
+// RPL341
+// # define RPL_INVITING (channel, nick) (nick + " is inviting you to " + channel)
+// RPL_AWAY
+
+//    Examples:
+//    :Angel!wings@irc.org INVITE Wiz #Dust
+
+//                                    ; Message to WiZ when he has been
+//                                    invited by user Angel to channel
+//                                    #Dust
+
+//    INVITE Wiz #Twilight_Zone       ; Command to invite WiZ to
+//                                    #Twilight_zone					
 

@@ -1,44 +1,5 @@
 #include "../srcs/Includes.hpp"
 
-//  [ client : 9000 ] MODE #anime b 
-//  [ server : 6667 ] :ChanServ!services@services.freenode.net NOTICE raul_ :[#anime] Welcome to freenode #anime IRC! Be aware conversations can be slow at times, so if you don't get a response immediately, please do stick around ☺ 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode/user/antifascist elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~technet@* elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~simon@* elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode-frpvje.rlp1.7tn1.4hb93e.IP elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 368 raul_ #anime :End of channel ban list 
-
-
-
-
-// [ client : 8000 ] MODE raul +i 
-// [ server : 6667 ] MODE raul +i 
-
-//  [ client : 8000 ] MODE #usa 
-//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+nt 
-
-//hay que bannear a algien me imagino para que pase a modo +b
-//  [ client : 8000 ] MODE #usa +b 
-//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+b
-
-//  [ client : 8000 ] MODE #usa -i 
-//  [ server : 6667 ] :*.42irc.net 324 raul #usa :-i 
-
-
-//  [ client : 9000 ] MODE #pitusa -sizpqwe 
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
-//  [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
-
-//  [ client : 9000 ] MODE #pitusa +si 
-//a todo los del canal
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :+si 
-
-// // MODE +i (invite_only channel)
-// // MODE +t (Change the channel topic in a mode +t channel)
-//  n - no messages to channel from clients on the outside;
-
-//mode -i cuando no esta (+nt)
 std::pair<std::string, std::string> splitString(const std::string& str)
 {
     std::pair<std::string, std::string> result;
@@ -54,10 +15,10 @@ std::pair<std::string, std::string> splitString(const std::string& str)
     return result;
 }
 
+// m->params[0] == channel ou nick
+// m->params[1] == mode to set
 void			Client::mode(Message *m)
 {
-	// m->params[0] == channel ou nick
-	// m->params[0] == channel ou nick
 	std::cout << FC(GREEN, ">\tmode function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
 	{
@@ -110,8 +71,21 @@ void			Client::mode(Message *m)
 	}
 	else if (m->params[0] == _nickname)
 	{
-		std::string msg = formatMsgsUsers();
-		msg.append("MODE " + getNickname() + " +i" + END_CHARACTERS);
+		std::string msg;
+		if (!m->params[1].compare("+i"))	
+		{
+			_hostname = "IP";
+			_hostname += ".hosted-by-42lausanne.ch";
+			msg = formatMsgsUsers();
+			msg.append("MODE " + getNickname() + " " + m->params[1] + END_CHARACTERS);
+		}
+		else if(!m->params[1].compare("-i"))	
+		{
+			_hostname = _ip;
+			_hostname += ".hosted-by-42lausanne.ch";
+			msg = formatMsgsUsers();
+			msg.append("MODE " + getNickname() + " " + m->params[1] + END_CHARACTERS);
+		}
 		sendMsg(msg);
 	}
 	else if (m->params.size() == 1)
@@ -119,9 +93,40 @@ void			Client::mode(Message *m)
 	else if (m->params.size() == 2)
 		return (sendReply(502, "change", "mode", "", "")); //Can't change mode for other users 
 }
+//  [ client : 9000 ] MODE #anime b 
+//  [ server : 6667 ] :ChanServ!services@services.freenode.net NOTICE raul_ :[#anime] Welcome to freenode #anime IRC! Be aware conversations can be slow at times, so if you don't get a response immediately, please do stick around ☺ 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode/user/antifascist elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~technet@* elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~simon@* elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode-frpvje.rlp1.7tn1.4hb93e.IP elon.hub :1676764361 
+//  [ server : 6667 ] :*.freenode.net 368 raul_ #anime :End of channel ban list 
+
+// [ client : 8000 ] MODE raul +i 
+// [ server : 6667 ] MODE raul +i 
+
+//  [ client : 8000 ] MODE #usa 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+nt 
+
+//hay que bannear a algien me imagino para que pase a modo +b
+//  [ client : 8000 ] MODE #usa +b 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+b
+
+//  [ client : 8000 ] MODE #usa -i 
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :-i 
 
 
+//  [ client : 9000 ] MODE #pitusa -sizpqwe 
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
+//  [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
 
+//  [ client : 9000 ] MODE #pitusa +si 
+//a todo los del canal
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :+si 
+
+// // MODE +i (invite_only channel)
+// // MODE +t (Change the channel topic in a mode +t channel)
+//  n - no messages to channel from clients on the outside;
 	// }
 //  c-> MODE raul 
 //  s-> :*.freenode.net 502 raul_ :Can't view modes for other users 
@@ -187,60 +192,3 @@ void			Client::mode(Message *m)
 //    The following examples are given to help understanding the syntax of
 //    the MODE command, but refer to modes defined in "Internet Relay Chat:
 //    Channel Management" [IRC-CHAN].
-
-//    Examples:
-
-//    MODE #Finnish +imI *!*@*.fi     ; Command to make #Finnish channel
-//                                    moderated and 'invite-only' with user
-//                                    with a hostname matching *.fi
-//                                    automatically invited.
-
-//    MODE #Finnish +o Kilroy         ; Command to give 'chanop' privileges
-//                                    to Kilroy on channel #Finnish.
-
-//    MODE #Finnish +v Wiz            ; Command to allow WiZ to speak on
-//                                    #Finnish.
-
-//    MODE #Fins -s                   ; Command to remove 'secret' flag
-//                                    from channel #Fins.
-
-//    MODE #42 +k oulu                ; Command to set the channel key to
-//                                    "oulu".
-
-//    MODE #42 -k oulu                ; Command to remove the "oulu"
-//                                    channel key on channel "#42".
-
-//    MODE #eu-opers +l 10            ; Command to set the limit for the
-//                                    number of users on channel
-//                                    "#eu-opers" to 10.
-
-//    :WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l
-//                                    ; User "WiZ" removing the limit for
-//                                    the number of users on channel "#eu-
-//                                    opers".
-
-//    MODE &oulu +b                   ; Command to list ban masks set for
-//                                    the channel "&oulu".
-
-//    MODE &oulu +b *!*@*             ; Command to prevent all users from
-//                                    joining.
-
-//    MODE &oulu +b *!*@*.edu +e *!*@*.bu.edu
-//                                    ; Command to prevent any user from a
-//                                    hostname matching *.edu from joining,
-//                                    except if matching *.bu.edu
-
-//    MODE #bu +be *!*@*.edu *!*@*.bu.edu
-//                                    ; Comment to prevent any user from a
-//                                    hostname matching *.edu from joining,
-//                                    except if matching *.bu.edu
-
-//    MODE #meditation e              ; Command to list exception masks set
-//                                    for the channel "#meditation".
-
-//    MODE #meditation I              ; Command to list invitations masks
-//                                    set for the channel "#meditation".
-
-//    MODE !12345ircd O               ; Command to ask who the channel
-//                                    creator for "!12345ircd" is
-

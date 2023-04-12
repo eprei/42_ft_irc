@@ -1,26 +1,33 @@
 #include "../srcs/Includes.hpp"
 
-void			Client::names(Message *m){
-	// m->params[0] channel
-	// m->params[1] target (multiserver)
+// m->params[0] channel
+// m->params[1] target (multiserver) not used
+void			Client::names(Message *m)
+{
 	std::cout << FC(GREEN, ">\tnames function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::vector<Channel *> *chList = _server->getChannelList();
 
 	if (m->params.empty())
 	{
-		for (std::vector<Channel *>::iterator it = chList->begin() ; it != chList->end(); ++it)
+		std::vector<Channel *>::iterator it = chList->begin();
+		for ( ; it != chList->end(); ++it)
 			sendReply(353, (*it)->getName(), (*it)->getMembersNicks(), "", "");
-			return (sendReply(366, "", "", "", ""));
+		return (sendReply(366, "", "", "", ""));
 	}
 	if (!m->params[0].empty())
 	{
-		Channel *ch = _server->getChannel(m->params[0]);
-		if (ch != NULL){
-			sendReply(353, ch->getName(), ch->getMembersNicks(), "", "");
-			return (sendReply(366, "", "", "", ""));
+		std::stringstream ss(m->params[0]);
+		std::string chan;
+		while (std::getline(ss, chan, ','))
+		{
+			Channel *ch = _server->getChannel(chan);
+			if (ch != NULL)
+				sendReply(353, ch->getName(), ch->getMembersNicks(), "", "");
 		}
+		return (sendReply(366, "", "", "", ""));
 	}
 }	
+
 // 3.2.5 Names message
 
 //       Command: NAMES

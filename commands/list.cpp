@@ -1,22 +1,29 @@
 #include "../srcs/Includes.hpp"
 
-void			Client::list(Message *m){
-	// m->params[0] channel
-	// m->params[1] target (multiserver)
+// m->params[0] channel
+// m->params[1] target (multiserver) not used
+void			Client::list(Message *m)
+{
 	std::cout << FC(GREEN, ">\tlist function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::vector<Channel *> *chList = _server->getChannelList();
 	if (m->params.empty())
 	{
-		for (std::vector<Channel *>::iterator it = chList->begin() ; it != chList->end(); ++it)
+		std::vector<Channel *>::iterator it = chList->begin();
+		for ( ; it != chList->end(); ++it)
 			sendReply(322, (*it)->getName(), to_string((*it)->getMembers().size()), (*it)->getModes(), (*it)->getTopic());
 			return (sendReply(323, "", "", "", ""));
 	}
 	if (!m->params[0].empty())
 	{
-		Channel *ch = _server->getChannel(m->params[0]);
-		if (ch != NULL)
-			(sendReply(322, ch->getName(), to_string(ch->getMembers().size()), ch->getModes(), ch->getTopic()));
-			return (sendReply(323, "", "", "", ""));
+		std::stringstream ss(m->params[0]);
+		std::string chan;
+		while (std::getline(ss, chan, ','))
+		{
+			Channel *ch = _server->getChannel(chan);
+			if (ch != NULL)
+				(sendReply(322, ch->getName(), to_string(ch->getMembers().size()), ch->getModes(), ch->getTopic()));
+		}
+		return (sendReply(323, "", "", "", ""));
 	}
 }
 
@@ -29,9 +36,6 @@ void			Client::list(Message *m){
 //  [ server : 6667 ] :*.freenode.net 321 raul_ Channel :Users Name 
 //  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin.cz 1 :[+nt]  
 //  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin-otc-eu 1 :[+nt]  
-//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin-be 1 :[+nt]  
-//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin-talk 1 :[+nt]  
-//  [ server : 6667 ] :*.freenode.net 323 raul_ :End of channel list. 
 
 // 3.2.6 List message
 

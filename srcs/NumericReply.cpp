@@ -180,5 +180,28 @@ void	Client::sendMsgJoinedChannels(std::string msg)
 		sendMsgChannel(msg, (*it));
 }
 
-//cl_list hecho con push_back de differentes clientes para mandar el mensaje
-// void	Client::sendMsgClientsList(std::string msg, vector<Client *> &cl_list);
+void	Client::sendMsgSharedUsers(std::string msg) 
+{
+	std::set<int> users;
+	if (_joinedChannels.empty())
+		return ;
+	std::vector<Channel *>::iterator ch = _joinedChannels.begin();
+	for ( ; ch != _joinedChannels.end(); ch++)
+	{
+		size_t old_size = users.size(); 
+		std::vector<Client *> members = (*ch)->getMembers();
+		std::vector<Client *>::iterator cl = members.begin();
+		for ( ; cl != members.end(); cl++)
+		{
+			if ((*cl)->getId() != _id)
+			{
+				users.insert((*cl)->getId());
+				if (users.size() > old_size)
+				{
+					sendMsgClient(msg, (*cl));
+					++old_size; 
+				}
+			}
+		}
+	}
+}

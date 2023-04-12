@@ -1,45 +1,5 @@
 #include "../srcs/Includes.hpp"
-// 3.2.4 Topic message
 
-//       Command: TOPIC
-//    Parameters: <channel> [ <topic> ]
-
-//    The TOPIC command is used 
-// 		to change or view the topic of a channel.
-//    The topic for channel <channel> is returned if there is no <topic>
-//    given.  If the <topic> parameter is present, the topic for that
-//    channel will be changed, if this action is allowed for the user
-//    requesting it. If the <topic> parameter is an empty string, the
-//    topic for that channel will be removed.
-// Si topic esta vacio da igual
-
-
-//    Numeric Replies:
-// ERR 461
-// #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
-
-// ERR 442    
-// # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
-// - Returned by the server whenever a client tries to perform a
-// channel affecting command for which the client isn't a member.
-
-//ERR 482
-// # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")			  
-
-// // RPL331    
-// # define RPL_NOTOPIC (channel) (channel + " :No topic is set")
-// // RPL332
-// # define RPL_TOPIC(channel, topic) (channel + " :" + topic)
-
-// ERR477 no se usa
-// # define ERR_NOCHANMODES(channel) (channel + " :Channel doesn't support modes")
-
-// m->command	TOPIC
-// m->params[0] channel
-// m->params[1] topic
-//  si presente se cambia el topic del channel
-// si string vacia topic will be removed
-// return (sendReply(477, ch_name, "", "", ""));//nose usa
 void	Client::topic(Message *m)
 {
 	std::cout << FC(GREEN, ">\ttopic function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
@@ -78,6 +38,47 @@ void	Client::topic(Message *m)
 		sendMsg(msg);		
 	}
 }
+
+// 3.2.4 Topic message
+
+//       Command: TOPIC
+//    Parameters: <channel> [ <topic> ]
+
+//    The TOPIC command is used 
+// 		to change or view the topic of a channel.
+//    The topic for channel <channel> is returned if there is no <topic>
+//    given.  If the <topic> parameter is present, the topic for that
+//    channel will be changed, if this action is allowed for the user
+//    requesting it. If the <topic> parameter is an empty string, the
+//    topic for that channel will be removed.
+// Si topic esta vacio da igual
+
+//    Numeric Replies:
+// ERR 461
+// #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
+
+// ERR 442    
+// # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
+// - Returned by the server whenever a client tries to perform a
+// channel affecting command for which the client isn't a member.
+
+//ERR 482
+// # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")			  
+
+// // RPL331    
+// # define RPL_NOTOPIC (channel) (channel + " :No topic is set")
+// // RPL332
+// # define RPL_TOPIC(channel, topic) (channel + " :" + topic)
+
+// ERR477 no se usa
+// # define ERR_NOCHANMODES(channel) (channel + " :Channel doesn't support modes")
+
+// m->command	TOPIC
+// m->params[0] channel
+// m->params[1] topic
+//  si presente se cambia el topic del channel
+// si string vacia topic will be removed
+// return (sendReply(477, ch_name, "", "", ""));//nose usa
 
 //    Examples:
 
