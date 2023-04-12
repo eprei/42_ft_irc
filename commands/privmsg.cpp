@@ -1,11 +1,9 @@
 #include "../srcs/Includes.hpp"
 
-// - Verify that private messages (PRIVMSG) and notices (NOTICE) 
-// fully functional with different parameters
-
-void			Client::privmsg(Message *m){
 	// m->params[0] target
 	// m->params[1] text
+void			Client::privmsg(Message *m)
+{
 	std::cout << FC(GREEN, ">\tprivmsg function executed ") <<"by client id: " << _id << "\t<" << std::endl;
 	if (m->params.empty())//no target
 		return (sendReply(411, m->command, "", "", ""));
@@ -21,13 +19,12 @@ void			Client::privmsg(Message *m){
 		else {
 		std::string msg = formatMsgsUsers();
 		msg.append("PRIVMSG " + ch_name + " :" + m->params[1] + END_CHARACTERS);
-		sendMsgChannel(msg, ch);// a todos los clientes del canal?
+		sendMsgChannel(msg, ch);
 		}
 	}
 	else //no es un canal
 	{
 		Client	*target = _server->getClient(m->params[0]);
-		//if Boucle joinned channel searching hasclient(target) = false?
 		if (target == NULL)//no esta ese nick
 			return (sendReply(401, m->params[0], "", "", ""));
 		else
@@ -38,6 +35,7 @@ void			Client::privmsg(Message *m){
 		}
 	}
 }
+
 // 3.3.1 Private messages
 
 //       Command: PRIVMSG
@@ -83,45 +81,11 @@ void			Client::privmsg(Message *m){
 // channel using the shortname when there are more than one
 // such channel.
 //RPL301    
-# define RPL_AWAY "<nick> :<away message>"
+// # define RPL_AWAY "<nick> :<away message>"
 
 //    Examples:
-
 //    :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message ?
 //                                    ; Message from Angel to Wiz.
 
 //    PRIVMSG Angel :yes I'm receiving it !
 //                                    ; Command to send a message to Angel.
-
-//    PRIVMSG jto@tolsun.oulu.fi :Hello !
-//                                    ; Command to send a message to a user
-//                                    on server tolsun.oulu.fi with
-//                                    username of "jto".
-
-//    PRIVMSG kalt%millennium.stealth.net@irc.stealth.net :Are you a frog?
-//                                    ; Message to a user on server
-//                                    irc.stealth.net with username of
-//                                    "kalt", and connected from the host
-//                                    millennium.stealth.net.
-
-//    PRIVMSG kalt%millennium.stealth.net :Do you like cheese?
-//                                    ; Message to a user on the local
-//                                    server with username of "kalt", and
-//                                    connected from the host
-//                                    millennium.stealth.net.
-
-//    PRIVMSG Wiz!jto@tolsun.oulu.fi :Hello !
-//                                    ; Message to the user with nickname
-//                                    Wiz who is connected from the host
-//                                    tolsun.oulu.fi and has the username
-//                                    "jto".
-
-//    PRIVMSG $*.fi :Server tolsun.oulu.fi rebooting.
-//                                    ; Message to everyone on a server
-//                                    which has a name matching *.fi.
-
-//    PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions
-//                                    ; Message to all users who come from
-//                                    a host which has a name matching
-//                                    *.edu.
-

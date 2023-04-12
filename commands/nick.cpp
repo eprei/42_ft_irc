@@ -1,6 +1,67 @@
 #include "../srcs/Includes.hpp"
 #include <cstring>
 
+# define NICKNAME_VALID_CHAR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_[]{}\\`|"
+
+bool	validNickName(std::string nickname)
+{
+	if (nickname.length() > 9)
+		return false;
+	for (size_t i = 0; i < nickname.length(); i++)
+	{
+		if (!std::strchr(NICKNAME_VALID_CHAR, nickname[i]))
+			return false;
+	}
+	return true;
+}
+
+void	Client::nick(Message *m)
+{
+	std::cout << FC(GREEN, ">\tnick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
+	if (_server->isNickUsed(m->params[0]))
+		sendReply(433, m->params[0], "", "", "");
+	else if (m->params[0].empty())
+		sendReply(431, _nickname, "", "", "");
+	else if (!validNickName(m->params[0]))
+		sendReply(432, _nickname, "", "", "");
+	else // "the nick is OK"
+	{
+		std::string msg;
+		if (_alreadyWelcomed)
+		{
+			msg = formatMsgsUsers();
+			setNickname(m->params[0]);
+		}
+		else 
+		{
+			setNickname(m->params[0]);
+			msg = formatMsgsUsers();
+		}
+		msg.append("NICK " + _nickname + END_CHARACTERS);
+		sendMsgSharedUsers(msg);
+		sendMsg(msg);
+		addToNicksHistory();
+		if (_alreadyWelcomed == false)
+		{
+			welcome();
+			_alreadyWelcomed = true;
+		}
+	}
+}
+
+void	Client::addToNicksHistory( void ){
+	nicksBackup newNick;
+
+	newNick.nick = this->_nickname;
+	newNick.server = this->_server->getName();
+	newNick.serverInfo = this->_server->getServInfo();
+	newNick.user = this->_username;
+	newNick.host = this->_hostname;
+	newNick.realname = this->_realname;
+	newNick.serverStartTime = this->_server->getStartTime();
+	_nicksHistory.push_back(newNick);
+}
+
 // 3.1.2 Nick message
 //       Command: NICK  Parameters: <nickname>
 
@@ -38,64 +99,5 @@
 // //          - Sent by the server to a user upon connection to indicate
 // //            the restricted nature of the connection (user mode "+r").
 
-# define NICKNAME_VALID_CHAR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_[]{}\\`|"
 
-bool	validNickName(std::string nickname)
-{
-	if (nickname.length() > 9)
-		return false;
-	for (size_t i = 0; i < nickname.length(); i++)
-	{
-		if (!std::strchr(NICKNAME_VALID_CHAR, nickname[i]))
-			return false;
-	}
-	return true;
-}
-
-void	Client::nick(Message *m)
-{
-	// std::cout << FC(GREEN, ">\tnick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
-	if (_server->isNickUsed(m->params[0]))
-		sendReply(433, m->params[0], "", "", "");
-	else if (m->params[0].empty())
-		sendReply(431, _nickname, "", "", "");
-	else if (!validNickName(m->params[0]))
-		sendReply(432, _nickname, "", "", "");
-	else // "the nick is OK"
-	{
-		std::string msg;
-		if (_alreadyWelcomed)
-		{
-			msg = formatMsgsUsers();
-			setNickname(m->params[0]);
-		}
-		else 
-		{
-			setNickname(m->params[0]);
-			msg = formatMsgsUsers();
-		}
-		msg.append("NICK " + _nickname + END_CHARACTERS);
-		sendMsgJoinedChannels(msg);
-		sendMsg(msg);
-		addToNicksHistory();
-		if (_alreadyWelcomed == false)
-		{
-			welcome();
-			_alreadyWelcomed = true;
-		}
-	}
-}
-
-void	Client::addToNicksHistory( void ){
-	nicksBackup newNick;
-
-	newNick.nick = this->_nickname;
-	newNick.server = this->_server->getName();
-	newNick.serverInfo = this->_server->getServInfo();
-	newNick.user = this->_username;
-	newNick.host = this->_hostname;
-	newNick.realname = this->_realname;
-	newNick.serverStartTime = this->_server->getStartTime();
-	_nicksHistory.push_back(newNick);
-}
 

@@ -20,12 +20,12 @@ class Client
 {
 	public:
 
-		// Client();
 		Client(Server *server);
 		Client(Client &other);
 		Client &operator=(Client &other);
 		~Client();
 
+		// SETTERS
 		void				setId(int id);
 		void				setNickname(std::string nickname);
 		void				setUsername(std::string username);
@@ -34,29 +34,41 @@ class Client
 		void				setSocket(int socket);
 		void				setAddress(struct sockaddr_in address);
 		void				setBuf(std::string buf);
-		int					getMaxId( void ) const ;
 		void				setIp(std::string ip);
 
-		int					getId( void ) const;
-		std::string			getNickname( void ) const;
-		std::string			getUsername( void ) const;
-		std::string			getHostname( void ) const;
-		std::string			getRealname( void ) const;
-		int					getSocket( void ) const;
-		struct sockaddr_in	getAddress( void ) const;
-		std::string			getIp( void ) const;
-		double				getIdle( void ) const;
+		// GETTERS
+		int					getMaxId() const ;
+		int					getId() const;
+		std::string			getNickname() const;
+		std::string			getUsername() const;
+		std::string			getHostname() const;
+		std::string			getRealname() const;
+		int					getSocket() const;
+		struct sockaddr_in	getAddress() const;
+		std::string			getIp() const;
+		double				getIdle() const;
+		bool				isQuiting();
 
-		//Parsing
-		std::string			getBuf( void ) const;
+		// PARSING
+		std::string			getBuf() const;
 		void				execCmd(Message *m);
 		void				process_buffer(const std::string& message);
+	
+		// REPLY
 		std::string			numericReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 		std::string			formatMsgsReply(const int code);
 		void				sendReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
-		std::string			formatMsgsUsers();
 
-		bool				isJoinedChannel(Channel *ch) const;
+		//MSG
+		std::string			formatMsgsUsers();
+		void				sendMsg(std::string msg);
+		void				sendMsgClient(std::string msg, Client *target);
+		void				sendMsgChannel(std::string msg, Channel *target);
+		void				sendMsgJoinedChannels(std::string msg);
+		void				sendMsgSharedUsers(std::string msg) ;
+
+
+		// JOINED CHANNELS
 		void				addJoinedChannel(Channel *ch);
 		void				removeJoinedChannel(Channel *ch);
 
@@ -72,7 +84,6 @@ class Client
 		void				privmsg(Message *m);
 		void				ping(Message *m);
 		void				kick(Message *m);
-		void				cap(Message *m);
 		void				notice(Message *m);
 		void				mode(Message *m);
 		void				pong(Message *m);
@@ -81,13 +92,10 @@ class Client
 		void				topic(Message *m);
 		void				invite(Message *m);
 
-		void				addToNicksHistory( void );
+		// CMDS TOOLS
+		void				addToNicksHistory();
 		void				welcome();
-		void				leaveAll(std::string cmd, std::string part_msg);
-		void				sendMsg(std::string msg);
-		void				sendMsgClient(std::string msg, Client *target);
-		void				sendMsgChannel(std::string msg, Channel *target);
-		void				sendMsgJoinedChannels(std::string msg);
+		void				leaveAll();
 
 		// TOOLS
 		std::vector<std::string>	subSplitString(const std::string& str, char c);
@@ -109,10 +117,8 @@ class Client
 		Server							*_server;
 		static std::vector<nicksBackup>	_nicksHistory;
 		bool							_alreadyWelcomed;
-		// bool							_passChecked;
+		bool							_quiting;
 		std::vector<Channel *>			_joinedChannels;
-		
-
 };
 
 std::ostream	&operator<<( std::ostream & o, Client const & rhs );

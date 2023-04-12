@@ -1,79 +1,80 @@
-#ifndef ROS_HPP
-# define ROS_HPP
+#ifndef NUMERIC_MACROS_HPP
+# define NUMERIC_MACROS_HPP
 
-// RPL 001
+// RPL001
 # define RPL_WELCOME(nick, user, host) (":Welcome to the Internet Relay Network " \
 			+ nick + "!" + user + "@" + host)
 
-// RPL 002
+// RPL002
 # define RPL_YOURHOST(servername, ver) (":Your host is " + servername + ", running version " + ver)
 
-// RPL 003
+// RPL003
 # define RPL_CREATED(_startTime) (":This server was created " + _startTime)
 
-// RPL 004
-# define RPL_MYINFO(servername, version, userModes, channelModes) (":" + servername + \
-				" " + version + " " + userModes + " " + channelModes)
-// RPL 311
+// RPL004
+# define RPL_MYINFO(servername, version, channelModes, userModes) (":" + servername + \
+				" " + version + " " + channelModes + " " + userModes)
+// RPL311
 # define RPL_WHOISUSER(nickwhoask, nickaskedfor, servername, real_name) (nickwhoask + \
 				" ~" + nickaskedfor + " " + servername + " * :" + real_name)
-// RPL 312
+// RPL312
 # define RPL_WHOISSERVER(nick, server, serverinfo) (nick + \
 				" " + server + " :" + serverinfo)
-// RPL 313
+// RPL313
 # define RPL_WHOISOPERATOR(nick, privileges) (nick + \
 				" :" + privileges)
-// RPL 314
+// RPL314
 # define RPL_WHOWASUSER(nick, user, host, realname) (nick + \
 				" " + user + " " + host + " * :" + realname)
-// RPL 317
+// RPL317
 # define RPL_WHOISIDLE(nick, seconds) (nick + \
 				" " + seconds + " :seconds idle")
-// RPL 318
+// RPL318
 # define RPL_ENDOFWHOIS(nick) (nick + \
 				" :End of /WHOIS list.")
-// RPL 369
+// RPL369
 # define RPL_ENDOFWHOWAS(nick) (nick + \
 				" :End of WHOWAS")
-// RPL 378
+// RPL378
 # define RPL_BANEXPIRED(nick, hostname, ip) (nick + \
 				" :is connecting from ~"  + nick + "@"+ hostname + " " \
 				+ ip)
-// RPL 401
+// RPL401
 # define ERR_NOSUCHNICK(nick) (nick + " :No such nick")
-// RPL 406
+// RPL406
 # define ERR_WASNOSUCHNICK(nick) (nick + " :There was no such nickname")
-// PASS COMMAND
 
-// ERR 461
+// PASS COMMAND
+// ERR461
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters")
 
-// ERR 462
+// ERR462
 #define ERR_ALREADYREGISTERED "462 :Unauthorized command (already registered)"
-// ERR 464
+// ERR464
 // #define ERR_PASSWDMISMATCH	"464 * :Password incorrect"
 #define ERR_PASSWDMISMATCH	"* :Password incorrect"
 
 // NICK COMMAND
-// ERR 431
+// ERR431
 #define ERR_NONICKNAMEGIVEN ":No nickname given" //431
 // - Returned when a nickname parameter expected for a command and isn't found.
 
-// ERR 432
+// ERR432
 // #define ERR_ERRONEUSNICKNAME "<nick> :Erroneous nickname" //432
 #define ERR_ERRONEUSNICKNAME(nick) (nick + " :Erroneous nickname") //432
 //          - Returned after receiving a NICK message which contains
 //            characters which do not fall in the defined set.  See
 //            section 2.3.1 for details on valid nicknames.
 
-// ERR 433
+// ERR433
 # define ERR_NICKNAMEINUSE(arg1) (arg1 + " :Nickname is already in use") //433
 //          - Returned when a NICK message is processed that results
 //            in an attempt to change to a currently existing
 //            nickname..
 //  [ server : 6667 ] :*.freenode.net 433 * epresa-c :Nickname is already in use.
-//join
-//353
+
+//JOIN
+// RPL353
 # define RPL_NAMREPLY(channel, nick) "= " + channel + " :@" + nick
 // = #lol :@Guest36096 mikeWpit
 //"( "=" / "*" / "@" ) <channel>
@@ -82,14 +83,14 @@
 //- "@" is used for secret channels, "*" for private channels,
 //  and "=" for others (public channels).
 
-//366
+// RPL366
 # define RPL_ENDOFNAMES(channel) channel + " :End of NAMES list"
 
-//part
+// PART
 // 403
 # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
 
-// ERR 442    
+// ERR442    
 # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
 // - Returned by the server whenever a client tries to perform a
 // channel affecting command for which the client isn't a member.
@@ -97,17 +98,17 @@
 // 324
 # define RPL_CHANNELMODEIS(channel, mode) (channel + " :" + mode)
 
-//KICK
-// ERR 476
+// KICK
+// ERR476
 # define ERR_BADCHANMASK(channel) (channel+ " :Bad Channel Mask")
 
-//ERR 482
+//ERR482
 # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
 // - Any command requiring 'chanop' privileges (such as MODE messages) 
 // MUST return this error if the client making the attempt is not a 
 // chanop on the specified channel.
 
-// ERR 441    
+// ERR441    
 # define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
 // - Returned by the server to indicate that the target
 // user of the command is not on the given channel.
@@ -140,14 +141,13 @@
 // RPL341
 # define RPL_INVITING(invited, channel) (invited + " :" + channel)
 
-//473
+// ERR473
 # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
 
 // RPL322
 # define RPL_LIST(channel, total_users , modes, topic) (channel + " " + total_users + " :[" + modes + "] " + topic)
 // RPL323
 # define RPL_LISTEND ":End of LIST"
-
 
 #endif // ROS_HPP
 

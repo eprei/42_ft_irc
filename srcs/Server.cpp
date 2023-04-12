@@ -22,7 +22,8 @@ Server::~Server(){
 bool	Server::finish()
 {
     std::cout << "\nTerminating server...\n";
-	for (std::map<int , Client *>::iterator it = this->_clientsList.begin(); it != this->_clientsList.end(); it++)
+	std::map<int , Client *>::iterator it = this->_clientsList.begin();
+	for ( ; it != this->_clientsList.end(); it++)
 		this->removeClientFromServer(it->second, "");
     close(getServerSocket()); // cerrar el socket
     return (true); // salir del programa con el codigo de señal
@@ -152,7 +153,11 @@ bool Server::serverLoop(){
 					if (isSocketClosed(SocketNumber) == true)
 						removeClientFromServer(_clientsList[SocketNumber], "has been disconnected unexpectedly");
 					else
+					{
 						messageHandling(SocketNumber);
+						if (_clientsList[SocketNumber]->isQuiting())
+							removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
+					}
 				}
 			}
 		}
@@ -182,7 +187,6 @@ void	Server::messageHandling(int userSocketNumber){
 	_buf.append(bufferLocal);
 	_clientsList[userSocketNumber]->setBuf(_buf);
 	_buf.erase();
-	// std::cout << *this << std::endl;
 }
 
 void	Server::checkInactiveUsers(){
@@ -224,7 +228,6 @@ void	Server::addNewClient(){
 void	Server::removeClientFromServer(Client* client, std::string reason){
 	int sock = client->getSocket();
 
-	// TO DO: send messages to the corresponding channel after sendMsgToChannel(reason) function is implemented
 	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
 	close(sock);
 	// delete _clientsList[sock];

@@ -1,16 +1,8 @@
 #include "../srcs/Includes.hpp"
 
 // made by: mpons
-
-// 442
-// # define ERR_NOTONCHANNEL(channel) channel + " :You're not on that channel"
-
-// 403
-// # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
-
 // m->params[0] = channel or list of channels
 // m->params[1] = part message
-
 void			Client::part(Message *m){
 	std::cout << FC(GREEN, ">\tpart function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	if (m->params.empty())
@@ -62,6 +54,12 @@ void			Client::part(Message *m){
 //    clients.
 
 //    Numeric Replies:
+
+// 442
+// # define ERR_NOTONCHANNEL(channel) channel + " :You're not on that channel"
+
+// 403
+// # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
 
 //            ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
 //            ERR_NOTONCHANNEL

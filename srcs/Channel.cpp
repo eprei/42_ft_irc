@@ -1,12 +1,11 @@
 # include "Channel.hpp"
 
-// TO DO: write copilen's functions
+// TO DO: write copilen's functions?
+//	  i - invite-only channel flag;
+//    t - topic settable by channel operator only flag;
+//    n - no messages to channel from clients on the outside;
 Channel::Channel(Client &owner, std::string name) :
-_oper(&owner), _name(name),
-_modes("+nt")
-	//	  i - invite-only channel flag;
-    //    t - topic settable by channel operator only flag;
-    //    n - no messages to channel from clients on the outside;
+_oper(&owner), _name(name), _modes("+nt")
 {}
 
 Channel::Channel(Channel &other){ *this = other;}
@@ -136,4 +135,14 @@ bool	Channel::isInvited(Client *client) const
 
 void Channel::addInvited(Client* client) {
 	_invited.push_back(client);
+}
+
+std::ostream	&operator<<(std::ostream & o, Channel const & rhs )
+{
+	o << FC(GREEN, "******\tChannel info\t******") << std::endl;
+	o << "Name: " << rhs.getName() << std::endl;
+	o << "Modes: " << rhs.getModes() << std::endl;
+	if (!rhs.getTopic().empty())
+		o << "Topic: " << rhs.getTopic() << std::endl;
+	return o;
 }

@@ -1,5 +1,37 @@
 #include "../srcs/Includes.hpp"
 
+void			Client::kick(Message *m)
+{
+	std::cout << FC(GREEN, ">\tkick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
+	if (m->params.size() < 2)
+		return (sendReply(461, m->command, "", "", ""));
+	Channel		*ch = _server->getChannel((m->params[0]));
+	if (ch == NULL)//no existe canal
+		return (sendReply(403, m->params[0], "", "", ""));
+	
+	std::string ch_name = ch->getName();
+	Client		*to_kick = _server->getClient((m->params[1]));
+	
+	if (!ch->hasClient(this))//no estoy en el canal
+		return (sendReply(442, ch_name, "", "", ""));
+	else if (!ch->hasClient(to_kick))//no existe el cliente en el canal
+		return (sendReply(441, m->params[1], ch_name, "", ""));
+	else if (!ch->isOperator(this))//no soy operador
+		return (sendReply(482, ch_name, "", "", ""));
+	else
+	{
+		std::string part_msg;
+		if (m->params.size() == 2)// PART_MSG not_defined
+			part_msg = "has been kicked";
+		else
+			part_msg = m->params[2];
+		std::string msg = formatMsgsUsers();
+		msg.append("KICK " + ch_name + " " + m->params[1] + " :" + part_msg + END_CHARACTERS);
+		sendMsgChannel(msg, ch);// a todos los clientes del canal
+		sendMsg(msg);
+		_server->removeClientFromChannel(to_kick, ch_name);
+	}
+}
 // 3.2.8 Kick command
 
 //       Command: KICK
@@ -46,37 +78,6 @@
 //    :WiZ!jto@tolsun.oulu.fi KICK #Finnish John
 //                                    ; KICK message on channel #Finnish
 //                                    from WiZ to remove John from channel
-void			Client::kick(Message *m){
-	std::cout << FC(GREEN, ">\tkick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
-	if (m->params.size() < 2)
-		return (sendReply(461, m->command, "", "", ""));
-	Channel		*ch = _server->getChannel((m->params[0]));
-	if (ch == NULL)//no existe canal
-		return (sendReply(403, m->params[0], "", "", ""));
-	
-	std::string ch_name = ch->getName();
-	Client		*to_kick = _server->getClient((m->params[1]));
-	
-	if (!ch->hasClient(this))//no estoy en el canal
-		sendReply(442, ch_name, "", "", "");
-	else if (!ch->hasClient(to_kick))//no existe el cliente en el canal
-		sendReply(441, m->params[1], ch_name, "", "");
-	else if (!ch->isOperator(this))//no soy operador
-		sendReply(482, ch_name, "", "", "");
-	else
-	{
-		std::string part_msg;
-		if (m->params.size() == 2)// PART_MSG not_defined
-			part_msg = "has been kicked";
-		else
-			part_msg = m->params[2];
-		std::string msg = formatMsgsUsers();
-		msg.append("KICK " + ch_name + " " + m->params[1] + " :" + part_msg + END_CHARACTERS);
-		sendMsgChannel(msg, ch);// a todos los clientes del canal?
-		sendMsg(msg);
-		_server->removeClientFromChannel(to_kick, ch_name);
-	}
-}
 // me hechan
 // [ server : 6667 ] :raul_!~raul@freenode-s3k.srb.vrebei.IP KICK #glingla pupi
 
@@ -86,5 +87,4 @@ void			Client::kick(Message *m){
 
 // hecho raul_ con msg
 // [ client : 9000 ] 	KICK #buinbui raul_ :eres un zopenco 
-// [ server : 6667 ] 	:pupi!~raul@freenode-s3k.srb.vrebei.IP 
-// 						KICK #buinbui raul_ :eres un zopenco 
+// [ server : 6667 ] 	:pupi!~raul@freenode-s3k.srb.vrebei.IP KICK #buinbui raul_ :eres un zopenco 

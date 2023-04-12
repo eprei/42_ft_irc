@@ -1,5 +1,40 @@
 #include "../srcs/Includes.hpp"
 
+void			Client::notice(Message *m)
+{
+	std::cout << FC(GREEN, ">\tnotice function executed ") <<"by client id: " << _id << "\t<" << std::endl;
+	if (m->params.empty())//no target
+		return;
+	else if (m->params.size() == 1)//no text
+		return;
+	
+	Channel	*ch = _server->getChannel(m->params[0]);
+	if (ch != NULL) //mandamos al canal
+	{
+		std::string	ch_name = ch->getName();
+		if (ch->hasModes("n") && !ch->hasClient(this))//no estoy en el canal
+			return;
+		else
+		{
+		std::string msg = formatMsgsUsers();
+		msg.append("NOTICE " + ch_name + " :" + m->params[1] + END_CHARACTERS);
+		sendMsgChannel(msg, ch);
+		}
+	}
+	else //no es un canal
+	{
+		Client	*target = _server->getClient(m->params[0]);
+		if (target == NULL)//no esta ese nick
+			return;
+		else
+		{
+			std::string msg = formatMsgsUsers();
+			msg.append("NOTICE " + m->params[0] + " :" + m->params[1] + END_CHARACTERS);
+			sendMsgClient(msg, target);		
+		}
+	}
+}
+
 // 	3.3.2 Notice
 //    Command: NOTICE
 //    Parameters: <msgtarget> <text>
@@ -20,37 +55,4 @@
 //    either an AI or other interactive program controlling their actions).
 
 //    See PRIVMSG for more details on replies and examples.
-void			Client::notice(Message *m){
-	std::cout << FC(GREEN, ">\tnotice function executed ") <<"by client id: " << _id << "\t<" << std::endl;
-	if (m->params.empty())//no target
-		return;
-	else if (m->params.size() == 1)//no text
-		return;
-	
-	Channel	*ch = _server->getChannel(m->params[0]);
-	if (ch != NULL) //mandamos al canal
-	{
-		std::string	ch_name = ch->getName();
-		if (!ch->hasClient(this))//no estoy en el canal
-			return;
-		else {
-		std::string msg = formatMsgsUsers();
-		msg.append("NOTICE " + ch_name + " :" + m->params[1] + END_CHARACTERS);
-		sendMsgChannel(msg, ch);// a todos los clientes del canal?
-		}
-	}
-	else //no es un canal
-	{
-		Client	*target = _server->getClient(m->params[0]);
-		//hace falta compartir un canal??
-		//if Boucle joinned channel searching hasclient(target) = false?
-		if (target == NULL)//no esta ese nick
-			return;
-		else
-		{
-			std::string msg = formatMsgsUsers();
-			msg.append("NOTICE " + m->params[0] + " :" + m->params[1] + END_CHARACTERS);
-			sendMsgClient(msg, target);		
-		}
-	}
-}
+

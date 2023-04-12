@@ -1,10 +1,8 @@
 #include "../srcs/Includes.hpp"
 
 // made by: epresa-c
-
 // TO CONSIDER TO DO: difference between ask four your own name and the others name.
-//			When you ask for yourself you have the real hostname, otherway you have the masked hostname
-
+//	When you ask for yourself you have the real hostname, otherway you have the masked hostname
 void			Client::whowas(Message *m){
 	std::cout << FC(GREEN, ">\twhowas function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	int found = false;
@@ -25,7 +23,6 @@ void			Client::whowas(Message *m){
 }
 
 // 4.5.3 Whowas
-
 //       Command: WHOWAS
 //    Parameters: <nickname> [<count> [<server>]]
 

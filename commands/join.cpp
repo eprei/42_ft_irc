@@ -1,17 +1,6 @@
 #include "../srcs/Includes.hpp"
 
- template<typename T>
-void    PrintVector(const std::vector<T> &v)
-{
-		std::cout << GREEN << "VECTOR" << "\033[0;0m\n";
-		for(typename std::vector<T>::const_iterator it(v.begin()); it != v.end(); it++)
-		{
-				std::cout << *it << "\n";
-		}
-}
-
-
- 	// else // "the channel is OK" join ,a ->join # + join a
+//  made by: mpons
 void	Client::join(Message *m)
 {
 	std::cout << FC(GREEN, ">\tjoin function executed ") << "by client id: " << _id << "\t\t<" << std::endl;
@@ -39,16 +28,14 @@ void	Client::join(Message *m)
 		sendReply(366, chan, "", "", "");
 	}
 }
-
 // [ client : 9000 ] JOIN #buinbui 
 //  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
 //  [ server : 6667 ] :*.freenode.net 353 mikeymi = #buinbui :@jonyony mikeymi 
 //  [ server : 6667 ] :*.freenode.net 366 mikeymi #buinbui :End of /NAMES list. 
+// the other client gets
 //  [ server : 6667 ] :mikeymi!~raul@freenode-oov.edl.vrebei.IP JOIN :#buinbui 
 
-
-
-//  made by: mpons
+// join ,a ->join # + join a
 //  3.2.1 Join message
 //    Command: JOIN
 //    Parameters: ( <channel> *( "," <channel> ) [ <key> *( "," <key> ) ] )
@@ -77,36 +64,6 @@ void	Client::join(Message *m)
 //    of.
 
 //    Numeric Replies:
-//            ERR_NEEDMOREPARAMS              ERR_BANNEDFROMCHAN
-//            ERR_INVITEONLYCHAN              ERR_BADCHANNELKEY
-//            ERR_CHANNELISFULL               ERR_BADCHANMASK
-//            ERR_NOSUCHCHANNEL               ERR_TOOMANYCHANNELS
-//            ERR_TOOMANYTARGETS              ERR_UNAVAILRESOURCE
-//            RPL_TOPIC
-
-//    Examples:
-
-//    JOIN #foobar                    ; Command to join channel #foobar.
-
-//    JOIN &foo fubar                 ; Command to join channel &foo using
-//                                    key "fubar".
-
-//    JOIN #foo,&bar fubar            ; Command to join channel #foo using
-//                                    key "fubar" and &bar using no key.
-
-//    JOIN #foo,#bar fubar,foobar     ; Command to join channel #foo using
-//                                    key "fubar", and channel #bar using
-//                                    key "foobar".
-
-//    JOIN #foo,#bar                  ; Command to join channels #foo and
-//                                    #bar.
-
-//    JOIN 0                          ; Leave all currently joined
-//                                    channels.
-
-//    :WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone ; JOIN message from WiZ
-//                                    on channel #Twilight_zone
-
 
 // //473
 // # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
@@ -159,11 +116,3 @@ void	Client::join(Message *m)
 //            channels and contents are sent back in a series of
 //            RPL_NAMEREPLY messages with a RPL_ENDOFNAMES to mark
 //            the end.
-
-// [client : 8000] 	'JOIN #LOL\r\n'
-//  [ server : 6667 ]
-// :mikeWpit!~raul@freenode-b8j.srb.vrebei.IP JOIN :#lol\r\n
-// :*.freenode.net 353 mikeWpit = #lol :@Guest36096 mikeWpit\r\n
-// :*.freenode.net 366 mikeWpit #lol :End of /NAMES list.\r\n'
-
-
