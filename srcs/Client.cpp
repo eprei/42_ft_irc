@@ -24,9 +24,7 @@ Client &Client::operator=(Client &other){
 	return (*this);
 }
 
-Client::~Client(){
-	_maxId -= 1;
-}
+Client::~Client(){}
 
 // SETTERS SETTERS SETTERS SETTERS SETTERS SETTERS SETTERS SETTERS
 
@@ -129,8 +127,8 @@ void	Client::removeJoinedChannel(Channel *ch)
 	std::vector<Channel*>::iterator it = _joinedChannels.begin();
 	for ( ; it != _joinedChannels.end(); ++it)
 	{
-		if ((*it)->getName() == ch->getName()) 
-		{	
+		if ((*it)->getName() == ch->getName())
+		{
 			_joinedChannels.erase(it);
 			return;
 		}

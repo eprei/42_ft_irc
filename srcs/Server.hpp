@@ -22,7 +22,7 @@ class Server
 		bool		launchServ();
 		bool		serverSocketConfig();
 		bool		serverLoop();
-		
+
 		// CLIENT
 		void		checkInactiveUsers();
 		void		messageHandling(int userSocketNumber);
@@ -64,7 +64,6 @@ class Server
 		struct sockaddr_in			_serverAddress;
 		fd_set						_currentSockets;
 		fd_set						_readySockets;
-		int							_nOfClients; // TO RESOLVE: if is useful to have this info here or it's enough with Client::_maxId
 		std::map<int , Client *>	_clientsList;
 		std::vector<Channel *>		_channelList;
 		std::string					_serverState;

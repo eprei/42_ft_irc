@@ -57,6 +57,9 @@ $(TEST_CLIENT_1): $(OBJ_T)
 $(TEST_CLIENT_2): $(OBJ_T)
 	$(CXX) $(CFLAGS) ./test/clientTest2.cpp -o $(TEST_CLIENT_2)
 
+debug:
+	lldb ./ircserv 6667 asd
+
 run: all
 	./ircserv 6667 asd
 

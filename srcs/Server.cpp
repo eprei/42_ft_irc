@@ -2,8 +2,7 @@
 
 bool go = true;
 
-// TO DO: inicialice _serveInfo with the right timestamp info
-Server::Server(): _name("*.42irc.net"), _nOfClients(0), _serverState(IS_ON){}
+Server::Server(): _name("*.42irc.net"), _serverState(IS_ON){}
 
 Server::Server(Server &other){ *this = other;}
 
@@ -189,19 +188,22 @@ void	Server::messageHandling(int userSocketNumber){
 	_buf.erase();
 }
 
-void	Server::checkInactiveUsers(){
-	std::map<int , Client *>::iterator it = _clientsList.begin();
-	std::map<int , Client *>::iterator itEnd = _clientsList.end();
 
-	while( !_clientsList.empty() && it != itEnd )
+void	Server::checkInactiveUsers(){
+	if (!_clientsList.empty())
 	{
-		// std::cout << "Client " << it->second->getId() <<  "\tIdle: " << it->second->getIdle() << "\t\tTIMEOUT: " << TIMEOUT << std::endl;
-		if (it->second->getIdle() > TIMEOUT)
-			removeClientFromServer(it->second, "has been disconnected from the server due to inactivity");
-		if(!_clientsList.empty()){
+		std::vector<Client *>				toDeleteList;
+		std::map<int , Client *>::iterator	it = _clientsList.begin();
+		std::map<int , Client *>::iterator	itEnd = _clientsList.end();
+
+		while( it != itEnd )
+		{
+			if (it->second->getIdle() > TIMEOUT)
+				toDeleteList.push_back(it->second);
 			++it;
-			itEnd = _clientsList.end();
 		}
+		for (size_t i = 0; i < toDeleteList.size(); i++)
+			removeClientFromServer(toDeleteList.at(i), "has been disconnected from the server due to inactivity");
 	}
 }
 
@@ -222,7 +224,6 @@ void	Server::addNewClient(){
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
 	std::cout << FC(GREEN, "++++++\tClient ") << neo->getId() << " added\t++++++\n";
-	_nOfClients += 1;
 }
 
 void	Server::removeClientFromServer(Client* client, std::string reason){
@@ -230,12 +231,9 @@ void	Server::removeClientFromServer(Client* client, std::string reason){
 
 	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
 	close(sock);
-	// delete _clientsList[sock];
 	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
-	// std::cout << RED << "removeClientFromServer _client list is empty: " << std::boolalpha << _clientsList.empty()  << WHITE << std::endl;
-	_nOfClients -= 1;
 	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
 }
 
@@ -369,7 +367,6 @@ std::string		Server::getServerState() const {return _serverState;}
 std::string		Server::getServInfo() const{ return _serverInfo;}
 int				Server::getPort() const {return _port;}
 int				Server::getServerSocket() const {return _serverSocket;}
-int				Server::getNOfClients() const {return _nOfClients;}
 
 Client*			Server::getClient(std::string nickname)
 {

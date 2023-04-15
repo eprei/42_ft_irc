@@ -3,6 +3,7 @@
 test1
 test2
 ircserv
+parser.cpython-*
 # Prerequisites
 *.d
 
