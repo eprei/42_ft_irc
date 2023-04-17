@@ -367,6 +367,7 @@ std::string		Server::getServerState() const {return _serverState;}
 std::string		Server::getServInfo() const{ return _serverInfo;}
 int				Server::getPort() const {return _port;}
 int				Server::getServerSocket() const {return _serverSocket;}
+size_t			Server::getNOfClients() const { return _clientsList.size(); }
 
 Client*			Server::getClient(std::string nickname)
 {
@@ -397,8 +398,6 @@ std::vector<Channel *> *Server::getChannelList()
 {
 	return (&_channelList);
 }
-
-
 
 std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 {

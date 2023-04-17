@@ -48,7 +48,7 @@ class Server
 		std::string	getServInfo() const;
 		int			getPort() const;
 		int			getServerSocket() const;
-		int			getNOfClients() const;
+		size_t		getNOfClients() const;
 		Client*		getClient(std::string nickname);
 		Channel*	getChannel(std::string channel_name);
 		std::vector<Channel *> *getChannelList();
