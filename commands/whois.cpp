@@ -15,7 +15,18 @@ void			Client::whois(Message *m){
 				sendReply(378, ptr->getUsername(), ptr->getHostname(), "", "");
 			sendReply(312, subsplited[i], _server->getName(), ctime(_server->getStartTime()), "");
 			// sendReply(313, m->params[i], "", "", ""); // is operator
-			// sendReply(317, m->params[i], to_string(ptr->getIdle()), "", ""); // last connection
+			sendReply(317, m->params[i], to_string(ptr->getIdle()), "", ""); // last connection
+			if (ptr->_joinedChannels.size() != 0)
+			{
+				std::string channelsList;
+				for (size_t i = 0; i < ptr->_joinedChannels.size(); i++)
+				{
+					// channelsList += "#";
+					channelsList += ptr->_joinedChannels.at(i)->getName();
+					channelsList += " ";
+				}
+				sendReply(319, m->params[i], channelsList, "", "");
+			}
 		}
 		else
 			sendReply(401, subsplited[i], "", "", "");

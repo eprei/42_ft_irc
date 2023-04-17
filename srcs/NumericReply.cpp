@@ -21,13 +21,13 @@ std::string	Client::formatMsgsReply(const int code)
 
 	r.append(":");
 	r.append(_server->getName());
-	r.append(" ");		
+	r.append(" ");
 	if (code < 10)
 		r.append("00");
 	else if (code < 100)
 		r.append("0");
 	r.append(to_string(code));	//:hostname 025
-	r.append(" ");		
+	r.append(" ");
 	if (getNickname() == "")
 		r.append("*"); 			//:hostname 025 *
 	else
@@ -58,9 +58,11 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 		case 314:
 			return (RPL_WHOWASUSER(arg1, arg2, arg3, arg4));
 		case 317:
-			return (RPL_WHOISIDLE(arg1, arg2)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
+			return (RPL_WHOISIDLE(arg1, arg2));
 		case 318:
 			return (RPL_ENDOFWHOIS(arg1));
+		case 319:
+			return (RPL_WHOISCHANNELS(arg1, arg2));
 		case 401:
 			return (ERR_NOSUCHNICK(arg1));
 		case 406:
@@ -99,16 +101,16 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_BADCHANMASK(arg1));
 		case 482:
 			return (ERR_CHANOPRIVSNEEDED(arg1));
-		case 441:   
+		case 441:
 			return (ERR_USERNOTINCHANNEL(arg1, arg2));
-		case 411:    
+		case 411:
 			return (ERR_NORECIPIENT(arg1));
-		case 412:    
+		case 412:
 			return (ERR_NOTEXTTOSEND);
-		case 404:    
+		case 404:
 			return (ERR_CANNOTSENDTOCHAN(arg1));
 		//TOPIC
-		case 331:    
+		case 331:
 			return (RPL_NOTOPIC(arg1));
 		case 332:
 			return (RPL_TOPIC(arg1, arg2));
@@ -119,7 +121,7 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_USERSDONTMATCH(arg1 ,arg2));
 		//INVITE
 		case 443:
-			return (ERR_USERONCHANNEL(arg1, arg2)); 
+			return (ERR_USERONCHANNEL(arg1, arg2));
 		case 341:
 			return (RPL_INVITING(arg1, arg2));
 		case 473:
@@ -180,7 +182,7 @@ void	Client::sendMsgJoinedChannels(std::string msg)
 		sendMsgChannel(msg, (*it));
 }
 
-void	Client::sendMsgSharedUsers(std::string msg) 
+void	Client::sendMsgSharedUsers(std::string msg)
 {
 	std::set<int> users;
 	if (_joinedChannels.empty())
@@ -188,7 +190,7 @@ void	Client::sendMsgSharedUsers(std::string msg)
 	std::vector<Channel *>::iterator ch = _joinedChannels.begin();
 	for ( ; ch != _joinedChannels.end(); ch++)
 	{
-		size_t old_size = users.size(); 
+		size_t old_size = users.size();
 		std::vector<Client *> members = (*ch)->getMembers();
 		std::vector<Client *>::iterator cl = members.begin();
 		for ( ; cl != members.end(); cl++)
@@ -199,7 +201,7 @@ void	Client::sendMsgSharedUsers(std::string msg)
 				if (users.size() > old_size)
 				{
 					sendMsgClient(msg, (*cl));
-					++old_size; 
+					++old_size;
 				}
 			}
 		}
