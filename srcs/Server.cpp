@@ -8,9 +8,19 @@ Server::Server(Server &other){ *this = other;}
 
 Server &Server::operator=(Server &other)
 {
+	this->_name = other._name;
 	this->_password = other._password;
 	this->_port = other._port;
+	this->_serverSocket = other._serverSocket;
+	this->_serverAddress = other._serverAddress;
+	this->_currentSockets = other._currentSockets;
+	this->_readySockets = other._readySockets;
 	this->_clientsList = other._clientsList;
+	this->_channelList = other._channelList;
+	this->_buf = other._buf;
+	this->_serverInfo = other._serverInfo;
+	this->_startTime = other._startTime;
+
 	return (*this);
 }
 
@@ -150,7 +160,7 @@ bool Server::serverLoop(){
 				else
 				{
 					if (isSocketClosed(SocketNumber) == true)
-						removeClientFromServer(_clientsList[SocketNumber], "has been disconnected unexpectedly");
+						removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
 					else
 					{
 						messageHandling(SocketNumber);
@@ -160,7 +170,7 @@ bool Server::serverLoop(){
 				}
 			}
 		}
-		checkInactiveUsers(); // TO DO: Check with TIMEOUT numbers smaller than the time lapse between each PING of the irssi client
+		checkInactiveUsers();
 		usleep(600);
 	}
 	finish();
@@ -177,14 +187,16 @@ void	Server::messageHandling(int userSocketNumber){
 
 	bzero(bufferLocal, MAX_BUFF + 1);
 	numOfBytesReceived = recv( userSocketNumber, bufferLocal, MAX_BUFF, 0);
-	// _buf[numOfBytesReceived] = 0;
-	if (numOfBytesReceived < 0){
+	if (numOfBytesReceived < 0)
+	{
 		std::cout << "ERROR: recv function error" << std::endl; // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		// return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
 	}
-	// bufferLocal[numOfBytesReceived] = 0;
-	_buf.append(bufferLocal);
-	_clientsList[userSocketNumber]->setBuf(_buf);
+	else
+	{
+		_buf.append(bufferLocal);
+		_clientsList[userSocketNumber]->setBuf(_buf);
+	}
 	_buf.erase();
 }
 
@@ -203,7 +215,17 @@ void	Server::checkInactiveUsers(){
 			++it;
 		}
 		for (size_t i = 0; i < toDeleteList.size(); i++)
-			removeClientFromServer(toDeleteList.at(i), "has been disconnected from the server due to inactivity");
+		{
+			std::string part_msg = " has been disconnected from the server due to inactivity";
+
+			std::string msg = toDeleteList.at(i)->formatMsgsUsers();
+			msg.append("QUIT : " + toDeleteList.at(i)->getNickname() + part_msg + END_CHARACTERS);
+			toDeleteList.at(i)->sendMsg(msg);
+			toDeleteList.at(i)->sendMsgSharedUsers(msg);
+			toDeleteList.at(i)->leaveAll();
+
+			removeClientFromServer(toDeleteList.at(i), " TIMOUT DISCONNECTED");
+		}
 	}
 }
 
@@ -227,11 +249,13 @@ void	Server::addNewClient(){
 }
 
 void	Server::removeClientFromServer(Client* client, std::string reason){
-	int sock = client->getSocket();
 
 	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
+
+	int sock = client->getSocket();
+
 	close(sock);
-	delete _clientsList.at(sock); // TO TEST: is better than using [] as in the previous line as it does not create the element in case it does not exist.
+	delete _clientsList.at(sock);
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
 	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
@@ -406,7 +430,6 @@ std::ostream		&operator<<( std::ostream & o, Server const & rhs )
 	o << "Port: " << rhs.getPort() << std::endl;
 	o << "Server Socket: " << rhs.getServerSocket() << std::endl;
 	o << "Number of clients: " << rhs.getNOfClients() << std::endl;
-	o << "State: " << rhs.getServerState() << std::endl;
 	o << "Created: " << ctime(rhs.getStartTime()) << std::endl;
 	return o;
 }

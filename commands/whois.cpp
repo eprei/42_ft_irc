@@ -21,7 +21,6 @@ void			Client::whois(Message *m){
 				std::string channelsList;
 				for (size_t i = 0; i < ptr->_joinedChannels.size(); i++)
 				{
-					// channelsList += "#";
 					channelsList += ptr->_joinedChannels.at(i)->getName();
 					channelsList += " ";
 				}
