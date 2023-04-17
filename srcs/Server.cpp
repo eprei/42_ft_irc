@@ -2,7 +2,7 @@
 
 bool go = true;
 
-Server::Server(): _name("*.42irc.net"), _serverState(IS_ON){}
+Server::Server(): _name("*.42irc.net"){}
 
 Server::Server(Server &other){ *this = other;}
 
@@ -363,7 +363,6 @@ void	Server::printChannel(std::string channel_name)
 time_t const*	Server::getStartTime() const { return &_startTime;}
 std::string		Server::getName() const {return _name;}
 std::string		Server::getPassword() const {return _password;}
-std::string		Server::getServerState() const {return _serverState;}
 std::string		Server::getServInfo() const{ return _serverInfo;}
 int				Server::getPort() const {return _port;}
 int				Server::getServerSocket() const {return _serverSocket;}

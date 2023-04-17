@@ -20,7 +20,7 @@ void			Client::part(Message *m){
 	{
 		Channel *target = _server->getChannel((chan));
 		if (target == NULL)
-			return (sendReply(403, target->getName(), "", "", ""));
+			sendReply(403, chan, "", "", "");
 		else if (!target->hasClient(this))
 			sendReply(442, target->getName(), "", "", "");
 		else

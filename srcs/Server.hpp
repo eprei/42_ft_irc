@@ -66,7 +66,6 @@ class Server
 		fd_set						_readySockets;
 		std::map<int , Client *>	_clientsList;
 		std::vector<Channel *>		_channelList;
-		std::string					_serverState;
 		std::string					_buf;
 		std::string					_serverInfo;
 		time_t						_startTime;
