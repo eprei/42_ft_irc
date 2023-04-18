@@ -170,6 +170,7 @@ bool Server::serverLoop(){
 				}
 			}
 		}
+		std::cout << FC(BOLDGREEN, "CHECK INACTIVE USERS ") << std::endl;
 		checkInactiveUsers();
 		usleep(600);
 	}
