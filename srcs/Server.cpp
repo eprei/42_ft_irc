@@ -211,10 +211,17 @@ void	Server::checkInactiveUsers(){
 
 		while( it != itEnd )
 		{
-			if (it->second->getIdle() > TIMEOUT)
+			if (it->second->getIdle() > (TIMEOUT - 20) && it->second->getIdle() < TIMEOUT)
+			{
+				std::string to_send = "PING :" + this->_name + END_CHARACTERS;
+				it->second->sendMsg(to_send);
+				std::cout << "Send Ping to " << it->second->getId() << " IDLE: " << it->second->getIdle() << std::endl;
+			}
+			else if (it->second->getIdle() > TIMEOUT)
 				toDeleteList.push_back(it->second);
 			++it;
 		}
+		std::cout << toDeleteList.size() << std::endl;
 		for (size_t i = 0; i < toDeleteList.size(); i++)
 		{
 			std::string part_msg = " has been disconnected from the server due to inactivity";

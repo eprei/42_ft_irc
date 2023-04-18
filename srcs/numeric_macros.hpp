@@ -116,6 +116,8 @@
 // PING PONG
 // ERR409
 # define ERR_NOORIGIN " :No origin specified"
+// ERR402
+# define ERR_NOSUCHSERVER(server) (server + " :No such server")
 
 //PRIVMSG
 // ERR411    

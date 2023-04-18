@@ -1,25 +1,24 @@
 #include "../srcs/Includes.hpp"
 
 // made by: mpons
-#define ERR_NOSUCHSERVER "no existe el servidor"
+// modified by: olmartin
 
 void			Client::ping(Message *m)
 {
 	std::cout << FC(GREEN, ">\tping function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
-	
-	// if (m->params.empty())
-		// return (s.numeric_reply(u, ERR_NOORIGIN, NONE, NONE, NONE));
-	// else if (m->params.size() <= 1)
-	if (m->params.size() <= 1)
+	bool pongSend = false;
+	if (m->params.empty())
+		return (sendReply(409, "", "", "", ""));
+	for (size_t i = 0; i < m->params.size(); ++i)
 	{
-		// if (!m->params[0].compare(_server->getHostname()))
-		// 	return (sendReply(this, ERR_NOSUCHSERVER, m->params[0], "", ""));
-		
-
-		pong(m);
-		std::string to_send =  +  "PING :" + m->params[0]  + END_CHARACTERS;
-		sendMsg(to_send);
-	}
+		if (m->params[i].compare(getHostname()) && !pongSend)
+		{
+			pong(m);
+			pongSend = true;
+		}
+		else
+			sendReply(402, m->params[i], "", "", "");
+	}		
 }
 
 // 4.6.2 Ping message   			RFC 1459
