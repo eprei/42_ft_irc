@@ -11,7 +11,7 @@ void			Client::list(Message *m)
 		std::vector<Channel *>::iterator it = chList->begin();
 		for ( ; it != chList->end(); ++it)
 			sendReply(322, (*it)->getName(), to_string((*it)->getMembers().size()), (*it)->getModes(), (*it)->getTopic());
-			return (sendReply(323, "", "", "", ""));
+		return (sendReply(323, "", "", "", ""));
 	}
 	if (!m->params[0].empty())
 	{
@@ -27,15 +27,15 @@ void			Client::list(Message *m)
 	}
 }
 
-//  [ server : 6667 ] :*.freenode.net 321 raul_ Channel :Users Name 
+//  [ server : 6667 ] :*.freenode.net 321 raul_ Channel :Users Name
 //:*.freenode.net 322 raul_ chanelname nb_user :[modes] topic
-//:*.freenode.net 322 raul_ ##C 44 :[+nrt] C Programming Community | Paste (>3 lines): https://bpa.st/ or http://ix.io/ | Wiki: http://www.iso-9899.info/ | Books: http://www.iso-9899.info/wiki/Books | C2X Charter: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2086.htm | Standard: http://iso-9899.info/wiki/The_Standard | Off-topic: ##c-offtopic 
-//  [ server : 6667 ] :*.freenode.net 323 raul_ :End of channel list. 
+//:*.freenode.net 322 raul_ ##C 44 :[+nrt] C Programming Community | Paste (>3 lines): https://bpa.st/ or http://ix.io/ | Wiki: http://www.iso-9899.info/ | Books: http://www.iso-9899.info/wiki/Books | C2X Charter: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2086.htm | Standard: http://iso-9899.info/wiki/The_Standard | Off-topic: ##c-offtopic
+//  [ server : 6667 ] :*.freenode.net 323 raul_ :End of channel list.
 
-//  [ client : 9000 ] LIST #bitcoin* 
-//  [ server : 6667 ] :*.freenode.net 321 raul_ Channel :Users Name 
-//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin.cz 1 :[+nt]  
-//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin-otc-eu 1 :[+nt]  
+//  [ client : 9000 ] LIST #bitcoin*
+//  [ server : 6667 ] :*.freenode.net 321 raul_ Channel :Users Name
+//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin.cz 1 :[+nt]
+//  [ server : 6667 ] :*.freenode.net 322 raul_ #bitcoin-otc-eu 1 :[+nt]
 
 // 3.2.6 List message
 
@@ -61,4 +61,3 @@ void			Client::list(Message *m)
 
 //    LIST #twilight_zone,#42         ; Command to list channels
 //                                    #twilight_zone and #42
-

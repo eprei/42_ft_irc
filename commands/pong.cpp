@@ -2,7 +2,7 @@
 
 void			Client::pong(Message *m){
 	(void)m;
-	std::string to_send =  +  ":" + m->params[0] + " PONG " + m->params[0] +  " :" + m->params[0] + END_CHARACTERS;
+	std::string to_send =  "PONG " + m->params[0] +  " :" + m->params[0] + END_CHARACTERS;
 	sendMsg(to_send);
 	 std::cout << FC(GREEN, ">\tpong function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::cout << std::endl;
