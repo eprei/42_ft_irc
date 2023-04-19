@@ -22,6 +22,7 @@
 # define NUMBER_OF_CMD 19
 # define END_CHARACTERS "\r\n"
 # define TIMEOUT 60.0
+# define REFRESH_INTERVAL 1
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -43,6 +44,7 @@
 # include <errno.h>
 # include <arpa/inet.h>
 # include <time.h>
+# include <fcntl.h>
 
 # include "Message.hpp"
 # include "Client.hpp"

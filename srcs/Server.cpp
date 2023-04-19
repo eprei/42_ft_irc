@@ -70,6 +70,9 @@ bool	Server::launchServ(){
 
 bool	Server::serverSocketConfig(){
 	time(&_startTime);
+	_tv.tv_sec = REFRESH_INTERVAL;
+	_tv.tv_usec = 0;
+
 //	SOCKET CREATION
 	if ((_serverSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0){
 		std::cout << "ERROR: socket function error" << std::endl;
@@ -97,6 +100,9 @@ bool	Server::serverSocketConfig(){
 		perror("\nerror found at listen");
 		return (EXIT_FAILURE);
 	}
+
+// SET _serverSocket in non block mode
+	fcntl(_serverSocket, F_SETFL, O_NONBLOCK);
 
 // SET THE GROUPS OF FD THAT WILL BE CHECKED BY SELECT
 	FD_ZERO(&_currentSockets);
@@ -130,16 +136,19 @@ bool	isSocketClosed(int socket_fd)
 
 bool Server::serverLoop(){
 	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl;
+	int ret;
+
 	while (1)
 	{
 		// if (signal(SIGINT, signalHandler) == SIG_ERR) TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-			// std::cerr << "error while handling signal" << std::endl;
+			// std::cerr << "error while handling signal" << std::endl; TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
-		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0)
+		ret = select(FD_SETSIZE, &_readySockets, NULL, NULL, &_tv);
+		if (ret < 0)
 		{
 			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-			 if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+			//  if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 			//   { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
                 // Si se recibe una señal durante select(), volver a comprobar go TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
                 // if (!go) { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
@@ -150,29 +159,29 @@ bool Server::serverLoop(){
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
             // }
 		}
-
-		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
+		else if ( ret != 0)
 		{
-			if (FD_ISSET(SocketNumber, &_readySockets))
+			for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
 			{
-				if (SocketNumber == _serverSocket)
-					addNewClient();
-				else
+				if (FD_ISSET(SocketNumber, &_readySockets))
 				{
-					if (isSocketClosed(SocketNumber) == true)
-						removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
+					if (SocketNumber == _serverSocket)
+						addNewClient();
 					else
 					{
-						messageHandling(SocketNumber);
-						if (_clientsList[SocketNumber]->isQuiting())
-							removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
+						if (isSocketClosed(SocketNumber) == true)
+							removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
+						else
+						{
+							messageHandling(SocketNumber);
+							if (_clientsList[SocketNumber]->isQuiting())
+								removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
+						}
 					}
 				}
 			}
 		}
-		std::cout << FC(BOLDGREEN, "CHECK INACTIVE USERS ") << std::endl;
 		checkInactiveUsers();
-		usleep(600);
 	}
 	// finish(); TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 	return (EXIT_SUCCESS);
@@ -248,6 +257,7 @@ void	Server::addNewClient(){
 		delete neo;
 		return ;
 	}
+	fcntl(clientSocketLocal, F_SETFL, O_NONBLOCK);
 	neo->setSocket(clientSocketLocal);
 	neo->setAddress(clientAddr);
 	neo->setIp(inet_ntoa(clientAddr.sin_addr));

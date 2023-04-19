@@ -68,6 +68,7 @@ class Server
 		std::string					_buf;
 		std::string					_serverInfo;
 		time_t						_startTime;
+		struct timeval				_tv;
 };
 
 std::ostream	&operator<<( std::ostream & o, Server const & rhs );
