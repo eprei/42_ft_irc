@@ -40,7 +40,6 @@ class Server
 		void 		printChannel(std::string channel_name);
 
 		// GETTERS
-		// struct sockaddr_in	getServerAddress() const; // TO CONSIDER if it's useful
 		time_t		const *getStartTime() const;
 		std::string	getName() const;
 		std::string	getPassword() const;

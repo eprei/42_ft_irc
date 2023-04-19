@@ -1,6 +1,6 @@
 # include "Server.hpp"
 
-bool go = true;
+// bool go = true;
 
 Server::Server(): _name("*.42irc.net"){}
 
@@ -28,21 +28,21 @@ Server::~Server(){
 	// TO DO: delete all mallocs like _clientList.seconds and _channelList objects
 }
 
-bool	Server::finish()
-{
-    std::cout << "\nTerminating server...\n";
-	std::map<int , Client *>::iterator it = this->_clientsList.begin();
-	for ( ; it != this->_clientsList.end(); it++)
-		this->removeClientFromServer(it->second, "");
-    close(getServerSocket()); // cerrar el socket
-    return (true); // salir del programa con el codigo de señal
+// bool	Server::finish() TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+// {
+    // std::cout << "\nTerminating server...\n";
+	// std::map<int , Client *>::iterator it = this->_clientsList.begin();
+	// for ( ; it != this->_clientsList.end(); it++)
+	// 	this->removeClientFromServer(it->second, "");
+    // close(getServerSocket()); // cerrar el socket
+    // return (true); // salir del programa con el codigo de señal
 	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
 	// // removeChannel((*it)->getName());
 	// {
 	// 	delete *it; // Liberamos la memoria reservada para el canal
     //     _channelList.erase(it);
 	// }
-}
+// }	TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 
 bool	Server::checkArgs(int argc, char **argv){
 	if (argc != 3 || !(DEFAULT_MIN_PORT <= atoi(argv[1]) && atoi(argv[1]) <= DEFAULT_MAX_PORT))
@@ -122,33 +122,33 @@ bool	isSocketClosed(int socket_fd)
 		return false;
 }
 
-void	signalHandler(int signum)
-{
-	if (signum == SIGINT)
-		go = false;
-}
+// void	signalHandler(int signum)
+// {
+// 	if (signum == SIGINT)
+// 		go = false;
+// }
 
 bool Server::serverLoop(){
 	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl;
 	while (1)
 	{
-		if (signal(SIGINT, signalHandler) == SIG_ERR)
-			std::cerr << "error while handling signal" << std::endl;
+		// if (signal(SIGINT, signalHandler) == SIG_ERR) TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+			// std::cerr << "error while handling signal" << std::endl;
 		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
 		if (select(FD_SETSIZE, &_readySockets, NULL, NULL, NULL) < 0)
 		{
-			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred
-			 if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation
-			  {
-                // Si se recibe una señal durante select(), volver a comprobar go
-                if (!go) {
-                    break;
-                }
-            } else {
+			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+			 if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+			//   { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+                // Si se recibe una señal durante select(), volver a comprobar go TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+                // if (!go) { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+                    // break; TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+                // } TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+            // } else { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
-            }
+            // }
 		}
 
 		for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
@@ -174,7 +174,7 @@ bool Server::serverLoop(){
 		checkInactiveUsers();
 		usleep(600);
 	}
-	finish();
+	// finish(); TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 	return (EXIT_SUCCESS);
 }
 
