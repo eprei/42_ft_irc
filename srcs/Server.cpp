@@ -211,7 +211,7 @@ void	Server::checkInactiveUsers(){
 
 		while( it != itEnd )
 		{
-			if (it->second->getIdle() > (TIMEOUT - 20) && it->second->getIdle() < TIMEOUT)
+			if (it->second->getIdle() > (TIMEOUT - (TIMEOUT / 3)) && it->second->getIdle() < TIMEOUT)
 			{
 				std::string to_send = "PING :" + this->_name + END_CHARACTERS;
 				it->second->sendMsg(to_send);
