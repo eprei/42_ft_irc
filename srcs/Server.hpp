@@ -26,6 +26,7 @@ class Server
 
 		// CLIENT
 		void		checkInactiveUsers();
+		void		checkWrongPasswords();
 		void		messageHandling(int userSocketNumber);
 		void		addNewClient();
 		void		removeClientFromServer(Client* client, std::string reason);

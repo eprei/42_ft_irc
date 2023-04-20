@@ -166,6 +166,7 @@ bool Server::serverLoop(){
 		else if ( ret != 0)
 			manageActivityOnSockets();
 		checkInactiveUsers();
+		checkWrongPasswords();
 	}
 	finish();
 	return (EXIT_SUCCESS);
@@ -226,6 +227,24 @@ void	Server::checkInactiveUsers(){
 
 			removeClientFromServer(toDeleteList.at(i), " TIMEOUT DISCONNECTED");
 		}
+	}
+}
+
+void	Server::checkWrongPasswords(){
+	if (!_clientsList.empty())
+	{
+		std::vector<Client *>				toDeleteList;
+		std::map<int , Client *>::iterator	it = _clientsList.begin();
+		std::map<int , Client *>::iterator	itEnd = _clientsList.end();
+
+		while( it != itEnd )
+		{
+			if (it->second->getPass() == PASS_WRONG)
+				toDeleteList.push_back(it->second);
+			++it;
+		}
+		for (size_t i = 0; i < toDeleteList.size(); i++)
+			removeClientFromServer(toDeleteList.at(i), "WRONG PASSWORD DISCONNECTED");
 	}
 }
 

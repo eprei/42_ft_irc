@@ -23,6 +23,8 @@
 # define END_CHARACTERS "\r\n"
 # define TIMEOUT 60.0
 # define REFRESH_INTERVAL 1
+# define PASS_NOT_YET_ENTERED 0
+# define PASS_WRONG 1
 
 # include <stdlib.h>
 # include <unistd.h>

@@ -8,7 +8,7 @@
 int Client::_maxId = 0;
 std::vector<nicksBackup>	Client::_nicksHistory;
 
-Client::Client(Server *s): _server(s){
+Client::Client(Server *s): _server(s), _pass(PASS_NOT_YET_ENTERED){
 	_maxId += 1;
 	_id = Client::_maxId;
 	_isRegistered = false;
@@ -49,6 +49,7 @@ struct sockaddr_in	Client::getAddress() const {return _address;}
 std::string			Client::getBuf() const {return _buf;}
 int					Client::getMaxId() const {return _maxId;}
 std::string			Client::getIp() const {return _ip;}
+int					Client::getPass() const {return _pass;}
 
 double 				Client::getIdle() const {
 	time_t actual;
@@ -62,6 +63,7 @@ double 				Client::getIdle() const {
 void 				Client::setBuf(std::string buf){
 	time(&_lastCommunication);
 	_buf += buf;
+
 	if (_buf.find(END_CHARACTERS) != std::string::npos )
 	{
 		process_buffer(_buf);
@@ -83,6 +85,11 @@ void	Client::process_buffer(const std::string& buf)
 		m = parseMessage(command);
 		std::cout << FC(GREEN, "Message parsed =") << std::endl;
 		print_message(m);
+		if (this->_isRegistered == false && ( m.command != "CAP" && m.command != "PASS" ))
+		{
+			std::cout << "Client " << this->_id << " has not yet entered the correct password" << std::endl;
+			return (sendReply(464, "", "", "", ""));
+		}
 		execCmd(&m);
         token = strtok(NULL, END_CHARACTERS); // Siguiente token
     }
