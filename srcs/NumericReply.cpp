@@ -120,6 +120,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_UNKNOWNMODE(arg1));
 		case 502:
 			return (ERR_USERSDONTMATCH(arg1 ,arg2));
+		case 696:			
+			return (ERR_NOKEY(arg1));
 		//INVITE
 		case 443:
 			return (ERR_USERONCHANNEL(arg1, arg2)); 
@@ -127,6 +129,15 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (RPL_INVITING(arg1, arg2));
 		case 473:
 			return (ERR_INVITEONLYCHAN(arg1));
+		// limitUser
+		case 471:
+			return (ERR_CHANNELISFULL(arg1));
+		case 697:
+			return (ERR_NOLIMIT(arg1));
+		case 698:
+			return (ERR_NOOPER(arg1));
+		case 475:
+			return (ERR_BADCHANNELKEY(arg1));
 		//LIST
 		case 322:
 			return (RPL_LIST(arg1, arg2, arg3, arg4));

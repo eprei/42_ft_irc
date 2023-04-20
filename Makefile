@@ -10,6 +10,7 @@ SRCS =	./srcs/main.cpp\
 		./srcs/Client.cpp\
 		./srcs/parsing.cpp\
 		./srcs/NumericReply.cpp\
+		./srcs/Utils.cpp\
 		./commands/join.cpp\
 		./commands/kick.cpp\
 		./commands/list.cpp\

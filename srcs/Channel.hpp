@@ -9,13 +9,14 @@ class Channel
 {
 	private:
 
-	    Client *_oper;
 		std::string	_name;
 		std::string _topic;
 		std::string _modes;
+		std::string _key;
 	    std::vector<Client*> _members;
 		std::vector<Client*> _invited;
-	    // std::vector<Client*> oper;
+	    std::vector<Client*> _operators;
+	    size_t _userLimit;
 
 	public:
 
@@ -32,13 +33,21 @@ class Channel
 		bool	hasClient(Client *client) const;
 		bool	isEmpty() const;
 		bool	isOperator(Client *client) const;
+		void	addOperator(Client* client);
+		void	removeOperator(Client* client);
+		void	setUserLimit(std::string set);
+		size_t	getUserLimit() const;
+		void	setChannelKey(std::string key);
+		bool	isValidKey(std::string key) const;
 
-
-		void		setTopic(std::string topic);
 		std::string	getTopic() const;
-		std::string	setModes(std::string to_add);
+		void		setTopic(std::string topic);
+		
+		bool		hasMode(char mode) const;
 		std::string	getModes() const;
-		bool		hasModes(std::string m) const;
+		char		setMode(char mode);
+		char		unsetMode(char mode);
+
 		bool		isInvited(Client *client) const;
 		void		addInvited(Client* client);
 };

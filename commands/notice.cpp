@@ -12,7 +12,7 @@ void			Client::notice(Message *m)
 	if (ch != NULL) //mandamos al canal
 	{
 		std::string	ch_name = ch->getName();
-		if (ch->hasModes("n") && !ch->hasClient(this))//no estoy en el canal
+		if (ch->hasMode('n') && !ch->hasClient(this))//no estoy en el canal
 			return;
 		else
 		{

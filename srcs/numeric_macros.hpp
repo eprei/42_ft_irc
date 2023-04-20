@@ -155,6 +155,23 @@
 // RPL323
 # define RPL_LISTEND ":End of LIST"
 
+//mode +l
+// ERR471
+# define ERR_CHANNELISFULL(channel) (channel + " :Cannot join channel (+l)")
+//mode +k
+// ERR475
+# define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
+
+ // ERR696
+# define ERR_NOKEY(channel) (channel + "k * :You must specify a parameter for the key mode. Syntax: <key>.")
+
+ // ERR697
+# define ERR_NOLIMIT(channel) (channel + "l * :You must specify a parameter for the limit mode. Syntax: <limit>.")
+
+// ERR698
+# define ERR_NOOPER(channel) (channel + "o * :You must specify a parameter for the operator mode. Syntax: <nick>.")
+
+
 #endif // ROS_HPP
 
 
