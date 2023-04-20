@@ -96,7 +96,8 @@ class Client
 		void				addToNicksHistory();
 		void				welcome();
 		void				leaveAll();
-
+		void				channelModes(Message *m);
+		void				userModes(Message *m);
 		// TOOLS
 		std::vector<std::string>	subSplitString(const std::string& str, char c);
 

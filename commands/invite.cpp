@@ -19,7 +19,7 @@ void	Client::invite(Message *m)
 			return (sendReply(442, ch_name, "", "", ""));
 		else if (ch->hasClient(to_invite))//ya existe el cliente en el canal
 			return (sendReply(443, to_invite->getNickname(), ch_name, "", ""));
-		else if (ch->hasModes("i") && !ch->isOperator(this))//no soy operador
+		else if (ch->hasMode('i') && !ch->isOperator(this))//no soy operador
 			return (sendReply(482, ch_name, "", "", ""));
 		ch->addInvited(to_invite);
 	}

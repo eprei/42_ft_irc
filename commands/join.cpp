@@ -14,8 +14,19 @@ void	Client::join(Message *m)
 		std::cout << FC(GREEN, "Canal =") << chan << std::endl;
 		_server->createChannel(this, chan);
 		Channel *ch = _server->getChannel(chan);
-		if (ch->hasModes("i") && !ch->isInvited(this))
+// 		 [ client : 9000 ] MODE #glingla +k 
+//  [ server : 6667 ] :*.freenode.net 696 pepi #glingla k * :You must specify a parameter for the key mode. Syntax: <key>. 
+		if (ch->hasMode('k'))
+		{
+			if (m->params.size() < 2 || !ch->isValidKey(m->params[1]))
+			//  [ client : 9000 ] JOIN #glingla 
+				return (sendReply(475, chan, "", "", ""));
+			//  [ server : 6667 ] :*.freenode.net 475 raul__ #glingla :Cannot join channel (incorrect channel key) 
+		}
+		if (ch->hasMode('i') && !ch->isInvited(this))
 			return (sendReply(473, chan, "", "", ""));
+		if (ch->hasMode('l') && ch->getMembers().size() >= ch->getUserLimit())
+			return (sendReply(471, chan, "", "", ""));
 		_server->addClientToChannel(this, chan);
 		std::string msg = formatMsgsUsers();
 		msg.append("JOIN " + chan + END_CHARACTERS);

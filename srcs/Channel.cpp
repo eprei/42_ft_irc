@@ -1,12 +1,13 @@
 # include "Channel.hpp"
 
-// TO DO: write copilen's functions?
 //	  i - invite-only channel flag;
 //    t - topic settable by channel operator only flag;
 //    n - no messages to channel from clients on the outside;
 Channel::Channel(Client &owner, std::string name) :
-_oper(&owner), _name(name), _modes("+nt")
-{}
+_name(name), _modes("+nt")
+{
+	_operators.push_back(&owner); 
+}
 
 Channel::Channel(Channel &other){ *this = other;}
 
@@ -67,9 +68,29 @@ bool	Channel::isEmpty() const{
 
 bool	Channel::isOperator(Client *client) const
 {
-	if (_oper->getNickname() == client->getNickname())
-		return (true);
-	return (false);
+	for (std::vector<Client*>::const_iterator it = _operators.begin(); it != _operators.end(); ++it)
+	{
+		std::cout << *(*it) << std::endl; 
+		if ((*it)->getId() == client->getId() &&\
+		(*it)->getUsername() == client->getUsername() &&\
+		(*it)->getHostname() == client->getHostname())
+			return true;
+	}
+	return false;
+}
+
+void	Channel::addOperator(Client* client)
+{
+	_operators.push_back(client);
+}
+
+void	Channel::removeOperator(Client* client) {
+	for (std::vector<Client*>::iterator it = _operators.begin(); it != _operators.end(); ++it) {
+		if ((*it)->getNickname() == client->getNickname()) {
+			_operators.erase(it);
+			return;
+		}
+	}
 }
 
 //TOPIC
@@ -85,39 +106,55 @@ std::string	Channel::getModes() const
 	return _modes;
 }
 
-std::string Channel::setModes(std::string set)
+char	Channel::setMode(char mode)
 {
-    std::string valid_modes = "nti";
-    std::string seted_modes;
-    for (std::string::iterator it = (set.begin() + 1); it != set.end(); ++it)
-	{
-        if (valid_modes.find(*it) != std::string::npos)//el char a modificar es valido
-		{
-            if (_modes.find(*it) == std::string::npos && set[0] == '+')//no esta ya agregado
-			{
-            	_modes.push_back(*it);
-	           	seted_modes.push_back(*it);
-			}
-			if (_modes.find(*it) != std::string::npos && set[0] == '-')//si esta ya agregado
-			{
-			    _modes.erase(_modes.find(*it), 1);
-	           	seted_modes.push_back(*it);
-			}
-        }
-        else  //no valido
-            return (seted_modes + "_" + *it);
-    }
-    return seted_modes;
+	if (hasMode(mode))
+		return 0;
+	else
+		_modes.push_back(mode);
+	return mode;
 }
 
-bool	Channel::hasModes(std::string m) const
+char	Channel::unsetMode(char mode)
 {
-	for (std::string::iterator it = m.begin(); it != m.end(); ++it)
+	if (hasMode(mode))
 	{
-		if (_modes.find(*it) == std::string::npos)//no encontramos el char
-			return (false);
+	    _modes.erase(_modes.find(mode), 1);
+		return mode;
 	}
+	else
+		return 0; 
+}
+
+bool	Channel::hasMode(char mode) const
+{
+	if (_modes.find(mode) == std::string::npos)//no encontramos el char
+		return (false);
 	return (true);
+}
+
+void	Channel::setUserLimit(std::string set)
+{
+	_userLimit = toSizeType(set);
+}
+
+size_t	Channel::getUserLimit() const
+{
+	return _userLimit;
+}
+
+void	Channel::setChannelKey(std::string key)
+{
+	_key = key;
+}
+
+bool	Channel::isValidKey(std::string key) const
+{ 
+	std::cout << "try key == " << key << std::endl; 
+	std::cout << "Good key == "<< _key << std::endl; 
+	if (_key.compare(key) == 0)
+		return true;
+	return false;
 }
 
 bool	Channel::isInvited(Client *client) const

@@ -1,6 +1,12 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
+# include "Includes.hpp"
+
+bool	isInt(std::string input);
+size_t	toSizeType(std::string value);
+void	removeZeros(std::string& str);
+
 template <typename T>
 std::string to_string(T value)
 {
@@ -28,6 +34,8 @@ void    PrintVectorPointer(const std::vector<T> &v)
 				std::cout << *(*it) << std::endl;
 		}
 }
+
+
 
 #endif // UTILS_HPP
 

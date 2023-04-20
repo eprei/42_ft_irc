@@ -23,6 +23,7 @@
 # define END_CHARACTERS "\r\n"
 # define TIMEOUT 60.0
 # define REFRESH_INTERVAL 1
+// # define TIMEOUT 600.0
 
 # include <stdlib.h>
 # include <unistd.h>

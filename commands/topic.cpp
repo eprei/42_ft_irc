@@ -13,7 +13,7 @@ void	Client::topic(Message *m)
 	std::string ch_name = ch->getName();
 	if (!ch->hasClient(this))//no estoy en el canal
 		return (sendReply(442, ch_name, "", "", ""));
-	else if (ch->hasModes("t"))//solo oper cambia topic
+	else if (ch->hasMode('t'))//solo oper cambia topic
 	{
 		if (!ch->isOperator(this))//no soy operador
 			return (sendReply(482, ch_name, "", "", ""));
