@@ -22,6 +22,7 @@ class Server
 		bool		launchServ();
 		bool		serverSocketConfig();
 		bool		serverLoop();
+		void		manageActivityOnSockets();
 
 		// CLIENT
 		void		checkInactiveUsers();

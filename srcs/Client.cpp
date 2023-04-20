@@ -74,6 +74,8 @@ void	Client::process_buffer(const std::string& buf)
 	Message	m;
     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
 
+	if ( strchr(token, ' ') == NULL )
+		return;
     while (token != NULL)
 	{
         std::string command(token);// Convierte token en string
