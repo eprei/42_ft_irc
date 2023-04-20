@@ -1,7 +1,5 @@
 # include "Server.hpp"
 
-// bool go = true;
-
 Server::Server(): _name("*.42irc.net"){}
 
 Server::Server(Server &other){ *this = other;}
@@ -28,21 +26,21 @@ Server::~Server(){
 	// TO DO: delete all mallocs like _clientList.seconds and _channelList objects
 }
 
-// bool	Server::finish() TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-// {
-    // std::cout << "\nTerminating server...\n";
-	// std::map<int , Client *>::iterator it = this->_clientsList.begin();
-	// for ( ; it != this->_clientsList.end(); it++)
-	// 	this->removeClientFromServer(it->second, "");
-    // close(getServerSocket()); // cerrar el socket
-    // return (true); // salir del programa con el codigo de señal
-	// for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
-	// // removeChannel((*it)->getName());
-	// {
-	// 	delete *it; // Liberamos la memoria reservada para el canal
-    //     _channelList.erase(it);
-	// }
-// }	TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+bool	Server::finish()
+{
+    std::cout << "\nTerminating server...\n";
+	std::map<int , Client *>::iterator it = this->_clientsList.begin();
+	for ( ; it != this->_clientsList.end(); it++)
+		this->removeClientFromServer(it->second, "");
+    close(getServerSocket()); // cerrar el socket
+    return (true); // salir del programa con el codigo de señal
+	for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
+	// removeChannel((*it)->getName());
+	{
+		delete *it; // Liberamos la memoria reservada para el canal
+        _channelList.erase(it);
+	}
+}
 
 bool	Server::checkArgs(int argc, char **argv){
 	if (argc != 3 || !(DEFAULT_MIN_PORT <= atoi(argv[1]) && atoi(argv[1]) <= DEFAULT_MAX_PORT))
@@ -128,62 +126,49 @@ bool	isSocketClosed(int socket_fd)
 		return false;
 }
 
-// void	signalHandler(int signum)
-// {
-// 	if (signum == SIGINT)
-// 		go = false;
-// }
+void	Server::manageActivityOnSockets()
+{
+	for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
+	{
+		if (FD_ISSET(SocketNumber, &_readySockets))
+		{
+			if (SocketNumber == _serverSocket)
+				addNewClient();
+			else
+			{
+				if (isSocketClosed(SocketNumber) == true)
+					removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
+				else
+				{
+					messageHandling(SocketNumber);
+					if (_clientsList[SocketNumber]->isQuiting())
+						removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
+				}
+			}
+		}
+	}
+}
 
 bool Server::serverLoop(){
-	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl;
+	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl << std::endl;
 	int ret;
 
 	while (1)
 	{
-		// if (signal(SIGINT, signalHandler) == SIG_ERR) TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-			// std::cerr << "error while handling signal" << std::endl; TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
 		ret = select(FD_SETSIZE, &_readySockets, NULL, NULL, &_tv);
 		if (ret < 0)
 		{
-			// EINTR = A signal was delivered before the time limit expired and before any of the selected events occurred TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-			//  if (errno == EINTR) //---> To verify if we control errno or not because if we do we could go against what is requested in the evaluation TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-			//   { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-                // Si se recibe una señal durante select(), volver a comprobar go TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-                // if (!go) { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-                    // break; TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-                // } TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
-            // } else { TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
-            // }
 		}
 		else if ( ret != 0)
-		{
-			for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
-			{
-				if (FD_ISSET(SocketNumber, &_readySockets))
-				{
-					if (SocketNumber == _serverSocket)
-						addNewClient();
-					else
-					{
-						if (isSocketClosed(SocketNumber) == true)
-							removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
-						else
-						{
-							messageHandling(SocketNumber);
-							if (_clientsList[SocketNumber]->isQuiting())
-								removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
-						}
-					}
-				}
-			}
-		}
+			manageActivityOnSockets();
 		checkInactiveUsers();
+		checkWrongPasswords();
 	}
-	// finish(); TO CONSIDER TO DELETE <<<<<<<<<<<<<<<<<<<<<<<<<============================================================
+	finish();
 	return (EXIT_SUCCESS);
 }
 
@@ -230,7 +215,6 @@ void	Server::checkInactiveUsers(){
 				toDeleteList.push_back(it->second);
 			++it;
 		}
-		std::cout << toDeleteList.size() << std::endl;
 		for (size_t i = 0; i < toDeleteList.size(); i++)
 		{
 			std::string part_msg = " has been disconnected from the server due to inactivity";
@@ -241,8 +225,26 @@ void	Server::checkInactiveUsers(){
 			toDeleteList.at(i)->sendMsgSharedUsers(msg);
 			toDeleteList.at(i)->leaveAll();
 
-			removeClientFromServer(toDeleteList.at(i), " TIMOUT DISCONNECTED");
+			removeClientFromServer(toDeleteList.at(i), " TIMEOUT DISCONNECTED");
 		}
+	}
+}
+
+void	Server::checkWrongPasswords(){
+	if (!_clientsList.empty())
+	{
+		std::vector<Client *>				toDeleteList;
+		std::map<int , Client *>::iterator	it = _clientsList.begin();
+		std::map<int , Client *>::iterator	itEnd = _clientsList.end();
+
+		while( it != itEnd )
+		{
+			if (it->second->getPass() == PASS_WRONG)
+				toDeleteList.push_back(it->second);
+			++it;
+		}
+		for (size_t i = 0; i < toDeleteList.size(); i++)
+			removeClientFromServer(toDeleteList.at(i), "WRONG PASSWORD DISCONNECTED");
 	}
 }
 
@@ -263,20 +265,23 @@ void	Server::addNewClient(){
 	neo->setIp(inet_ntoa(clientAddr.sin_addr));
 	_clientsList.insert(std::pair<int , Client *>(neo->getSocket(), neo));
 	FD_SET(clientSocketLocal, &_currentSockets);
-	std::cout << FC(GREEN, "++++++\tClient ") << neo->getId() << " added\t++++++\n";
+	std::cout << GREEN << ">>\t\tNEW CLIENT CONNECTION DETECTED" << "\t\t<<" << RESET << std::endl;
+	std::cout << GREEN << "++\t\tClient class instance number " << RESET<< neo->getId() << GREEN << " added\t++\n" << RESET << std::endl;
 }
 
 void	Server::removeClientFromServer(Client* client, std::string reason){
 
 	std::cout << YELLOW << "\tClient " << client->getId() << " " << reason << WHITE << std::endl;
 
+	int clientId = client->getId();
 	int sock = client->getSocket();
 
 	close(sock);
 	delete _clientsList.at(sock);
 	FD_CLR(sock, &_currentSockets);
 	_clientsList.erase(sock);
-	std::cout << GREEN << ">>\t\tCLIENT REMOVED" << "\t\t<<" << RESET << std::endl;
+	std::cout << RED << ">>\t\tCLIENT CONNECTION TERMINATED" << "\t\t<<" << RESET << std::endl;
+	std::cout << RED << "--\tClient class instance number " << RESET << clientId << RED << " has been removed\t--\n" << RESET << std::endl;
 }
 
 

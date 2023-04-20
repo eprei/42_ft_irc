@@ -47,13 +47,14 @@ class Client
 		struct sockaddr_in	getAddress() const;
 		std::string			getIp() const;
 		double				getIdle() const;
+		int					getPass() const;
 		bool				isQuiting();
 
 		// PARSING
 		std::string			getBuf() const;
 		void				execCmd(Message *m);
 		void				process_buffer(const std::string& message);
-	
+
 		// REPLY
 		std::string			numericReply(const int code, std::string arg1, std::string arg2, std::string arg3, std::string arg4);
 		std::string			formatMsgsReply(const int code);
@@ -120,6 +121,7 @@ class Client
 		bool							_alreadyWelcomed;
 		bool							_quiting;
 		std::vector<Channel *>			_joinedChannels;
+		int								_pass;
 };
 
 std::ostream	&operator<<( std::ostream & o, Client const & rhs );

@@ -22,9 +22,11 @@ class Server
 		bool		launchServ();
 		bool		serverSocketConfig();
 		bool		serverLoop();
+		void		manageActivityOnSockets();
 
 		// CLIENT
 		void		checkInactiveUsers();
+		void		checkWrongPasswords();
 		void		messageHandling(int userSocketNumber);
 		void		addNewClient();
 		void		removeClientFromServer(Client* client, std::string reason);

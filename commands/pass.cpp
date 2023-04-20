@@ -24,6 +24,7 @@ void	Client::pass(Message *m)
 		_isRegistered = true;
 	else //wrong pass
 	{
+		_pass = PASS_WRONG;
 		std::cout << BOLDCYAN << "Realpass = "<< _server->getPassword().c_str() << RESET << std::endl;
 		return (sendReply(464, "", "", "", ""));
 	}
