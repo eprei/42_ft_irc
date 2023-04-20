@@ -1,7 +1,5 @@
 # include "Server.hpp"
 
-// bool go = true;
-
 Server::Server(): _name("*.42irc.net"){}
 
 Server::Server(Server &other){ *this = other;}
@@ -127,48 +125,6 @@ bool	isSocketClosed(int socket_fd)
 	else
 		return false;
 }
-
-// bool Server::serverLoop(){
-// 	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl << std::endl;
-// 	int ret;
-
-// 	while (1)
-// 	{
-// 		bzero(&_readySockets, sizeof(_readySockets));
-// 		_readySockets = _currentSockets;
-// 		ret = select(FD_SETSIZE, &_readySockets, NULL, NULL, &_tv);
-// 		if (ret < 0)
-// 		{
-// 			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-// 			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
-// 		}
-// 		else if ( ret != 0)
-// 		{
-// 			for (int SocketNumber = 0; SocketNumber < FD_SETSIZE; SocketNumber++)
-// 			{
-// 				if (FD_ISSET(SocketNumber, &_readySockets))
-// 				{
-// 					if (SocketNumber == _serverSocket)
-// 						addNewClient();
-// 					else
-// 					{
-// 						if (isSocketClosed(SocketNumber) == true)
-// 							removeClientFromServer(_clientsList[SocketNumber], " has been disconnected unexpectedly");
-// 						else
-// 						{
-// 							messageHandling(SocketNumber);
-// 							if (_clientsList[SocketNumber]->isQuiting())
-// 								removeClientFromServer(_clientsList[SocketNumber], "QUIT ");
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-// 		checkInactiveUsers();
-// 	}
-// 	finish();
-// 	return (EXIT_SUCCESS);
-// }
 
 void	Server::manageActivityOnSockets()
 {
