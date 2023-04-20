@@ -16,6 +16,12 @@ typedef struct s_nicksBackup {
 	const time_t	*serverStartTime;
 }	nicksBackup;
 
+typedef struct s_isFullyRegistered {
+	bool passHasBeenExecuted;
+	bool nickHasBeenExecuted;
+	bool userHasBeenExecuted;
+}	isFullyRegistered;
+
 class Client
 {
 	public:
@@ -99,6 +105,8 @@ class Client
 		void				leaveAll();
 		void				channelModes(Message *m);
 		void				userModes(Message *m);
+		void				addCommandToRegister(std::string &command);
+
 		// TOOLS
 		std::vector<std::string>	subSplitString(const std::string& str, char c);
 
@@ -122,6 +130,7 @@ class Client
 		bool							_quiting;
 		std::vector<Channel *>			_joinedChannels;
 		int								_pass;
+		isFullyRegistered				_register;
 };
 
 std::ostream	&operator<<( std::ostream & o, Client const & rhs );

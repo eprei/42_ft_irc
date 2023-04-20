@@ -90,7 +90,7 @@
 // 403
 # define ERR_NOSUCHCHANNEL(channel_name) (channel_name + " :No such channel")
 
-// ERR442    
+// ERR442
 # define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel")
 // - Returned by the server whenever a client tries to perform a
 // channel affecting command for which the client isn't a member.
@@ -104,11 +104,11 @@
 
 //ERR482
 # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
-// - Any command requiring 'chanop' privileges (such as MODE messages) 
-// MUST return this error if the client making the attempt is not a 
+// - Any command requiring 'chanop' privileges (such as MODE messages)
+// MUST return this error if the client making the attempt is not a
 // chanop on the specified channel.
 
-// ERR441    
+// ERR441
 # define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
 // - Returned by the server to indicate that the target
 // user of the command is not on the given channel.
@@ -120,21 +120,21 @@
 # define ERR_NOSUCHSERVER(server) (server + " :No such server")
 
 //PRIVMSG
-// ERR411    
+// ERR411
 # define ERR_NORECIPIENT(command) (":No recipient given (" + command + ")")
-// ERR412    
+// ERR412
 # define ERR_NOTEXTTOSEND ":No text to send"
-// ERR404    
+// ERR404
 # define ERR_CANNOTSENDTOCHAN(channel_name) (channel_name + " :Cannot send to channel")
 
 //TOPIC
-// RPL331    
+// RPL331
 # define RPL_NOTOPIC(channel) (channel + " :No topic is set")
 // RPL332
 # define RPL_TOPIC(channel, topic) (channel + " :" + topic)
 
 //MODE
-// ERR472 
+// ERR472
 # define ERR_UNKNOWNMODE(char) (char + " :is not a recognised channel mode.")
 
 // ERR502
@@ -171,6 +171,8 @@
 // ERR698
 # define ERR_NOOPER(channel) (channel + "o * :You must specify a parameter for the operator mode. Syntax: <nick>.")
 
+// RPL351
+# define ERR_NOTREGISTERED(command, notregistered) (command + " :" + notregistered)
 
 #endif // ROS_HPP
 
@@ -727,7 +729,7 @@
            ERR_NOTOPLEVEL and ERR_WILDTOPLEVEL are errors that
            are returned when an invalid use of
            "PRIVMSG $<server>" or "PRIVMSG #<host>" is attempted.
-       
+
        421    ERR_UNKNOWNCOMMAND
               "<command> :Unknown command"
 
