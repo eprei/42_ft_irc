@@ -15,6 +15,9 @@ Client::Client(Server *s): _server(s), _pass(PASS_NOT_YET_ENTERED){
 	_alreadyWelcomed = false;
 	_quiting = false;
 	time(&_lastCommunication);
+	_register.passHasBeenExecuted = false;
+	_register.nickHasBeenExecuted = false;
+	_register.userHasBeenExecuted = false;
 }
 
 Client::Client(Client &other){ *this = other;}
@@ -76,7 +79,7 @@ void	Client::process_buffer(const std::string& buf)
 	Message	m;
     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
 
-	if ( strchr(token, ' ') == NULL )
+	if ( token == NULL  || strchr(token, ' ') == NULL ) // If in the future we have problems with commands that have no parameters, check this line (strchr function) which is a quick fix!
 		return;
     while (token != NULL)
 	{
@@ -85,11 +88,6 @@ void	Client::process_buffer(const std::string& buf)
 		m = parseMessage(command);
 		std::cout << FC(GREEN, "Message parsed =") << std::endl;
 		print_message(m);
-		if (this->_isRegistered == false && ( m.command != "CAP" && m.command != "PASS" ))
-		{
-			std::cout << "Client " << this->_id << " has not yet entered the correct password" << std::endl;
-			return (sendReply(464, "", "", "", ""));
-		}
 		execCmd(&m);
         token = strtok(NULL, END_CHARACTERS); // Siguiente token
     }
@@ -110,7 +108,14 @@ void			Client::execCmd(Message *m){
 	for (int i = 0; i < NUMBER_OF_CMD; i++)
 	{
 		if (acceptableCommands[i].compare(m->command) == 0)
-			return ((this->*p[i])(m));
+		{
+			if (_isRegistered == true)
+				return ((this->*p[i])(m));
+			else if (m->command == "CAP" || m->command == "PASS" || m->command == "USER" || m->command == "NICK")
+				return ((this->*p[i])(m));
+			else
+				return (sendReply(451, m->command, "You have not registered", "", ""));
+		}
 	}
 }
 
@@ -155,4 +160,29 @@ std::ostream		&operator<<( std::ostream & o, Client const & rhs )
 	o << "Client Socket: " << rhs.getSocket() << std::endl;
 	// o << "Address: " << rhs.getAddress() << std::endl; TO CONSIDER: if it's usefull to print this infos to debug
 	return o;
+}
+
+void	Client::addCommandToRegister(std::string &command)
+{
+	if (command == "PASS")
+	{
+		_register.passHasBeenExecuted = true;
+		std::cout << "pass has been added to the register" << std::endl;
+	}
+	else if (command == "NICK")
+	{
+		_register.nickHasBeenExecuted = true;
+		std::cout << "nick has been added to the register" << std::endl;
+	}
+	else if (command == "USER")
+	{
+		_register.userHasBeenExecuted = true;
+		std::cout << "user has been added to the register" << std::endl;
+	}
+
+	_isRegistered = ( _register.userHasBeenExecuted == true && \
+					_register.nickHasBeenExecuted == true && \
+					_register.passHasBeenExecuted == true);
+	if ( _isRegistered == true )
+		std::cout << "the user has been fully registered" << std::endl;
 }

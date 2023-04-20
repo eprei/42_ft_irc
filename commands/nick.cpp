@@ -18,6 +18,8 @@ bool	validNickName(std::string nickname)
 void	Client::nick(Message *m)
 {
 	std::cout << FC(GREEN, ">\tnick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::string nick = "NICK";
+
 	if (_server->isNickUsed(m->params[0]))
 		sendReply(433, m->params[0], "", "", "");
 	else if (m->params[0].empty())
@@ -32,7 +34,7 @@ void	Client::nick(Message *m)
 			msg = formatMsgsUsers();
 			setNickname(m->params[0]);
 		}
-		else 
+		else
 		{
 			setNickname(m->params[0]);
 			msg = formatMsgsUsers();
@@ -46,6 +48,7 @@ void	Client::nick(Message *m)
 			welcome();
 			_alreadyWelcomed = true;
 		}
+		addCommandToRegister(nick);
 	}
 }
 

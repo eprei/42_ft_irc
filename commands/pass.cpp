@@ -14,6 +14,7 @@ void	Client::welcome()
 void	Client::pass(Message *m)
 {
 	std::cout << FC(GREEN, ">\tpass function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
+	std::string pass = "PASS";
 	if (_isRegistered)
 		return (sendReply(462, "", "", "", ""));
 	_hostname = _ip;
@@ -21,7 +22,8 @@ void	Client::pass(Message *m)
 	if (m->params.empty())
 		return (sendReply(461, m->command, "", "", ""));
 	else if (!m->params[0].compare(_server->getPassword()))
-		_isRegistered = true;
+		addCommandToRegister(pass);
+		// _isRegistered = true;
 	else //wrong pass
 	{
 		_pass = PASS_WRONG;
