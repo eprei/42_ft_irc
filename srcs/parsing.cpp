@@ -5,6 +5,12 @@ Message parseMessage(std::string input)
 {
    	Message msg;
 
+	// Validar que hay al menos un espacio
+    if (input.find(' ') == std::string::npos)
+	{
+		msg.command = input;
+		return msg;
+    }
     // Parsing prefix
     if (input[0] == ':')
 	{
