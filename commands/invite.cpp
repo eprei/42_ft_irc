@@ -8,8 +8,8 @@ void	Client::invite(Message *m)
 	if (m->params.size() < 2)
 		return (sendReply(461, m->command, "", "", ""));
  	Client *to_invite = _server->getClient((m->params[0]));
-		if (to_invite == NULL)
-			return (sendReply(401, m->params[0], "", "", ""));//no such nick
+	if (to_invite == NULL)
+		return (sendReply(401, m->params[0], "", "", ""));//no such nick
 	Channel		*ch = _server->getChannel((m->params[1]));
 	if (ch != NULL)//existe el canal 
 	{

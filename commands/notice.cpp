@@ -16,9 +16,9 @@ void			Client::notice(Message *m)
 			return;
 		else
 		{
-		std::string msg = formatMsgsUsers();
-		msg.append("NOTICE " + ch_name + " :" + m->params[1] + END_CHARACTERS);
-		sendMsgChannel(msg, ch);
+			std::string msg = formatMsgsUsers();
+			msg.append("NOTICE " + ch_name + " :" + m->params[1] + END_CHARACTERS);
+			sendMsgChannel(msg, ch);
 		}
 	}
 	else //no es un canal

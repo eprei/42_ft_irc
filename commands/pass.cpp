@@ -8,7 +8,7 @@ void	Client::welcome()
 	sendReply(1, getNickname(), getUsername(), getHostname(), "");
 	sendReply(2, _server->getName(), "1.0", "", "");
 	sendReply(3, ctime(_server->getStartTime()), "", "", "");
-	sendReply(4, _server->getName(), "1.0", "Channel modes +ntiokl", "");
+	sendReply(4, _server->getName(), "1.0", "Channel modes +ntikl", "");
 }
 
 void	Client::pass(Message *m)

@@ -13,7 +13,10 @@ void			Client::user(Message *m)
 	(void) m->params[1];
 	_hostname = _ip;
 	_hostname += ".hosted-by-42lausanne.ch";
-	_realname = m->params[3];
+	if (m->params.size() > 1)
+		_realname = m->params[3];
+	else
+		_realname = m->params[0];
 	addCommandToRegister(user);
 
 }
