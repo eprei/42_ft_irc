@@ -12,6 +12,8 @@ void			Client::kick(Message *m)
 	std::string ch_name = ch->getName();
 	Client		*to_kick = _server->getClient((m->params[1]));
 	
+	if (to_kick == NULL)
+		return (sendReply(401, m->params[1], "", "", ""));
 	if (!ch->hasClient(this))//no estoy en el canal
 		return (sendReply(442, ch_name, "", "", ""));
 	else if (!ch->hasClient(to_kick))//no existe el cliente en el canal
