@@ -18,7 +18,6 @@ void			Client::user(Message *m)
 	else
 		_realname = m->params[0];
 	addCommandToRegister(user);
-
 }
 	// std::string msg = formatMsgsUsers();
 	// msg.append( "Nickname: " + _nickname + "\nUsername: " + _username + "\nHostname: " + _hostname + "\nReal name: " + _realname + "\nConnected to: " + _server->getName() + END_CHARACTERS);

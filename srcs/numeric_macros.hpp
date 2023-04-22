@@ -163,13 +163,13 @@
 # define ERR_BADCHANNELKEY(channel) (channel + " :Cannot join channel (+k)")
 
  // ERR696
-# define ERR_NOKEY(channel) (channel + "k * :You must specify a parameter for the key mode. Syntax: <key>.")
+# define ERR_NOKEY(channel) (channel + " k * :You must specify a parameter for the key mode. Syntax: <key>.")
 
  // ERR697
-# define ERR_NOLIMIT(channel) (channel + "l * :You must specify a parameter for the limit mode. Syntax: <limit>.")
+# define ERR_NOLIMIT(channel) (channel + " l * :You must specify a parameter for the limit mode. Syntax: <limit>.")
 
 // ERR698
-# define ERR_NOOPER(channel) (channel + "o * :You must specify a parameter for the operator mode. Syntax: <nick>.")
+# define ERR_NOOPER(channel) (channel + " o * :You must specify a parameter for the operator mode. Syntax: <nick>.")
 
 // RPL351
 # define ERR_NOTREGISTERED(command, notregistered) (command + " :" + notregistered)

@@ -96,6 +96,11 @@ void	Client::channelModes(Message *m)
 					break;
 				}
 				oper = _server->getClient((m->params[arg_n]));
+				if (oper == NULL)
+				{
+					sendReply(401, m->params[arg_n], "", "", "");
+					break;
+				}
 				if (!ch->hasClient(oper))
 				{
 					sendReply(441, m->params[arg_n], ch_name, "", "");
