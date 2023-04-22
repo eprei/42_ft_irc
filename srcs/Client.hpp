@@ -41,6 +41,7 @@ class Client
 		void				setAddress(struct sockaddr_in address);
 		void				setBuf(std::string buf);
 		void				setIp(std::string ip);
+		void				setIsPingSent( bool isPingSentStatus);
 
 		// GETTERS
 		int					getMaxId() const ;
@@ -55,6 +56,7 @@ class Client
 		double				getIdle() const;
 		int					getPass() const;
 		bool				isQuiting();
+		bool				getIsPingSent() const;
 
 		// PARSING
 		std::string			getBuf() const;
@@ -131,6 +133,7 @@ class Client
 		std::vector<Channel *>			_joinedChannels;
 		int								_pass;
 		isFullyRegistered				_register;
+		bool							_isPingSent;
 };
 
 std::ostream	&operator<<( std::ostream & o, Client const & rhs );

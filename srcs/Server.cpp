@@ -149,11 +149,12 @@ void	Server::manageActivityOnSockets()
 	}
 }
 
-bool Server::serverLoop(){
+bool	Server::serverLoop(){
 	std::cout << FC(BOLDGREEN, "IRC_SERVER initialized... Welcome") << std::endl << std::endl;
-	int ret;
+	int		ret;
+	bool	serverIsOn = true;
 
-	while (1)
+	while ( serverIsOn == true)
 	{
 		bzero(&_readySockets, sizeof(_readySockets));
 		_readySockets = _currentSockets;
@@ -167,10 +168,36 @@ bool Server::serverLoop(){
 			manageActivityOnSockets();
 		checkInactiveUsers();
 		checkWrongPasswords();
+		checkShutdown(serverIsOn);
 	}
 	finish();
 	return (EXIT_SUCCESS);
 }
+
+void	Server::checkShutdown( bool & serverIsOn)
+{
+	time_t		currentTime;
+	static bool	blockLastUserLeftTimestamp = false;
+
+	time(&currentTime);
+
+	if ( _clientsList.size() >= 1 )
+	{
+		_lastUserLeftTimestamp = currentTime;
+		blockLastUserLeftTimestamp = false;
+	}
+	else if ( blockLastUserLeftTimestamp == false )
+	{
+		time(&_lastUserLeftTimestamp);
+		blockLastUserLeftTimestamp = true;
+	}
+	if ( std::difftime(currentTime, _lastUserLeftTimestamp) > SERVER_SHUTDOWN_TIMEOUT_SECONDS )
+	{
+		std::cout << "The server will shut down because no one has been connected for " << std::difftime(currentTime, _lastUserLeftTimestamp) << " seconds" <<  std::endl;
+		serverIsOn = false;
+	}
+}
+
 
 // CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
 // CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS CLIENTS
@@ -205,11 +232,12 @@ void	Server::checkInactiveUsers(){
 
 		while( it != itEnd )
 		{
-			if (it->second->getIdle() > (TIMEOUT - (TIMEOUT / 3)) && it->second->getIdle() < TIMEOUT)
+			if (it->second->getIdle() > (TIMEOUT - (TIMEOUT / 3)) && it->second->getIdle() < TIMEOUT && it->second->getIsPingSent() == false)
 			{
 				std::string to_send = "PING :" + this->_name + END_CHARACTERS;
 				it->second->sendMsg(to_send);
 				std::cout << "Send Ping to " << it->second->getId() << " IDLE: " << it->second->getIdle() << std::endl;
+				it->second->setIsPingSent(true);
 			}
 			else if (it->second->getIdle() > TIMEOUT)
 				toDeleteList.push_back(it->second);

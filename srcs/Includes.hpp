@@ -10,13 +10,6 @@
 # define DEFAULT_PORT 6667
 # define DEFAULT_MIN_PORT 6665
 # define DEFAULT_MAX_PORT 6669
-# define DEFAULT_PASSWORD "0000"
-# define IS_OFF "off"
-# define IS_ON "on"
-# define CLIENT_NICKNAME_NOT_SET "NickNotSet"
-# define CLIENT_USERNAME_NOT_SET "UserNotSet"
-# define CLIENT_HOSTNAME_NOT_SET "HostnameNotSet"
-# define CLIENT_REALNAME_NOT_SET "RealnameNotSet"
 # define USERSMODES		"io"
 # define CHANNELSMODES	"kobil"
 # define NUMBER_OF_CMD 19
@@ -25,6 +18,7 @@
 # define REFRESH_INTERVAL 1
 # define PASS_NOT_YET_ENTERED 0
 # define PASS_WRONG 1
+# define SERVER_SHUTDOWN_TIMEOUT_SECONDS 15.0
 
 # include <stdlib.h>
 # include <unistd.h>

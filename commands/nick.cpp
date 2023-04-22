@@ -43,11 +43,11 @@ void	Client::nick(Message *m)
 		sendMsgSharedUsers(msg);
 		sendMsg(msg);
 		addToNicksHistory();
-		if (_alreadyWelcomed == false)
-		{
-			welcome();
-			_alreadyWelcomed = true;
-		}
+		// if (_alreadyWelcomed == false)
+		// {
+		// 	welcome();
+		// 	_alreadyWelcomed = true;
+		// }
 		addCommandToRegister(nick);
 	}
 }

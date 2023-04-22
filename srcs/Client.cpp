@@ -18,6 +18,7 @@ Client::Client(Server *s): _server(s), _pass(PASS_NOT_YET_ENTERED){
 	_register.passHasBeenExecuted = false;
 	_register.nickHasBeenExecuted = false;
 	_register.userHasBeenExecuted = false;
+	_isPingSent = false;
 }
 
 Client::Client(Client &other){ *this = other;}
@@ -38,6 +39,7 @@ void				Client::setLastCommunication(std::time_t lastCommunication){_lastCommuni
 void 				Client::setSocket(int socket){_socket = socket;}
 void 				Client::setAddress(struct sockaddr_in address){_address = address;}
 void				Client::setIp(std::string ip){_ip = ip;}
+void				Client::setIsPingSent(bool isPingSentStatus){_isPingSent = isPingSentStatus;}
 
 // GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS GETTERS
 
@@ -53,6 +55,7 @@ std::string			Client::getBuf() const {return _buf;}
 int					Client::getMaxId() const {return _maxId;}
 std::string			Client::getIp() const {return _ip;}
 int					Client::getPass() const {return _pass;}
+bool				Client::getIsPingSent() const {return _isPingSent;}
 
 double 				Client::getIdle() const {
 	time_t actual;
@@ -65,6 +68,8 @@ double 				Client::getIdle() const {
 
 void 				Client::setBuf(std::string buf){
 	time(&_lastCommunication);
+	_isPingSent = false;
+
 	_buf += buf;
 
 	if (_buf.find(END_CHARACTERS) != std::string::npos )
@@ -167,22 +172,27 @@ void	Client::addCommandToRegister(std::string &command)
 	if (command == "PASS")
 	{
 		_register.passHasBeenExecuted = true;
-		std::cout << "pass has been added to the register" << std::endl;
+		std::cout << "PASS command has been added to the register of client number " << _id << std::endl;
 	}
 	else if (command == "NICK")
 	{
 		_register.nickHasBeenExecuted = true;
-		std::cout << "nick has been added to the register" << std::endl;
+		std::cout << "NICK command has been added to the register of client number " << _id << std::endl;
 	}
 	else if (command == "USER")
 	{
 		_register.userHasBeenExecuted = true;
-		std::cout << "user has been added to the register" << std::endl;
+		std::cout << "USER command has been added to the register of client number " << _id << std::endl;
 	}
 
 	_isRegistered = ( _register.userHasBeenExecuted == true && \
 					_register.nickHasBeenExecuted == true && \
 					_register.passHasBeenExecuted == true);
-	if ( _isRegistered == true )
+
+	if (_isRegistered == true)
+	{
+		welcome();
+		_alreadyWelcomed = true;
 		std::cout << "the user has been fully registered" << std::endl;
+	}
 }
