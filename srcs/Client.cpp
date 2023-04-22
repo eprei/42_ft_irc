@@ -189,7 +189,7 @@ void	Client::addCommandToRegister(std::string &command)
 					_register.nickHasBeenExecuted == true && \
 					_register.passHasBeenExecuted == true);
 
-	if (_isRegistered == true)
+	if (_isRegistered == true && _alreadyWelcomed == false)
 	{
 		welcome();
 		_alreadyWelcomed = true;

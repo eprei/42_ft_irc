@@ -29,7 +29,7 @@ void	Client::nick(Message *m)
 	else // "the nick is OK"
 	{
 		std::string msg;
-		if (_alreadyWelcomed)
+		if ( _register.nickHasBeenExecuted )
 		{
 			msg = formatMsgsUsers();
 			setNickname(m->params[0]);
@@ -43,11 +43,6 @@ void	Client::nick(Message *m)
 		sendMsgSharedUsers(msg);
 		sendMsg(msg);
 		addToNicksHistory();
-		// if (_alreadyWelcomed == false)
-		// {
-		// 	welcome();
-		// 	_alreadyWelcomed = true;
-		// }
 		addCommandToRegister(nick);
 	}
 }
