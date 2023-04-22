@@ -17,7 +17,7 @@
 
 int main(int argc, char *argv[])
 {
-	sleep(5);
+	sleep(10);
 	(void)argv;
 	(void)argc;
 	int sockfd, numbytes;
