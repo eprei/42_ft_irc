@@ -35,8 +35,8 @@ SRCS_T =./test/clientTest1.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors -pedantic
-# CFLAGS += -g
-# CFLAGS += -fsanitize=address
+CFLAGS += -g
+CFLAGS += -fsanitize=address
 
 OBJ = $(SRCS:.cpp=.o)
 OBJ_T = $(SRCS_T:.cpp=.o)
@@ -62,19 +62,25 @@ debug:
 	lldb ./ircserv 6667 asd
 
 run: all
+	./ircserv 6667 asd
+
+test: all
 	./test1 &
 	sleep 0.5
 	./test2 &
 	./ircserv 6667 asd
 
-run2: all
-	./ircserv 6668 asd
-
 val: all
 	valgrind ./ircserv 6667 asd
 
 leak: all
-	valgrind --leak-check=full ./ircserv 6667 asd
+	valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6667 asd
+
+tleak: all
+	./test1 & 
+	sleep 0.5
+	./test2 &
+	valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6667 asd
 
 proxy: all
 	python3 ./proxy/proxy.py

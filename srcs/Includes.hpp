@@ -14,11 +14,13 @@
 # define CHANNELSMODES	"kobil"
 # define NUMBER_OF_CMD 19
 # define END_CHARACTERS "\r\n"
-# define TIMEOUT 60.0
+// # define TIMEOUT 60.0
+# define TIMEOUT 120.0
 # define REFRESH_INTERVAL 1
 # define PASS_NOT_YET_ENTERED 0
 # define PASS_WRONG 1
-# define SERVER_SHUTDOWN_TIMEOUT_SECONDS 15.0
+// # define SERVER_SHUTDOWN_TIMEOUT_SECONDS 15.0
+# define SERVER_SHUTDOWN_TIMEOUT_SECONDS 60.0
 
 # include <stdlib.h>
 # include <unistd.h>

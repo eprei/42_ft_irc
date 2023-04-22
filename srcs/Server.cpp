@@ -34,12 +34,6 @@ bool	Server::finish()
 		this->removeClientFromServer(it->second, "");
     close(getServerSocket()); // cerrar el socket
     return (true); // salir del programa con el codigo de señal
-	for (std::vector<Channel *>::iterator it = _channelList.begin(); it != _channelList.end(); it++)
-	// removeChannel((*it)->getName());
-	{
-		delete *it; // Liberamos la memoria reservada para el canal
-        _channelList.erase(it);
-	}
 }
 
 bool	Server::checkArgs(int argc, char **argv){
@@ -251,7 +245,7 @@ void	Server::checkInactiveUsers(){
 			msg.append("QUIT : " + toDeleteList.at(i)->getNickname() + part_msg + END_CHARACTERS);
 			toDeleteList.at(i)->sendMsg(msg);
 			toDeleteList.at(i)->sendMsgSharedUsers(msg);
-			toDeleteList.at(i)->leaveAll();
+			// toDeleteList.at(i)->leaveAll();
 
 			removeClientFromServer(toDeleteList.at(i), " TIMEOUT DISCONNECTED");
 		}
@@ -303,7 +297,7 @@ void	Server::removeClientFromServer(Client* client, std::string reason){
 
 	int clientId = client->getId();
 	int sock = client->getSocket();
-
+	client->leaveAll();
 	close(sock);
 	delete _clientsList.at(sock);
 	FD_CLR(sock, &_currentSockets);

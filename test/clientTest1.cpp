@@ -90,7 +90,8 @@ int main(int argc, char *argv[])
 			std::cout << "numbytes sended = " << numbytes << "the test message has been partially sent" << std::endl;
 		else
 			std::cout << "the message has been completely sent" << std::endl;
-		sleep (2);
+		// sleep (2);
+		sleep (1);
 		i++;
 	}
 	sleep (2);
