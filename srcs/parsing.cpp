@@ -11,6 +11,9 @@ Message parseMessage(std::string input)
 		msg.command = input;
 		return msg;
     }
+	// Eliminate empty spaces at the beginning of the entry
+    while (input[0] == ' ')
+        input = input.substr(1);
     // Parsing prefix
     if (input[0] == ':')
 	{
