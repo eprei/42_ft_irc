@@ -29,7 +29,7 @@ void	Client::nick(Message *m)
 	else // "the nick is OK"
 	{
 		std::string msg;
-		if (_register.nickHasBeenExecuted == true)
+		if ( _register.nickHasBeenExecuted )
 		{
 			msg = formatMsgsUsers();
 			setNickname(m->params[0]);

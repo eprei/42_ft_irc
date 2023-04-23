@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in servaddr;
 	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;
 	std::string testCmd[N_LINES] = {
-		"USER juan\r\n" ,\
+		"USER juan juan localhost :juanRamon\r\n" ,\
 		"NICK pepito\r\n" ,\
 		"PASS asd\r\n" ,\
 		"JOIN #usa\r\n" ,\
@@ -58,9 +58,9 @@ int main(int argc, char *argv[])
 		"WHOWAS raul\r\n" ,\
 		"PART #usa\r\n" ,\
 		"JOIN\r\n" ,\
-		"QUIT :ME FUI\r\n" 
+		"QUIT :ME FUI\r\n"
 		};
-	
+
 	int i = 0;
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 			perror("send");
 			exit(1);
 		}
-		
+
 		std::cout << "string length = " << (int)(testCmd[i % N_LINES].length()) << std::endl;
 		if (numbytes != (int)(testCmd[i % N_LINES].length()))
 			std::cout << "numbytes sended = " << numbytes << "the test message has been partially sent" << std::endl;
