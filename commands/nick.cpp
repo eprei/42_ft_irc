@@ -20,7 +20,9 @@ void	Client::nick(Message *m)
 	std::cout << FC(GREEN, ">\tnick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::string nick = "NICK";
 
-	if (_server->isNickUsed(m->params[0]))
+	if (m->params.empty())
+		return (sendReply(461, m->command, "", "", ""));
+	else if (_server->isNickUsed(m->params[0]))
 		sendReply(433, m->params[0], "", "", "");
 	else if (m->params[0].empty())
 		sendReply(431, _nickname, "", "", "");
