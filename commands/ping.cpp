@@ -11,14 +11,18 @@ void			Client::ping(Message *m)
 		return (sendReply(409, "", "", "", ""));
 	for (size_t i = 0; i < m->params.size(); ++i)
 	{
-		if (m->params[i].compare(getHostname()) && !pongSend)
+		if (m->params[i].compare(_server->getName()) == 0)
 		{
-			pong(m);
-			pongSend = true;
+			if (!pongSend)
+			{
+				std::string to_send =  "PONG " + m->params[0] +  " :" + m->params[0] + END_CHARACTERS;
+				sendMsg(to_send);
+				pongSend = true;
+			}
 		}
 		else
 			sendReply(402, m->params[i], "", "", "");
-	}		
+	}
 }
 
 // 4.6.2 Ping message   			RFC 1459

@@ -113,7 +113,7 @@ bool	isSocketClosed(int socket_fd)
 	if (result == 0)
 		return true;
 	else if (result < 0) {
-		// std::cout << "error found at isSocketClosed function" << std::endl;
+		std::cout << "error found at recev function at isSocketClosed function" << std::endl;
 		return false;
 	}
 	else
@@ -154,10 +154,7 @@ bool	Server::serverLoop(){
 		_readySockets = _currentSockets;
 		ret = select(FD_SETSIZE, &_readySockets, NULL, NULL, &_tv);
 		if (ret < 0)
-		{
-			perror("\nerror found at select"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
-			return (EXIT_FAILURE); // TO DO: this EXIT is temporary since we do not have the right to use the EXIT function, we must handle it differently.
-		}
+			std::cout << "Error found at select" << std::endl;
 		else if ( ret != 0)
 			manageActivityOnSockets();
 		checkInactiveUsers();
