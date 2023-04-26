@@ -108,6 +108,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 		case 404:
 			return (ERR_CANNOTSENDTOCHAN(arg1));
 		//PING PONG
+		case 402:
+			return (ERR_NOSUCHSERVER(arg1));
 		case 409:
 			return (ERR_NOORIGIN);
 		//TOPIC

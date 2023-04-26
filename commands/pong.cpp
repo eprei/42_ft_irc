@@ -3,8 +3,7 @@
 void			Client::pong(Message *m){
 	if (m->params.size() < 1)
 		return (sendReply(461, m->command, "", "", ""));
-	std::string to_send =  "PONG " + m->params[0] +  " :" + m->params[0] + END_CHARACTERS;
-	sendMsg(to_send);
+	
 	std::cout << FC(GREEN, ">\tpong function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::cout << std::endl;
 	_isPingSent = false;

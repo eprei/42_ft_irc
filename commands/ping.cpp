@@ -7,18 +7,23 @@ void			Client::ping(Message *m)
 {
 	std::cout << FC(GREEN, ">\tping function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	bool pongSend = false;
-	if (m->params.empty())
+		if (m->params.empty())
 		return (sendReply(409, "", "", "", ""));
-	for (size_t i = 0; i < m->params.size(); ++i)
+	size_t nbParam = (m->params.size() > 1 ? 2 : 1);
+	for (size_t i = 0; i < nbParam; ++i)
 	{
-		if (m->params[i].compare(getHostname()) && !pongSend)
+		if (m->params[i].compare(_server->getName()) == 0)
 		{
-			pong(m);
-			pongSend = true;
+			if (!pongSend)
+			{
+				std::string to_send =  "PONG " + m->params[0] +  " :" + m->params[0] + END_CHARACTERS;
+				sendMsg(to_send);
+				pongSend = true;
+			}
 		}
 		else
 			sendReply(402, m->params[i], "", "", "");
-	}		
+	}
 }
 
 // 4.6.2 Ping message   			RFC 1459

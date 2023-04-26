@@ -19,13 +19,12 @@ void	Client::nick(Message *m)
 {
 	std::cout << FC(GREEN, ">\tnick function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
 	std::string nick = "NICK";
-
-	if (_server->isNickUsed(m->params[0]))
-		sendReply(433, m->params[0], "", "", "");
-	else if (m->params[0].empty())
+	if (m->params.empty())
 		sendReply(431, _nickname, "", "", "");
 	else if (!validNickName(m->params[0]))
 		sendReply(432, _nickname, "", "", "");
+	else if (_server->isNickUsed(m->params[0]))
+		sendReply(433, m->params[0], "", "", "");
 	else // "the nick is OK"
 	{
 		std::string msg;
@@ -96,6 +95,3 @@ void	Client::addToNicksHistory( void ){
 // #define ERR_RESTRICTED ":Your connection is restricted!" //484
 // //          - Sent by the server to a user upon connection to indicate
 // //            the restricted nature of the connection (user mode "+r").
-
-
-
