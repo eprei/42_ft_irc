@@ -32,11 +32,14 @@
 // RPL318
 # define RPL_ENDOFWHOIS(nick) (nick + \
 				" :End of /WHOIS list.")
+// RPL319
+# define RPL_WHOISCHANNELS(nick, channelsList) (nick + \
+				" :" + channelsList)
 // RPL369
 # define RPL_ENDOFWHOWAS(nick) (nick + \
 				" :End of WHOWAS")
 // RPL378
-# define RPL_BANEXPIRED(nick, hostname, ip) (nick + \
+# define RPL_WHOISHOST(nick, hostname, ip) (nick + \
 				" :is connecting from ~"  + nick + "@"+ hostname + " " \
 				+ ip)
 // RPL401

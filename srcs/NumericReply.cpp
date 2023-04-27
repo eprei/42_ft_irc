@@ -61,6 +61,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (RPL_WHOISIDLE(arg1, arg2)); // TO DO: CALL IDLE FUNCTION AS THE SECOND ARGUMENT
 		case 318:
 			return (RPL_ENDOFWHOIS(arg1));
+		case 319:
+			return (RPL_WHOISCHANNELS(arg1, arg2));
 		case 401:
 			return (ERR_NOSUCHNICK(arg1));
 		case 406:
@@ -74,7 +76,7 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 		case 369:
 			return (RPL_ENDOFWHOWAS(arg1));
 		case 378:
-			return (RPL_BANEXPIRED(arg1, arg2, getIp()));
+			return (RPL_WHOISHOST(arg1, arg2, getIp()));
 		// part
 		case 403:
 			return (ERR_NOSUCHCHANNEL(arg1));
@@ -122,7 +124,7 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (ERR_UNKNOWNMODE(arg1));
 		case 502:
 			return (ERR_USERSDONTMATCH(arg1 ,arg2));
-		case 696:			
+		case 696:
 			return (ERR_NOKEY(arg1));
 		//INVITE
 		case 443:
