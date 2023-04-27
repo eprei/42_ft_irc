@@ -3,7 +3,7 @@
 void	Client::channelModes(Message *m)
 {
 	Channel	*ch = _server->getChannel((m->params[0]));
-	if (ch == NULL)	
+	if (ch == NULL)
 		return (sendReply(403, m->params[0], "", "", ""));
 
 	std::string ch_name = ch->getName();
@@ -11,12 +11,13 @@ void	Client::channelModes(Message *m)
 		sendReply(442, ch_name, "", "", "");
 	else if (m->params.size() == 1)	//return mode from channel
 		return (sendReply(324, ch_name, ch->getModes(), "", ""));
-	else if (!ch->isOperator(this))
-		return (sendReply(482, ch_name, "", "", ""));
-	
 	std::string set = m->params[1];
 	if (set == "b")
 		return ;
+	else if (!ch->isOperator(this))
+		return (sendReply(482, ch_name, "", "", ""));
+
+
 	if (set.empty() || (set[0] != '+' && set[0] != '-') || set.size() < 2)
 	{
 		std::string err;
@@ -43,7 +44,7 @@ void	Client::channelModes(Message *m)
 				if (set[0] == '-')
 					seted += ch->unsetMode(*it);
 			break;
-		
+
 			case 'l':
 				if (set[0] == '-')
 					seted += ch->unsetMode(*it);
@@ -64,9 +65,9 @@ void	Client::channelModes(Message *m)
 					}
 				}
 			break;
-		
+
 			case 'k':
-				if (m->params.size() < arg_n + 1) 
+				if (m->params.size() < arg_n + 1)
 				{
 					sendReply(696 , ch->getName(), "", "", "");
 					break;
@@ -88,7 +89,7 @@ void	Client::channelModes(Message *m)
 				}
 				++arg_n;
 			break;
-		
+
 			case 'o':
 				if (m->params.size() < arg_n + 1)
 				{
@@ -107,14 +108,14 @@ void	Client::channelModes(Message *m)
 					break;
 				}
 				else if (set[0] == '+')
-					ch->addOperator(oper);					
+					ch->addOperator(oper);
 				else if (set[0] == '-')
-					ch->removeOperator(oper);	
+					ch->removeOperator(oper);
 				seted += 'o';
 				args += m->params[arg_n] + " ";
 				++arg_n;
 			break;
-			
+
 			default:
 				error = *it;
 				sendReply(472, error, "", "", "");
@@ -122,7 +123,7 @@ void	Client::channelModes(Message *m)
 		}
 	}
 	removeZeros(seted);
-	if (!seted.empty()) 
+	if (!seted.empty())
 	{
 		std::string msg = formatMsgsUsers();
 		msg.append("MODE " + ch_name + " " + set[0] + seted + " :" + args + END_CHARACTERS);
@@ -136,14 +137,14 @@ void	Client::userModes(Message *m)
 	if (m->params[0] == _nickname)
 	{
 		std::string msg;
-		if (!m->params[1].compare("+i"))	
+		if (!m->params[1].compare("+i"))
 		{
 			_hostname = "IP";
 			_hostname += ".hosted-by-42lausanne.ch";
 			msg = formatMsgsUsers();
 			msg.append("MODE " + getNickname() + " " + m->params[1] + END_CHARACTERS);
 		}
-		else if(!m->params[1].compare("-i"))	
+		else if(!m->params[1].compare("-i"))
 		{
 			_hostname = _ip;
 			_hostname += ".hosted-by-42lausanne.ch";
@@ -153,9 +154,9 @@ void	Client::userModes(Message *m)
 		sendMsg(msg);
 	}
 	else if (m->params.size() == 1)
-		return (sendReply(502, "view", "modes", "", "")); //Can't view modes for other users 
+		return (sendReply(502, "view", "modes", "", "")); //Can't view modes for other users
 	else if (m->params.size() == 2)
-		return (sendReply(502, "change", "mode", "", "")); //Can't change mode for other users 
+		return (sendReply(502, "change", "mode", "", "")); //Can't change mode for other users
 }
 
 // m->params[0] == channel ou nick
@@ -174,110 +175,110 @@ void	Client::mode(Message *m)
 
 // k + o - viene siempre con arg
 // [ client : 9000 ] MODE #glingla -kl pass -> pass es enviado por irssi
-//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla -kl :pass 
-//  [ client : 9000 ] MODE #glingla +klo pass 42 cuchi 
-//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +klo pass 42 :cuchi 
-//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +klo pass 42 :cuchi 
+//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla -kl :pass
+//  [ client : 9000 ] MODE #glingla +klo pass 42 cuchi
+//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +klo pass 42 :cuchi
+//  [ server : 6667 ] :pepi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +klo pass 42 :cuchi
 
-//  [ client : 9000 ] MODE #glingla +kol pass chapurri 40 
-//  [ server : 6667 ] :*.freenode.net 401 cuchi chapurri :No such nick 
-//  [ server : 6667 ] :cuchi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +kl pass :40 
-//  [ server : 6667 ] :cuchi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +kl pass :40 
+//  [ client : 9000 ] MODE #glingla +kol pass chapurri 40
+//  [ server : 6667 ] :*.freenode.net 401 cuchi chapurri :No such nick
+//  [ server : 6667 ] :cuchi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +kl pass :40
+//  [ server : 6667 ] :cuchi!~raul@freenode-nop.edl.vrebei.IP MODE #glingla +kl pass :40
 
-// [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
+// [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode.
 // +l
-//  [ client : 9000 ] MODE #glingla +l 1 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :1 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :1 
-//  [ client : 9000 ] PART #glingla 
-//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP PART :#glingla 
-//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP PART :#glingla 
-//  [ client : 9000 ] JOIN #glingla 
-//  [ server : 6667 ] :*.freenode.net 471 raul_ #glingla :Cannot join channel (channel is full) 
+//  [ client : 9000 ] MODE #glingla +l 1
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :1
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :1
+//  [ client : 9000 ] PART #glingla
+//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP PART :#glingla
+//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP PART :#glingla
+//  [ client : 9000 ] JOIN #glingla
+//  [ server : 6667 ] :*.freenode.net 471 raul_ #glingla :Cannot join channel (channel is full)
 
 // le agrega el @ al nick cuando es operador
 // /mode o nick no funciona hay que poner +
 // un operador puede quitarle priv a los otros y viceversa
-//  [ client : 9000 ] MODE #glingla +o pepi 
-//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +o :pepi 
-//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +o :pepi 
-	
+//  [ client : 9000 ] MODE #glingla +o pepi
+//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +o :pepi
+//  [ server : 6667 ] :raul_!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +o :pepi
+
 // +k pass
-//  [ client : 9000 ] MODE k papi 
-//  [ server : 6667 ] :*.freenode.net 501 pepi p :is not a recognised user mode. 
-//  [ server : 6667 ] :*.freenode.net 501 pepi a :is not a recognised user mode. 
-//  [ server : 6667 ] :*.freenode.net 501 pepi p :is not a recognised user mode. 
-//  [ server : 6667 ] :*.freenode.net 502 pepi :Can't change mode for other users 
-//  [ client : 9000 ] MODE #glingla +k papi 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +k :papi 
+//  [ client : 9000 ] MODE k papi
+//  [ server : 6667 ] :*.freenode.net 501 pepi p :is not a recognised user mode.
+//  [ server : 6667 ] :*.freenode.net 501 pepi a :is not a recognised user mode.
+//  [ server : 6667 ] :*.freenode.net 501 pepi p :is not a recognised user mode.
+//  [ server : 6667 ] :*.freenode.net 502 pepi :Can't change mode for other users
+//  [ client : 9000 ] MODE #glingla +k papi
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +k :papi
 
-//  [ client : 9000 ] JOIN #glingla 
-//  [ server : 6667 ] :*.freenode.net 475 raul_ #glingla :Cannot join channel (incorrect channel key) 
-//  [ client : 9000 ] JOIN #glingla papi 
-//  [ server : 6667 ] :*.freenode.net 471 raul_ #glingla :Cannot join channel (channel is full) 
+//  [ client : 9000 ] JOIN #glingla
+//  [ server : 6667 ] :*.freenode.net 475 raul_ #glingla :Cannot join channel (incorrect channel key)
+//  [ client : 9000 ] JOIN #glingla papi
+//  [ server : 6667 ] :*.freenode.net 471 raul_ #glingla :Cannot join channel (channel is full)
 
-// [ client : 9000 ] MODE #glingla +k 
-//  [ server : 6667 ] :*.freenode.net 696 pepi #glingla k * :You must specify a parameter for the key mode. Syntax: <key>. 
-//  [ client : 9000 ] MODE #glingla +kl pass 
-//  [ server : 6667 ] :*.freenode.net 696 pepi #glingla l * :You must specify a parameter for the limit mode. Syntax: <limit>. 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +k :pass 
-//  [ client : 9000 ] PING *.freenode.net 
-//  [ server : 6667 ] :*.freenode.net PONG *.freenode.net :*.freenode.net 
-//  [ client : 9000 ] MODE #glingla +kl pass 4 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :4 
-//  [ client : 9000 ] PING *.freenode.net 
-//  [ server : 6667 ] :*.freenode.net PONG *.freenode.net :*.freenode.net 
-//  [ client : 9000 ] MODE #glingla -kl pass 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla -kl :pass 
-//  [ client : 9000 ] MODE #glingla +kl pass 4 
-//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +kl pass :4 
+// [ client : 9000 ] MODE #glingla +k
+//  [ server : 6667 ] :*.freenode.net 696 pepi #glingla k * :You must specify a parameter for the key mode. Syntax: <key>.
+//  [ client : 9000 ] MODE #glingla +kl pass
+//  [ server : 6667 ] :*.freenode.net 696 pepi #glingla l * :You must specify a parameter for the limit mode. Syntax: <limit>.
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +k :pass
+//  [ client : 9000 ] PING *.freenode.net
+//  [ server : 6667 ] :*.freenode.net PONG *.freenode.net :*.freenode.net
+//  [ client : 9000 ] MODE #glingla +kl pass 4
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +l :4
+//  [ client : 9000 ] PING *.freenode.net
+//  [ server : 6667 ] :*.freenode.net PONG *.freenode.net :*.freenode.net
+//  [ client : 9000 ] MODE #glingla -kl pass
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla -kl :pass
+//  [ client : 9000 ] MODE #glingla +kl pass 4
+//  [ server : 6667 ] :pepi!~raul@freenode-ioq.edl.vrebei.IP MODE #glingla +kl pass :4
 
-//  [ client : 9000 ] MODE #anime b 
-//  [ server : 6667 ] :ChanServ!services@services.freenode.net NOTICE raul_ :[#anime] Welcome to freenode #anime IRC! Be aware conversations can be slow at times, so if you don't get a response immediately, please do stick around ☺ 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode/user/antifascist elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~technet@* elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~simon@* elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode-frpvje.rlp1.7tn1.4hb93e.IP elon.hub :1676764361 
-//  [ server : 6667 ] :*.freenode.net 368 raul_ #anime :End of channel ban list 
+//  [ client : 9000 ] MODE #anime b
+//  [ server : 6667 ] :ChanServ!services@services.freenode.net NOTICE raul_ :[#anime] Welcome to freenode #anime IRC! Be aware conversations can be slow at times, so if you don't get a response immediately, please do stick around ☺
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode/user/antifascist elon.hub :1676764361
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~technet@* elon.hub :1676764361
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!~simon@* elon.hub :1676764361
+//  [ server : 6667 ] :*.freenode.net 367 raul_ #anime *!*@freenode-frpvje.rlp1.7tn1.4hb93e.IP elon.hub :1676764361
+//  [ server : 6667 ] :*.freenode.net 368 raul_ #anime :End of channel ban list
 
-// [ client : 8000 ] MODE raul +i 
-// [ server : 6667 ] MODE raul +i 
+// [ client : 8000 ] MODE raul +i
+// [ server : 6667 ] MODE raul +i
 
-//  [ client : 8000 ] MODE #usa 
-//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+nt 
+//  [ client : 8000 ] MODE #usa
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :+nt
 
 //hay que bannear a algien me imagino para que pase a modo +b
-//  [ client : 8000 ] MODE #usa +b 
+//  [ client : 8000 ] MODE #usa +b
 //  [ server : 6667 ] :*.42irc.net 324 raul #usa :+b
 
-//  [ client : 8000 ] MODE #usa -i 
-//  [ server : 6667 ] :*.42irc.net 324 raul #usa :-i 
+//  [ client : 8000 ] MODE #usa -i
+//  [ server : 6667 ] :*.42irc.net 324 raul #usa :-i
 
-//  [ client : 9000 ] MODE #pitusa -sizpqwe 
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
-//  [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode. 
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si 
+//  [ client : 9000 ] MODE #pitusa -sizpqwe
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si
+//  [ server : 6667 ] :*.freenode.net 472 pepi q :is not a recognised channel mode.
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :-si
 
-//  [ client : 9000 ] MODE #pitusa +si 
+//  [ client : 9000 ] MODE #pitusa +si
 //a todo los del canal
-//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :+si 
+//  [ server : 6667 ] :pepi!~raul@freenode-s3k.srb.vrebei.IP MODE #pitusa :+si
 
 // // MODE +i (invite_only channel)
 // // MODE +t (Change the channel topic in a mode +t channel)
 //  n - no messages to channel from clients on the outside;
 	// }
-//  c-> MODE raul 
-//  s-> :*.freenode.net 502 raul_ :Can't view modes for other users 
-//  c-> MODE raul -i 
-//  s-> :*.freenode.net 502 glingla :Can't change mode for other users 
+//  c-> MODE raul
+//  s-> :*.freenode.net 502 raul_ :Can't view modes for other users
+//  c-> MODE raul -i
+//  s-> :*.freenode.net 502 glingla :Can't change mode for other users
 
 
 // ERR472   ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
-// RPL325    
+// RPL325
 // # define RPL_UNIQOPIS(channel, nickname) (channel + " " + nickname)
-// RPL346    
+// RPL346
 // # define RPL_INVITELIST(channel, invitemask) (channel + " " + invitemask)
-// RPL347    
+// RPL347
 // # define RPL_ENDOFINVITELIST(channel) (channel + " :End of channel invite list")
 
 //  [ client : 8000 ] MODE Rony +i
@@ -303,28 +304,28 @@ void	Client::mode(Message *m)
 //ERR 482
 // # define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator")
 
-// ERR 441    
+// ERR 441
 // # define ERR_USERNOTINCHANNEL(nick, channel) (nick + " " + channel + " :They aren't on that channel")
 
 // 324
 // # define RPL_CHANNELMODEIS(channel, mode) (channel + " :" + mode)
 // :*server_name 324 nick #CHANNEL :+nt
 // :DESKTOP-MQD5OHQ 324 Rony #people [+n]  ccomis
- 
 
-// // ERR467    
+
+// // ERR467
 // # define ERR_KEYSET(channel) (channel + " :Channel key already set")
 
-// // ERR472    
+// // ERR472
 // # define ERR_UNKNOWNMODE(char, channel) (char + " :is unknown mode char to me for " + channel)
 
-// // RPL325    
+// // RPL325
 // # define RPL_UNIQOPIS(channel, nickname) (channel + " " + nickname)
 
-// // RPL346    
+// // RPL346
 // # define RPL_INVITELIST(channel, invitemask) (channel + " " + invitemask)
 
-// // RPL347    
+// // RPL347
 // # define RPL_ENDOFINVITELIST(channel) (channel + " :End of channel invite list")
 
 //    The following examples are given to help understanding the syntax of
