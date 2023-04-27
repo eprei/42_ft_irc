@@ -242,8 +242,6 @@ void	Server::checkInactiveUsers(){
 			msg.append("QUIT : " + toDeleteList.at(i)->getNickname() + part_msg + END_CHARACTERS);
 			toDeleteList.at(i)->sendMsg(msg);
 			toDeleteList.at(i)->sendMsgSharedUsers(msg);
-			// toDeleteList.at(i)->leaveAll();
-
 			removeClientFromServer(toDeleteList.at(i), " TIMEOUT DISCONNECTED");
 		}
 	}
@@ -271,8 +269,12 @@ void	Server::addNewClient(){
 	int addrSize = sizeof(struct sockaddr_in);
 	int clientSocketLocal;
 	struct sockaddr_in clientAddr;
-	Client *neo = new Client(this);
-
+	Client *neo = new (std::nothrow) Client(this);
+	if (!neo)
+	{
+		std::cerr << FC(RED, "Client was not created (not enough memory)") << std::endl;
+		return ;
+	}	
 	if ((clientSocketLocal = accept(this->_serverSocket, (struct sockaddr*)&clientAddr, (socklen_t*)&addrSize)) < 0){
 		perror("\nerror found at accept"); // TO CONSIDER: We must decide how to deal with this error and consider to throw exceptions or kill the program ???
 		delete neo;
@@ -350,8 +352,9 @@ void	Server::createChannel(Client* owner, std::string channel_name)
         std::cout << "Channel " << channel_name << " already exists." << std::endl;
         return;
     }
-
-    Channel* new_channel = new Channel(*owner, channel_name);
+    Channel* new_channel = new (std::nothrow) Channel(*owner, channel_name);
+	if (new_channel == NULL)
+		return;
     _channelList.push_back(new_channel);
     std::cout << "Channel " << channel_name << " created." << std::endl;
 }

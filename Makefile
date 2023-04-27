@@ -43,11 +43,11 @@ OBJ_T = $(SRCS_T:.cpp=.o)
 
 TEST_CLIENT_1 = test1
 TEST_CLIENT_2 = test2
+TEST_CLIENT_3 = test3
 
 .cpp.o:
 	$(CXX) $(CFLAGS) -c $^ -o $@
 
-all: $(NAME) $(TEST_CLIENT_1) $(TEST_CLIENT_2)
 
 $(NAME): $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
@@ -57,6 +57,11 @@ $(TEST_CLIENT_1): $(OBJ_T)
 
 $(TEST_CLIENT_2): $(OBJ_T)
 	$(CXX) $(CFLAGS) ./test/clientTest2.cpp -o $(TEST_CLIENT_2)
+
+$(TEST_CLIENT_3): $(OBJ_T)
+	$(CXX) $(CFLAGS) ./test/clientTest3.cpp -o $(TEST_CLIENT_3)
+
+all: $(NAME) $(TEST_CLIENT_1) $(TEST_CLIENT_2) $(TEST_CLIENT_3)
 
 debug:
 	lldb ./ircserv 6667 asd
@@ -68,6 +73,16 @@ test: all
 	./test1 &
 	sleep 0.5
 	./test2 &
+	sleep 0.5
+	./test3 &
+	./ircserv 6667 asd
+
+
+rclean: 
+	/bin/rm -f $(TEST_CLIENT_3)
+
+t: rclean $(TEST_CLIENT_3)
+	./test3 &
 	./ircserv 6667 asd
 
 val: all
@@ -97,6 +112,7 @@ fclean: clean
 	/bin/rm -f $(NAME)
 	/bin/rm -f $(TEST_CLIENT_1)
 	/bin/rm -f $(TEST_CLIENT_2)
+	/bin/rm -f $(TEST_CLIENT_3)
 
 re: fclean all test
 

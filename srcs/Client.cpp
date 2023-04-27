@@ -1,10 +1,10 @@
+
+
 #include "Client.hpp"
 
 //  Client: Esta clase representaría a cada cliente que se conecta al servidor IRC.
 //   Sería responsable de mantener una conexión con el servidor, recibir y enviar mensajes,
 //    y unirse o abandonar canales.
-
-// TO DO: write copilen's functions
 int Client::_maxId = 0;
 std::vector<nicksBackup>	Client::_nicksHistory;
 
@@ -98,6 +98,8 @@ void	Client::process_buffer(const std::string& buf)
 		std::cout << FC(GREEN, "Message parsed =") << std::endl;
 		print_message(m);
 		execCmd(&m);
+		if (isQuiting())
+			return ;
         token = strtok(NULL, END_CHARACTERS); // Siguiente token
     }
 }

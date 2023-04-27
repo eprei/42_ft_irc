@@ -24,6 +24,11 @@ void	Client::join(Message *m)
 		std::cout << FC(GREEN, "Canal =") << chan << std::endl;
 		_server->createChannel(this, chan);
 		Channel *ch = _server->getChannel(chan);
+		if (!ch)
+		{
+			std::cerr << FC(RED, "Channel =") << chan << "was not created (not enough memory)" << std::endl;
+			return ;
+		}
 		if (ch->hasMode('k'))
 		{
 			if (m->params.size() < 2 || !ch->isValidKey(m->params[1]))
@@ -33,6 +38,8 @@ void	Client::join(Message *m)
 			return (sendReply(473, chan, "", "", ""));
 		if (ch->hasMode('l') && ch->getMembers().size() >= ch->getUserLimit())
 			return (sendReply(471, chan, "", "", ""));
+		if (ch->hasClient(this))
+			return (sendReply(443, _nickname, chan, "", ""));
 		_server->addClientToChannel(this, chan);
 		std::string msg = formatMsgsUsers();
 		msg.append("JOIN " + chan + END_CHARACTERS);
