@@ -95,6 +95,8 @@ tleak: all
 	./test1 &
 	sleep 0.5
 	./test2 &
+	sleep 0.5
+	./test3 &
 	valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6667 asd
 
 proxy: all

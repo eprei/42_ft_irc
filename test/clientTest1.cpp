@@ -15,11 +15,9 @@
 // #define PORT 6667
 #define N_LINES 35
 
-int main(int argc, char *argv[])
+int main()
 {
 	sleep(10);
-	(void)argv;
-	(void)argc;
 	int sockfd, numbytes;
 	struct sockaddr_in servaddr;
 	// char buff[TEST_MESSAGE_LENGTH] = TEST_MESSAGE;

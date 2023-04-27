@@ -58,8 +58,8 @@ int main()
 	// msg.push_back("PART #usa");
 	// msg.push_back("JOIN");
 	// msg.push_back("QUIT :ME FUI");
-	msg.push_back("USER juan juan localhost :juanRamon");
-	msg.push_back("NICK pepito");
+	msg.push_back("USER Pierre Lapointe localhost :Piedra lapunta");
+	msg.push_back("NICK JamesBond");
 	msg.push_back("PASS asd");
 	msg.push_back("JOIN");
 	msg.push_back("INVITE");
