@@ -6,12 +6,15 @@
 
 endline="\r\n"
 LF="$'\n'"
+# machine="c2r7s8"
+machine="localhost"
+ipServ=$( ping -c 1 $machine | grep "from" | awk '{print $4}' | sed 's/.$//')
 
 # >>> TEST 1 <<<
 # NICK, USER, PASS
 input1="NICK Almodovar${endline}USER pedro pedro localhost :Pedro Almodovar${endline}PASS asd$endline"
 expected_output1=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}")
 
@@ -19,10 +22,10 @@ expected_output1=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # NICK, USER, PASS, JOIN #usa,
 input2="${input1}JOIN #usa$endline"
 expected_output2=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}")
 
@@ -30,10 +33,10 @@ expected_output2=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # NICK, USER, PASS, JOIN #usa, INVITE raul #usa,
 input3="${input2}INVITE raul #usa$endline"
 expected_output3=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}")
@@ -41,10 +44,10 @@ expected_output3=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # >>> TEST 4 <<<
 input4="${input3}PRIVMSG #usa :hola!!!$endline"
 expected_output4=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}")
@@ -53,10 +56,10 @@ expected_output4=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # NICK, USER, PASS, JOIN #usa, INVITE raul #usa, PRIVMSG #usa :hola!!!,
 input5="${input4}PRIVMSG #usa :hola!!!$endline"
 expected_output5=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}")
@@ -65,10 +68,10 @@ expected_output5=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # NICK, USER, PASS, JOIN #usa, INVITE raul #usa, PRIVMSG #usa :hola!!!, MODE #usa +o baby,
 input6="${input5}MODE #usa +o baby$endline"
 expected_output6=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -78,10 +81,10 @@ expected_output6=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # NICK, USER, PASS, JOIN #usa, INVITE raul #usa, PRIVMSG #usa :hola!!!, MODE #usa +o baby, KICK raul
 input7="${input6}KICK raul$endline"
 expected_output7=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -93,10 +96,10 @@ expected_output7=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas
 input8="${input7}KICK #usa raul :no te quiero ver mas$endline"
 expected_output8=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -109,10 +112,10 @@ expected_output8=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas, LIST,
 input9="${input8}LIST$endline"
 expected_output9=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -127,10 +130,10 @@ expected_output9=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas, LIST, LIST #usa,#ARG
 input10="${input9}LIST #usa,#ARG$endline"
 expected_output10=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -147,10 +150,10 @@ expected_output10=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas, LIST, LIST #usa,#ARG, TOPIC #ASPDJAPON,
 input11="${input10}TOPIC #ASPDJAPON$endline"
 expected_output11=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -168,10 +171,10 @@ expected_output11=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas, LIST, LIST #usa,#ARG, TOPIC #ASPDJAPON, TOPIC #usa,
 input12="${input11}TOPIC #usa$endline"
 expected_output12=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -190,10 +193,10 @@ expected_output12=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # KICK #usa raul :no te quiero ver mas, LIST, LIST #usa,#ARG, TOPIC #ASPDJAPON, TOPIC #usa, TOPIC #usa :born to be wild $endline,
 input13="${input12}TOPIC #usa :born to be wild$endline"
 expected_output13=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -206,7 +209,7 @@ expected_output13=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 :*.42irc.net 323 Almodovar :End of LIST${endline}\
 :*.42irc.net 403 Almodovar #ASPDJAPON :No such channel${endline}\
 :*.42irc.net 331 Almodovar #usa :No topic is set${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}")
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}")
 
 # >>> TEST 14 <<<
 # NICK, USER, PASS, JOIN #usa, INVITE raul #usa, PRIVMSG #usa :hola!!!, MODE #usa +o baby, KICK raul,
@@ -214,10 +217,10 @@ expected_output13=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # TOPIC #usa,
 input14="${input13}TOPIC #usa$endline"
 expected_output14=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -230,7 +233,7 @@ expected_output14=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 :*.42irc.net 323 Almodovar :End of LIST${endline}\
 :*.42irc.net 403 Almodovar #ASPDJAPON :No such channel${endline}\
 :*.42irc.net 331 Almodovar #usa :No topic is set${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
 :*.42irc.net 332 Almodovar #usa :born to be wild${endline}")
 
 # >>> TEST 15 <<<
@@ -239,10 +242,10 @@ expected_output14=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 # TOPIC #usa, MODE #usa -n, MODE #usa +n, MODE #usa +t
 input15="${input14}MODE #usa -n${endline}MODE #usa +n${endline}MODE #usa +t$endline"
 expected_output15=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -255,10 +258,10 @@ expected_output15=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 :*.42irc.net 323 Almodovar :End of LIST${endline}\
 :*.42irc.net 403 Almodovar #ASPDJAPON :No such channel${endline}\
 :*.42irc.net 331 Almodovar #usa :No topic is set${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
 :*.42irc.net 332 Almodovar #usa :born to be wild${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa -n :${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa +n :${endline}")
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa -n :${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa +n :${endline}")
 
 
 # >>> TEST 99 <<<
@@ -272,10 +275,10 @@ NOTICE #ASDSAD hola${endline}NOTICE #usa :jsuis au toilet${endline}PRIVMSG #usa 
 PRIVMSG raul :Che raul deja esos pankakes!${endline}WHOIS raul${endline}WHOWAS raul${endline}PART #usa${endline}\
 JOIN${endline}QUIT :ME FUI${endline}"
 expected_output99=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
-:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch${endline}\
+:*.42irc.net 001 Almodovar :Welcome to the Internet Relay Network Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch${endline}\
 :*.42irc.net 002 Almodovar :Your host is *.42irc.net, running version 1.0${endline}\
 :*.42irc.net 004 Almodovar :*.42irc.net 1.0 Channel modes +ntikl ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch JOIN #usa${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch JOIN #usa${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar #usa :End of NAMES list${endline}\
 :*.42irc.net 401 Almodovar raul :No such nick${endline}\
@@ -288,13 +291,13 @@ expected_output99=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 :*.42irc.net 323 Almodovar :End of LIST${endline}\
 :*.42irc.net 403 Almodovar #ASPDJAPON :No such channel${endline}\
 :*.42irc.net 331 Almodovar #usa :No topic is set${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch TOPIC #usa :born to be wild${endline}\
 :*.42irc.net 332 Almodovar #usa :born to be wild${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa -n :${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa +n :${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa +i :${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa +l :1 ${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch MODE #usa +k :asd ${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa -n :${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa +n :${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa +i :${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa +l :1 ${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch MODE #usa +k :asd ${endline}\
 :*.42irc.net 353 Almodovar = #usa :@Almodovar ${endline}\
 :*.42irc.net 366 Almodovar  :End of NAMES list${endline}\
 :*.42irc.net 411 Almodovar :No recipient given (PRIVMSG)${endline}\
@@ -302,9 +305,9 @@ expected_output99=$(echo -e ":Almodovar!@ NICK Almodovar${endline}\
 :*.42irc.net 318 Almodovar raul :End of /WHOIS list.${endline}\
 :*.42irc.net 406 Almodovar raul :There was no such nickname${endline}\
 :*.42irc.net 369 Almodovar raul :End of WHOWAS${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch PART #usa :hasta la vista Baby${endline}\
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch PART #usa :hasta la vista Baby${endline}\
 :*.42irc.net 461 Almodovar JOIN :Not enough parameters${endline}\
-:Almodovar!pedro@127.0.0.1.hosted-by-42lausanne.ch QUIT :Quit: ME FUI${endline}")
+:Almodovar!pedro@${ipServ}.hosted-by-42lausanne.ch QUIT :Quit: ME FUI${endline}")
 
 inputs=("$input1" "$input2" "$input3" "$input4" "$input5"
 		"$input6" "$input7" "$input8" "$input9" "$input10"
@@ -324,7 +327,7 @@ do
 
 	echo -ne "\033[1;37mSTART TEST $((i+1))\033[0m\n"
 
-    output=$(echo -ne "$input" | nc -c localhost 6667)
+    output=$(echo -ne "$input" | nc -c ${ipServ} 6667)
 
 	#####		UNCOMMENT TO ADD NEW TESTS		#####
 	# printf "\n"
