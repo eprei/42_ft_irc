@@ -32,7 +32,11 @@ std::string	Channel::getMembersNicks()
 { 
 	std::string all_nicks;
 	for (std::vector<Client *>::iterator it = _members.begin(); it != _members.end(); ++it)
+	{
+		if (isOperator(*it))
+			all_nicks += "@";
 		all_nicks += (*it)->getNickname() + " ";
+	}
 	return all_nicks;
 }
 
@@ -44,6 +48,8 @@ void Channel::removeClient(Client* client) {
 	for (std::vector<Client*>::iterator it = _members.begin(); it != _members.end(); ++it) {
 		if ((*it)->getNickname() == client->getNickname()) {
 			_members.erase(it);
+			if (isOperator(client))
+				removeOperator(client);
 			return;
 		}
 	}

@@ -75,7 +75,7 @@
 
 //JOIN
 // RPL353
-# define RPL_NAMREPLY(channel, nick) "= " + channel + " :@" + nick
+# define RPL_NAMREPLY(channel, nick) "= " + channel + " :" + nick
 // = #lol :@Guest36096 mikeWpit
 //"( "=" / "*" / "@" ) <channel>
 //:[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
