@@ -35,7 +35,7 @@ SRCS_T =./test/clientTest1.cpp\
 
 CFLAGS = -Werror -Wextra -Wall -std=c++98
 CFLAGS += -Wfatal-errors -pedantic
-CFLAGS += -g
+# CFLAGS += -g
 # CFLAGS += -fsanitize=address
 
 OBJ = $(SRCS:.cpp=.o)
@@ -77,7 +77,7 @@ leak: all
 	valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6667 asd
 
 tleak: all
-	./test1 & 
+	./test1 &
 	sleep 0.5
 	./test2 &
 	valgrind --leak-check=full --show-leak-kinds=all ./ircserv 6667 asd

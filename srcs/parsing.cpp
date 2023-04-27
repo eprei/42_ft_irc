@@ -11,8 +11,9 @@ Message parseMessage(std::string input)
 		msg.command = input;
 		return msg;
     }
-	// Eliminate empty spaces at the beginning of the entry
-    while (input[0] == ' ')
+	// Eliminate empty spaces and special characters at the beginning of the entry
+    while (input[0] == ' ' || input[0] == '\r' ||  input[0] == '\n' \
+			|| input[0] == 'v' || input[0] == '\t' || input[0] == '\f')
         input = input.substr(1);
     // Parsing prefix
     if (input[0] == ':')

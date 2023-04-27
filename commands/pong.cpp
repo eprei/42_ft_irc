@@ -3,10 +3,7 @@
 void			Client::pong(Message *m){
 	if (m->params.size() < 1)
 		return (sendReply(461, m->command, "", "", ""));
-	
-	std::cout << FC(GREEN, ">\tpong function executed ") <<"by client id: " << _id << "\t\t<" << std::endl;
-	std::cout << std::endl;
-	_isPingSent = false;
+	std::cout << FC(GREEN, ">\tpong function executed ") <<"by client id: " << _id << "\t\t<" << std::endl << std::endl;
 }
 
 // 4.6.3 Pong message				RFC 1459

@@ -82,9 +82,13 @@ void 				Client::setBuf(std::string buf){
 void	Client::process_buffer(const std::string& buf)
 {
 	Message	m;
+
+	if ( buf.find_first_of(VALID_CHARACTERS) == std::string::npos)
+		return;
+
     char	*token = strtok(const_cast<char*>(buf.c_str()), END_CHARACTERS);
 
-	if (token == NULL)// || strchr(token, ' ') == NULL ) // If in the future we have problems with commands that have no parameters, check this line (strchr function) which is a quick fix!
+	if (token == NULL)
 		return;
     while (token != NULL)
 	{

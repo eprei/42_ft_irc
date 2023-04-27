@@ -21,6 +21,7 @@
 # define PASS_WRONG 1
 # define SERVER_SHUTDOWN_TIMEOUT_SECONDS 120.0
 // # define SERVER_SHUTDOWN_TIMEOUT_SECONDS 60.0
+# define VALID_CHARACTERS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890"
 
 # include <stdlib.h>
 # include <unistd.h>
