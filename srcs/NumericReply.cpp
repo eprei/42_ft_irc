@@ -134,6 +134,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 		case 473:
 			return (ERR_INVITEONLYCHAN(arg1));
 		// limitUser
+		case 405:
+			return (ERR_TOOMANYCHANNELS(arg1));
 		case 471:
 			return (ERR_CHANNELISFULL(arg1));
 		case 697:
@@ -149,6 +151,8 @@ std::string	Client::numericReply(const int code, std::string arg1, std::string a
 			return (RPL_LISTEND);
 		case 451:
 			return (ERR_NOTREGISTERED(arg1, arg2));
+		default:
+			return ("BAD REPLY");
 	}
 	return ("");
 }
