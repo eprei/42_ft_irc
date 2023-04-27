@@ -11,6 +11,11 @@ void	Client::join(Message *m)
 	std::string chan;
 	while (std::getline(ss, chan, ','))
 	{
+		if (_joinedChannels.size() >= MAX_CHANNEL_PER_USER)
+		{
+				sendReply(405, chan, "", "", "");
+				break;
+		}
 		if ((chan[0] != '#' && chan[0] != '+' && chan[0] != '!') || chan.length() > 50)
 		{
 			sendReply(403, chan, "", "", "");

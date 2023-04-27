@@ -147,6 +147,7 @@
 // RPL341
 # define RPL_INVITING(invited, channel) (invited + " :" + channel)
 
+
 // ERR473
 # define ERR_INVITEONLYCHAN(channel) (channel + " :Cannot join channel (+i)")
 
@@ -154,6 +155,9 @@
 # define RPL_LIST(channel, total_users , modes, topic) (channel + " " + total_users + " :[" + modes + "] " + topic)
 // RPL323
 # define RPL_LISTEND ":End of LIST"
+
+//RPL 405
+# define ERR_TOOMANYCHANNELS(channel) (channel + " :You have joined to many channels")
 
 //mode +l
 // ERR471
