@@ -61,7 +61,7 @@ int main()
 	msg.push_back("USER Pierre Lapointe localhost :Piedra lapunta");
 	msg.push_back("NICK JamesBond");
 	msg.push_back("PASS asd");
-	msg.push_back("JOIN");
+	msg.push_back("JOIN #japon");
 	msg.push_back("INVITE");
 	msg.push_back("PRIVMSG");
 	msg.push_back("MODE");
@@ -69,6 +69,12 @@ int main()
 	msg.push_back("LIST");
 	msg.push_back("TOPIC");
 	msg.push_back("MODE");
+	msg.push_back("MODE #japon +i");
+	msg.push_back("MODE #japon +l");
+	msg.push_back("MODE #japon +k");
+	msg.push_back("MODE #japon +o");
+	msg.push_back("MODE #japon +t");
+	msg.push_back("MODE #japon +n");
 	msg.push_back("NAMES");
 	msg.push_back("NOTICE");
 	msg.push_back("PRIVMSG");
@@ -115,28 +121,5 @@ int main()
 	}
 	sleep (2);
 	close(sockfd);
-
 	return 0;
 }
-
-// std::string acceptableCommands[NUMBER_OF_CMD] = \
-// 	{ "NICK" , "USER" , "PASS" , "JOIN" , "QUIT" , "LIST" , "NAMES" \
-// 	, "PART" , "PRIVMSG" , "PING" , "KICK" , "NOTICE" , "MODE", "PONG"\
-// 	, "WHOIS" , "WHOWAS", "TOPIC", "INVITE"};
-
-// 	for (int i = 0; i < NUMBER_OF_CMD; i++)
-// 	{
-// 		if (acceptableCommands[i].compare(m->command) == 0)
-// 		{
-// 			switch (i)
-// 			{
-// 			case 0:
-// 				/* code */
-// 				break;
-			
-// 			default:
-// 				break;
-// 			}
-// 		}
-// 	}
-// }

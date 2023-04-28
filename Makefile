@@ -1,6 +1,6 @@
 # CXX = c++
-CXX = clang++
-# CXX = g++-12
+# CXX = clang++
+CXX = g++-12
 
 NAME = ircserv
 
@@ -33,8 +33,8 @@ SRCS =	./srcs/main.cpp\
 SRCS_T =./test/clientTest1.cpp\
 		./test/clientTest2.cpp\
 
-CFLAGS = -Werror -Wextra -Wall -std=c++98
-CFLAGS += -Wfatal-errors -pedantic
+CFLAGS = -Werror -Wextra -Wall -std=c++98 -pedantic
+CFLAGS += -Wfatal-errors 
 # CFLAGS += -g
 # CFLAGS += -fsanitize=address
 
